@@ -2,6 +2,6 @@
 
 # Team Members
 Corey McTavish
-McKenzie Nichol
+McKenzie Nicol
 Vivian Chu
 Reza Hedieloo
