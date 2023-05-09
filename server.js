@@ -14,7 +14,7 @@ const Joi = require('joi');
 const app = express();
 
 // const port = process.env.PORT || 3000;
-const port = 3001;
+const port = 3000;
 
 const mongodb_user = process.env.MONGODB_USER;
 const mongodb_password = process.env.MONGODB_PASSWORD;
@@ -69,8 +69,4 @@ app.get('/login', (req, res) => {
 
 app.get('/createUser', (req, res) => {
     res.render('createUser');
-});
-
-app.listen(3000, () => {
-    console.log('Server started on port 3000');
 });
