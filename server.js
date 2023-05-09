@@ -53,6 +53,24 @@ app.listen(port, () =>
     console.log(`Listening on port ${port}`)
 );
 
+
+
+app.set('view engine', 'ejs');
+
 app.get('/', (req, res) => {
-    res.send('Hello World!');
+    res.render('home');
+});
+
+app.get('/login', (req, res) => {
+    // req.session.loginError = true;
+    // res.render('login', { loginError: req.session.loginError });
+    res.render('login', { loginError: true });
+});
+
+app.get('/createUser', (req, res) => {
+    res.render('createUser');
+});
+
+app.listen(3000, () => {
+    console.log('Server started on port 3000');
 });
