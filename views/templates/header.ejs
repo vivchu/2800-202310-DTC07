@@ -11,29 +11,43 @@
     <script src="server.js"></script>
     <style>
 .profile-icon {
-    font-size: 32px;
-    color: green;
-    position: absolute;
+  font-size: 32px;
+  color: green;
+  position: absolute;
+}
 
-  }
+.logo {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
 
+img {
+  width: 100%;
+  height: auto;
+  margin: 0;
+  padding: 0;
+}
+
+@media (max-width: 768px) {
   .logo {
-    position: absolute;
-    top: 10px;
-    left: 10px;
+    top: 5px;
+    left: 5px;
   }
+}
     </style>
 </head>
 
-<header class=" text-white py-3 ">
+<header class="text-center py-3" >
   <div class="container">
     <div class="row align-items-center">
-      <div class="col-md-2">
+      <div class="col-md-12">
+
+        <!-- <img src="/images/logo.png" alt="" width="80px"> -->
         <img src="/images/header.png" alt="">
-        <img src="/images/logo.png" alt="" width="80px">
       </div>
       <div class="col-md-10 text-right">
-       <a href="/profile" class="text-black profile-icon"><i class="fas fa-user"></i></a>
+       <!-- <a href="/profile" class="text-black profile-icon"><i class="fas fa-user"></i></a> -->
       </div>
     </div>
   </div>
