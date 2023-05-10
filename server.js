@@ -247,34 +247,27 @@ app.get('/search', (req, res) => {
 app.get('/searchName', (req, res) => {    
     res.render('searchName');
 });
-    
 
+// const searchRecipesByName = async (keywords) => {
+//     const searchRegex = new RegExp(keywords, 'i');
+//     const foundRecipes = await recipeCollection.find({ Name: searchRegex }).toArray();
+//     return foundRecipes;
+// }
 
+const searchRecipesByName = async (keywords) => {
+    const searchRegex = new RegExp(keywords, 'i');
+    const foundRecipes = await recipeCollection.find({ Name: searchRegex }).limit(200).toArray();
+    const sortedRecipes = foundRecipes.sort((a, b) => b.AggregatedRating - a.AggregatedRating);
+    return sortedRecipes;
+};
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+app.post('/searchNameSubmit', async (req, res) => {
+    const keywords = req.body.recipeName;
+    console.log(keywords)
+    const foundRecipes = await searchRecipesByName(keywords);
+    console.log(foundRecipes);
+    res.render('searchResults', { foundRecipes: foundRecipes });
+});
 
 
 
