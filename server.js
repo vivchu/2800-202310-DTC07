@@ -145,8 +145,11 @@ app.post('/submitUser', async (req, res) => {
 
         await userCollection.insertOne({ username: userName, email: userEmail, password: hashedPassword, type: "user" });
         console.log("Inserted user");
-
-        res.redirect("/login");
+        req.session.authenticated = true;
+        req.session.username = result[0].username;
+        req.session.email = userEmail;
+        req.session.cookie.maxAge = expireTime;
+        res.redirect("/");
     }
 });
 
