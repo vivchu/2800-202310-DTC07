@@ -1,0 +1,80 @@
+<%- include("templates/header") %>
+<!-- link the profile.css stylesheet -->
+<!-- <link rel="stylesheet" href="/styles/profile.css"> -->
+
+<br><br><br>
+<div class="container">
+    <form>
+        <!-- space for profile picture -->
+        <div class="d-flex justify-content-center">
+            <img src="/images/profile.png" alt="profile picture" width="200px">
+        </div>
+
+        <!-- Edit and Save buttons -->
+        <style>
+            .btn-custom {
+                width: 150px;
+            }
+        </style>
+        <div class="d-flex justify-content-center mt-5">
+            <button type="button" class="btn btn-secondary btn-lg rounded-pill btn-custom"
+                onclick="editUserInfo()">Edit</button>
+            <span style="width: 10px"></span>
+            <button type="button" class="btn btn-info btn-lg rounded-pill btn-custom"
+                onclick="saveUserInfo()">Save</button>
+        </div>
+
+        <!-- Personal Information -->
+        <br><br>
+        <fieldset class="mb-3" id="personalInfoFields" disabled>
+            <div class="form-group row justify-content-center" style="flex-wrap: nowrap;">
+                <label for="nameInput" class="col-2 col-form-label text-center">Name:</label>
+                <div class="col-sm-6">
+                    <input type="text" id="nameInput" class="form-control" placeholder="Enter your name">
+                </div>
+            </div>
+            <div class="form-group row justify-content-center" style="flex-wrap: nowrap;">
+                <label for="nameInput" class="col-2 col-form-label text-center">Email:</label>
+                <div class="col-sm-6">
+                    <input type="text" id="nameInput" class="form-control" placeholder="Enter your email">
+                </div>
+            </div>
+            <div class="form-group row justify-content-center" style="flex-wrap: nowrap;">
+                <label for="nameInput" class="col-2 col-form-label text-center">Password:</label>
+                <div class="col-sm-6">
+                    <input type="text" id="nameInput" class="form-control" placeholder="Enter your password">
+                </div>
+            </div>
+            
+            
+            <br>
+            <form>
+                <div class="form-group text-center">
+                    <h4>Cooking Skill Level</h4>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="skillLevel" id="beginnerRadio" value="beginner">
+                        <label class="form-check-label" for="beginnerRadio">
+                            Beginner
+                        </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="skillLevel" id="intermediateRadio" value="intermediate">
+                        <label class="form-check-label" for="intermediateRadio">
+                            Intermediate
+                        </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="skillLevel" id="expertRadio" value="expert">
+                        <label class="form-check-label" for="expertRadio">
+                            Expert
+                        </label>
+                    </div>
+                </div>
+            </form>
+            <br>
+        </fieldset><br><br><br><br>
+    </form><br>
+</div>
+
+
+<%- include("templates/footer") %>

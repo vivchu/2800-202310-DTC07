@@ -162,7 +162,9 @@ app.post('/submitUser', async (req, res) => {
 // this is for the profile page route (Corey)
 
 
-
+app.get('/profile', (req, res) => {
+    res.render('profile');
+});
 
 
 
