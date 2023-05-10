@@ -1,19 +1,33 @@
 <%- include("templates/header") %>
 <!-- link the profile.css stylesheet -->
 <!-- <link rel="stylesheet" href="/styles/profile.css"> -->
+<!-- add jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- add bootstrap js -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 <br><br><br>
 <div class="container">
     <form>
         <!-- space for profile picture -->
-        <div class="d-flex justify-content-center">
-            <img src="/images/profile.png" alt="profile picture" width="200px">
+        <div class="container">
+            <div class=" row d-flex justify-content-center">
+                <img src="/images/profile.png" alt="profile picture" width="200px">
+            </div>
+            <div class="row d-flex justify-content-center">
+                <h3><%= user[0].username %></h3>
+            </div>
         </div>
+        <br>
+        
 
         <!-- Edit and Save buttons -->
         <style>
             .btn-custom {
                 width: 150px;
+            }
+            .btn-custom-password {
+                width: 250px;
             }
         </style>
         <div class="d-flex justify-content-center mt-5">
@@ -30,23 +44,15 @@
             <div class="form-group row justify-content-center" style="flex-wrap: nowrap;">
                 <label for="nameInput" class="col-2 col-form-label text-center">Name:</label>
                 <div class="col-sm-6">
-                    <input type="text" id="nameInput" class="form-control" placeholder="Enter your name">
+                    <input type="text" id="nameInput" class="form-control" placeholder="<%= user[0].username %>">
                 </div>
             </div>
             <div class="form-group row justify-content-center" style="flex-wrap: nowrap;">
                 <label for="nameInput" class="col-2 col-form-label text-center">Email:</label>
                 <div class="col-sm-6">
-                    <input type="text" id="nameInput" class="form-control" placeholder="Enter your email">
+                    <input type="text" id="nameInput" class="form-control" placeholder="<%= user[0].email %>">
                 </div>
             </div>
-            <div class="form-group row justify-content-center" style="flex-wrap: nowrap;">
-                <label for="nameInput" class="col-2 col-form-label text-center">Password:</label>
-                <div class="col-sm-6">
-                    <input type="text" id="nameInput" class="form-control" placeholder="Enter your password">
-                </div>
-            </div>
-            
-            
             <br>
             <form>
                 <div class="form-group text-center">
@@ -72,8 +78,45 @@
                 </div>
             </form>
             <br>
-        </fieldset><br><br><br><br>
+        </fieldset>
     </form><br>
+
+    <!-- change password -->
+    <!-- Button to trigger modal -->
+    <div class="text-center">
+        <button type="button" class="btn btn-info btn-lg rounded-pill btn-custom-password" data-toggle="modal" data-target="#changePasswordModal">
+            Change Password
+        </button>
+    </div><br><br><br><br><br>
+    
+    <!-- Modal -->
+    <div class="modal fade" id="changePasswordModal" tabindex="-1" role="dialog" aria-labelledby="changePasswordModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="changePasswordModalLabel">Change Password</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="/changePassword">
+                        <div class="form-group">
+                            <label for="newPassword">New Password</label>
+                            <input type="password" class="form-control" id="newPassword" name="newPassword" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirmPassword">Confirm Password</label>
+                            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword"
+                                required>
+                        </div>
+                        <button type="submit" class="text-center btn btn-info btn-lg rounded-pill btn-custom">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 
