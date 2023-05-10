@@ -61,7 +61,12 @@ app.set('view engine', 'ejs');
 app.get('/', async (req, res) => {
     var result = await recipeCollection.find().limit(3).toArray();
     console.log(result);
+    if (!req.session.authenticated) {
     res.render('home');
+    }
+    else { 
+        res.render('homeLoggedIn');
+    }
 });
 
 app.get('/login', (req, res) => {
@@ -145,8 +150,9 @@ app.post('/submitUser', async (req, res) => {
 
         await userCollection.insertOne({ username: userName, email: userEmail, password: hashedPassword, type: "user" });
         console.log("Inserted user");
+        if (await userCollection.find({ username: userName }))
         req.session.authenticated = true;
-        req.session.username = result[0].username;
+        req.session.username = userName;
         req.session.email = userEmail;
         req.session.cookie.maxAge = expireTime;
         res.redirect("/");
