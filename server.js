@@ -13,8 +13,8 @@ const Joi = require('joi');
 
 const app = express();
 
-// const port = process.env.PORT || 3000;
-const port = 3000;
+const port = process.env.PORT || 3000;
+// const port = 3000;
 
 const mongodb_user = process.env.MONGODB_USER;
 const mongodb_password = process.env.MONGODB_PASSWORD;
@@ -159,8 +159,176 @@ app.post('/submitUser', async (req, res) => {
     }
 });
 
+// this is for the profile page route (Corey)
 
 
-app.get('/createUser', (req, res) => {
-    res.render('createUser');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// this is for the forgot password and email page routes (Vivian)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// this is for the search page route (McKenzie)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// this is for the favourite page route
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+app.get('/logout', (req, res) => {
+    req.session.destroy();
+    res.redirect('/');
 });
+
+// catch all 404 page not found errors
+app.get('*', (req, res) => {
+    res.status(404)
+    // res.render('errorMessages', {error: "Error 404 - Page not found", redirect: "/", button: "Go To Home Page"});
+    res.send("Error 404 - Page not found");
+    res.redirect('/');
+})
