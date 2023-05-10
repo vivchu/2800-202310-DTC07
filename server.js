@@ -188,6 +188,65 @@ app.post('/forgotPasswordSubmit', async (req, res) => {
     }
 });
 
+app.post('/submitUser', async (req, res) => {
+    const { username, email, password, secretquestion, secretanswer } = req.body;
+    // if no user name, email, or password, redirect to signup page
+    if (!username) {
+        res.redirect("/createUser?error=Missing username field, please try again");
+        return;
+    }
+    if (!email) {
+        res.redirect("/createUser?error=Missing email field, please try again");
+        return;
+    }
+    if (!password) {
+        res.redirect("/createUser?error=Missing password field, please try again");
+        return;
+    }
+    if (!secretQuestion) {
+        res.redirect("/createUser?error=Missing question field, please try again");
+        return;
+    }
+    if (!secretAnswer) {
+        res.redirect("/createUser?error=Missing answer field, please try again");
+        return;
+    }
+    if (username && email && password && secretQuestion && secretAnswer) {
+        var userName = req.body.username;
+        var userEmail = req.body.email;
+        var userPassword = req.body.password;
+        var secretQuestion = req.body.secretQuestion;
+        var secretAnswer = req.body.secretAnswer;
+        const schema = Joi.object(
+            {
+                userName: Joi.string().alphanum().max(20).required(),
+                userEmail: Joi.string().email().required(),
+                userPassword: Joi.string().max(20).required(),
+                secretQuestion: Joi.string().email().required(),
+                secretAnswer: Joi.string().max(100).required()
+            });
+
+        const validationResult = schema.validate({ userName, userEmail, userPassword, secretAnswer, secretQuestion });
+        console.log(validationResult.error);
+        if (validationResult.error != null) {
+            console.log(validationResult.error);
+            res.redirect("/createUser");
+            return;
+        }
+
+        var hashedPassword = await bcrypt.hashSync(userPassword, 1);
+
+        await userCollection.insertOne({ username: userName, email: userEmail, password: hashedPassword, type: "user", secret_question: secretQuestion, secret_answer: secretAnswer });
+        console.log("Inserted user");
+        if (await userCollection.find({ username: userName }))
+            req.session.authenticated = true;
+        req.session.username = userName;
+        req.session.email = userEmail;
+        req.session.cookie.maxAge = expireTime;
+        res.redirect("/");
+    }
+});
+
 
 
 
