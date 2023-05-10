@@ -150,12 +150,14 @@ app.post('/submitUser', async (req, res) => {
 
         await userCollection.insertOne({ username: userName, email: userEmail, password: hashedPassword, type: "user" });
         console.log("Inserted user");
-        if (await userCollection.find({ username: userName }))
+        if (await userCollection.find({ username: userName })) {
         req.session.authenticated = true;
         req.session.username = userName;
         req.session.email = userEmail;
         req.session.cookie.maxAge = expireTime;
-        res.redirect("/");
+        res.render("homeLoggedIn");
+        return;
+        }
     }
 });
 
@@ -238,7 +240,14 @@ app.post('/submitUser', async (req, res) => {
 
 
 // this is for the search page route (McKenzie)
+app.get('/search', (req, res) => {
+    res.render('search');
+});
 
+app.get('/searchName', (req, res) => {    
+    res.render('searchName');
+});
+    
 
 
 
