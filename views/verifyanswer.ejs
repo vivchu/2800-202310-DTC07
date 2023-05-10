@@ -1,0 +1,15 @@
+<%- include("templates/header") %>
+    <div class="container">
+    <form action="/verifyanswerSubmit" method="post">
+        <p>
+            <%= secretQuestion %>
+        </p>
+        <div class="form-group">
+            <label for="answer">Answer:</label>
+            <input name='answer' type='text' class="form-control" id="answer" placeholder='Enter answer'>
+        </div>
+    
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    </div>
+    <%- include("templates/footer") %>
