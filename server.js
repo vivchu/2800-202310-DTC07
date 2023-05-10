@@ -62,9 +62,9 @@ app.get('/', async (req, res) => {
     var result = await recipeCollection.find().limit(3).toArray();
     console.log(result);
     if (!req.session.authenticated) {
-    res.render('home');
+        res.render('home');
     }
-    else { 
+    else {
         res.render('homeLoggedIn');
     }
 });
@@ -113,52 +113,6 @@ app.get("/createUser", (req, res) => {
     res.render("createUser.ejs", { errorMessage: errorMessage });
 });
 
-app.post('/submitUser', async (req, res) => {
-    const { username, email, password } = req.body;
-    // if no user name, email, or password, redirect to signup page
-    if (!username) {
-        res.redirect("/createUser?error=Missing username field, please try again");
-        return;
-    }
-    if (!email) {
-        res.redirect("/createUser?error=Missing email field, please try again");
-        return;
-    }
-    if (!password) {
-        res.redirect("/createUser?error=Missing password field, please try again");
-        return;
-    }
-    if (username && email && password) {
-        var userName = req.body.username;
-        var userEmail = req.body.email;
-        var userPassword = req.body.password;
-        const schema = Joi.object(
-            {
-                userName: Joi.string().alphanum().max(20).required(),
-                userEmail: Joi.string().email().required(),
-                userPassword: Joi.string().max(20).required()
-            });
-        const validationResult = schema.validate({ userName, userEmail, userPassword });
-        console.log(validationResult.error);
-        if (validationResult.error != null) {
-            console.log(validationResult.error);
-            res.redirect("/createUser");
-            return;
-        }
-
-        var hashedPassword = await bcrypt.hashSync(userPassword, 1);
-
-        await userCollection.insertOne({ username: userName, email: userEmail, password: hashedPassword, type: "user" });
-        console.log("Inserted user");
-        if (await userCollection.find({ username: userName }))
-        req.session.authenticated = true;
-        req.session.username = userName;
-        req.session.email = userEmail;
-        req.session.cookie.maxAge = expireTime;
-        res.redirect("/");
-    }
-});
-
 // this is for the profile page route (Corey)
 
 
@@ -198,17 +152,41 @@ app.post('/submitUser', async (req, res) => {
 
 
 // this is for the forgot password and email page routes (Vivian)
+app.get('/forgotPassword', (req, res) => {
+    res.render('forgotPassword');
+});
 
+app.post('/forgotPasswordSubmit', async (req, res) => {
+    var userEmail = req.body.email;
 
+    const schema = Joi.string().max(20).required();
+    const validationResult = schema.validate(userEmail);
+    if (validationResult.error != null) {
+        console.log(userEmail);
+        res.redirect("/forgotPassword");
+        return;
+    }
+    const result = await userCollection.find({ email: userEmail }).project({ email: 1, _id: 1 }).toArray();
+    const question = await userCollection.find({ email: userEmail }).project({ secret_question: 1, _id: 0 }).toArray();
 
-
-
-
-
-
-
-
-
+    if (result.length != 1) {
+        res.render(errorMessage, { errorMessage: "User not found" });
+    }
+    if (await bcrypt.compare(userEmail, result[0].useremail)) {
+        console.log("found user email");
+        req.session.authenticated = true;
+        req.session.username = question[0].secret_question;
+        req.session.usertype = result[0].usertype;
+        req.session.secret_question = question[0].secret_question;
+        req.session.cookie.maxAge = expireTime
+        res.redirect('/verifyanswer');
+        return;
+    }
+    else {
+        ;
+        res.render(errorMessage, { errorMessage: "User not found" });
+    }
+});
 
 
 
