@@ -31,6 +31,7 @@ const expireTime = 1 * 60 * 60 * 1000; //expires after 1 day (hours * minutes * 
 var { database } = include('databaseConnection');
 
 const userCollection = database.db(mongodb_database).collection('users');
+const recipeCollection = database.db(mongodb_database).collection('recipes');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.urlencoded({ extended: false }));
@@ -57,15 +58,99 @@ app.listen(port, () =>
 
 app.set('view engine', 'ejs');
 
-app.get('/', (req, res) => {
+app.get('/', async (req, res) => {
+    var result = await recipeCollection.find().limit(3).toArray();
+    console.log(result);
     res.render('home');
 });
 
 app.get('/login', (req, res) => {
-    // req.session.loginError = true;
-    // res.render('login', { loginError: req.session.loginError });
-    res.render('login', { loginError: true });
+    var errorMessage = req.query.error;
+    console.log(errorMessage);
+    res.render("login", { errorMessage: errorMessage });
 });
+
+app.post("/loginSubmit", async (req, res) => {
+    var userEmail = req.body.email;
+    var userPassword = req.body.password;
+
+    const schema = Joi.string().email().required();
+    const validationResult = schema.validate(userEmail);
+    if (validationResult.error != null) {
+        res.redirect("/login?error=Missing field, please try again");
+        return;
+    }
+
+    const result = await userCollection.find({ email: userEmail }).project({ username: 1, email: 1, password: 1, _id: 1 }).toArray();
+
+    if (result.length != 1) {
+        res.redirect("/login?error=User not found");
+        return;
+    }
+    if (await bcrypt.compare(userPassword, result[0].password)) {
+        req.session.authenticated = true;
+        req.session.username = result[0].username;
+        req.session.email = userEmail;
+        req.session.cookie.maxAge = expireTime;
+
+        res.redirect('/');
+        return;
+    }
+    else {
+        res.redirect("/login?error=Invalid email or password");
+        return;
+    }
+});
+
+app.get("/createUser", (req, res) => {
+    var errorMessage = req.query.error;
+    console.log(errorMessage);
+    res.render("createUser.ejs", { errorMessage: errorMessage });
+});
+
+app.post('/submitUser', async (req, res) => {
+    const { username, email, password } = req.body;
+    // if no user name, email, or password, redirect to signup page
+    if (!username) {
+        res.redirect("/createUser?error=Missing username field, please try again");
+        return;
+    }
+    if (!email) {
+        res.redirect("/createUser?error=Missing email field, please try again");
+        return;
+    }
+    if (!password) {
+        res.redirect("/createUser?error=Missing password field, please try again");
+        return;
+    }
+    if (username && email && password) {
+        var userName = req.body.username;
+        var userEmail = req.body.email;
+        var userPassword = req.body.password;
+        const schema = Joi.object(
+            {
+                userName: Joi.string().alphanum().max(20).required(),
+                userEmail: Joi.string().email().required(),
+                userPassword: Joi.string().max(20).required()
+            });
+        const validationResult = schema.validate({ userName, userEmail, userPassword });
+        console.log(validationResult.error);
+        if (validationResult.error != null) {
+            console.log(validationResult.error);
+            res.redirect("/createUser");
+            return;
+        }
+
+        var hashedPassword = await bcrypt.hashSync(userPassword, 1);
+
+        await userCollection.insertOne({ username: userName, email: userEmail, password: hashedPassword, type: "user" });
+        console.log("Inserted user");
+
+        res.redirect("/login");
+    }
+});
+
+
 
 app.get('/createUser', (req, res) => {
     res.render('createUser');
