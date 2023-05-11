@@ -4,9 +4,9 @@
     <div class="row">
         <% foundRecipes.forEach((recipe, index)=> { %>
                 <div class="col-md-4 mb-3">
-                <div class="card">
+                <div class="card d-flex flex-column align-items-center justify-content-center">
                     <div class="card-body">
-                        <img src="images/meal.jpg" alt="<%= recipe.Name %>" height="100px">
+                        <img src="<%= recipe.Image_Link %>" alt="<%= recipe.Name %>" height="100px" class="mx-auto">
                         <h5 class="card-title">
                             <%= recipe.Name %>
                         </h5>

@@ -237,8 +237,6 @@ app.post('/submitUser', async (req, res) => {
 
 
 
-
-
 // this is for the search page route (McKenzie)
 app.get('/search', (req, res) => {
     res.render('search');
@@ -248,18 +246,24 @@ app.get('/searchName', (req, res) => {
     res.render('searchName');
 });
 
-// const searchRecipesByName = async (keywords) => {
-//     const searchRegex = new RegExp(keywords, 'i');
-//     const foundRecipes = await recipeCollection.find({ Name: searchRegex }).toArray();
-//     return foundRecipes;
-// }
-
+// populates search results based off of image availability and then rating
 const searchRecipesByName = async (keywords) => {
     const searchRegex = new RegExp(keywords, 'i');
-    const foundRecipes = await recipeCollection.find({ Name: searchRegex }).limit(200).toArray();
-    const sortedRecipes = foundRecipes.sort((a, b) => b.AggregatedRating - a.AggregatedRating);
+    const foundRecipes = await recipeCollection.find({ Name: searchRegex }).toArray();
+
+    const sortedRecipes = foundRecipes.sort((a, b) => {
+        if (a.Image_Link === 'Unavailable' && b.Image_Link !== 'Unavailable') {
+            return 1;
+        } else if (a.Image_Link !== 'Unavailable' && b.Image_Link === 'Unavailable') {
+            return -1;
+        } else {
+            return b.AggregatedRating - a.AggregatedRating;
+        }
+    }).slice(0, 200);
+
     return sortedRecipes;
 };
+
 
 app.post('/searchNameSubmit', async (req, res) => {
     const keywords = req.body.recipeName;
