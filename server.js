@@ -63,9 +63,9 @@ app.get('/', async (req, res) => {
     var result = await recipeCollection.find().limit(3).toArray();
     console.log(result);
     if (!req.session.authenticated) {
-    res.render('home');
+        res.render('home');
     }
-    else { 
+    else {
         res.render('homeLoggedIn');
     }
 });
@@ -114,38 +114,9 @@ app.get("/createUser", (req, res) => {
     res.render("createUser.ejs", { errorMessage: errorMessage });
 });
 
-app.post('/submitUser', async (req, res) => {
-    const { username, email, password } = req.body;
-    // if no user name, email, or password, redirect to signup page
-    if (!username) {
-        res.redirect("/createUser?error=Missing username field, please try again");
-        return;
-    }
-    if (!email) {
-        res.redirect("/createUser?error=Missing email field, please try again");
-        return;
-    }
-    if (!password) {
-        res.redirect("/createUser?error=Missing password field, please try again");
-        return;
-    }
-    if (username && email && password) {
-        var userName = req.body.username;
-        var userEmail = req.body.email;
-        var userPassword = req.body.password;
-        const schema = Joi.object(
-            {
-                userName: Joi.string().alphanum().max(20).required(),
-                userEmail: Joi.string().email().required(),
-                userPassword: Joi.string().max(20).required()
-            });
-        const validationResult = schema.validate({ userName, userEmail, userPassword });
-        console.log(validationResult.error);
-        if (validationResult.error != null) {
-            console.log(validationResult.error);
-            res.redirect("/createUser");
-            return;
-        }
+// this is for the profile page route (Corey)
+
+
 
         var hashedPassword = await bcrypt.hashSync(userPassword, 1);
 
@@ -162,7 +133,7 @@ app.post('/submitUser', async (req, res) => {
     }
 });
 
-// this is for the profile page route (Corey)
+// this is for the profile page route (Corey) 
 
 
 app.get('/profile', async (req, res) => {
@@ -226,49 +197,131 @@ app.post('/editSkillLevel', async (req, res) => {
 });
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // this is for the forgot password and email page routes (Vivian)
 
 
 
+// this is for the forgot password and email page routes (Vivian)
+app.get('/forgotPassword', (req, res) => {
+    res.render('forgotPassword');
+});
 
+app.post('/forgotPasswordSubmit', async (req, res) => {
+    var userEmail = req.body.email;
+    const schema = Joi.string().max(20).required();
+    const validationResult = schema.validate(userEmail);
+    if (validationResult.error != null) {
+        console.log(userEmail);
+        res.redirect("/forgotPassword");
+        return;
+    }
+    const result = await userCollection.find({ email: userEmail }).project({ email: 1, _id: 1 }).toArray();
+    const question = await userCollection.find({ email: userEmail }).project({ secretquestion: 1, _id: 0 }).toArray();
 
+    if (result.length!=1) {
+        res.redirect("/forgotPassword?error=user not found, please try again");
+    }
+    else {
+        req.session.secret_question = question[0].secretquestion;
+        req.session.cookie.maxAge = expireTime
+        req.session.email = userEmail;
+        console.log(req.session.email);
+        res.redirect('/verifyanswer');
+        return;
+    }
+});
 
+app.get('/verifyanswer', (req, res) => {
+    res.render('verifyanswer', { secret_question: req.session.secret_question });
+});
 
+app.post('/verifyanswerSubmit', async(req, res) => {
+    var userAnswer = req.body.answer;
+    const schema = Joi.string().max(100).required();
+    const validationResult = schema.validate(userAnswer);
+    if (validationResult.error != null) {
+        console.log(userAnswer);
+        res.redirect("/verifyanswer?error=incorrect answer, please try again");
+        return;
+    }
+    console.log(req.session.email)
+    var answer = await userCollection.find({ email: req.session.email }).project({ secretanswer: 1, _id: 0 }).toArray();
+    console.log(answer);
+    if (answer.length != 1) {
+        res.redirect("/verifyanswer?error=no answer found, please try again");
+    }
+    else {
+        const storedAnswer = answer[0].secretanswer;
+            if (userAnswer !== storedAnswer) {
+                console.log(userAnswer);
+                res.redirect("/verifyanswer?error=incorrect answer, please try again");
+                return;
+            }
+            req.session.secret_answer = answer[0].secretanswer;
+            req.session.cookie.maxAge = expireTime;
+            console.log(req.session.secretanswer);
+            res.redirect('/profile');
+            return;
+        }
+});
 
+app.post('/submitUser', async (req, res) => {
+    if (!req.body.username) {
+        res.redirect("/createUser?error=Missing username field, please try again");
+        return;
+    }
+    if (!req.body.email) {
+        res.redirect("/createUser?error=Missing email field, please try again");
+        return;
+    }
+    if (!req.body.password) {
+        res.redirect("/createUser?error=Missing password field, please try again");
+        return;
+    }
+    if (!req.body.secretQuestion) {
+        console.log(secretQuestion)
+        res.redirect("/createUser?error=Missing question field, please try again");
+        return;
+    }
+    if (!req.body.secretAnswer) {
+        res.redirect("/createUser?error=Missing answer field, please try again");
+        return;
+    }
+    if (req.body.username && req.body.email && req.body.password && req.body.secretQuestion && req.body.secretAnswer) {
+        var userName = req.body.username;
+        var userEmail = req.body.email;
+        var userPassword = req.body.password;
+        var secretQuestion = req.body.secretQuestion;
+        var secretAnswer = req.body.secretAnswer;
+        const schema = Joi.object(
+            {
+                userName: Joi.string().alphanum().max(20).required(),
+                userEmail: Joi.string().email().required(),
+                userPassword: Joi.string().max(20).required(),
+                secretQuestion: Joi.string().max(1000).required(),
+                secretAnswer: Joi.string().max(100).required()
+            });
 
+        const validationResult = schema.validate({ userName, userEmail, userPassword, secretAnswer, secretQuestion });
+        console.log(validationResult.error);
+        if (validationResult.error != null) {
+            console.log(validationResult.error);
+            res.redirect("/createUser");
+            return;
+        }
 
+        var hashedPassword = await bcrypt.hashSync(userPassword, 1);
 
+        await userCollection.insertOne({ username: userName, email: userEmail, password: hashedPassword, type: "user", secretquestion: secretQuestion, secretanswer: secretAnswer });
+        console.log("Inserted user");
+        if (await userCollection.find({ username: userName }))
+            req.session.authenticated = true;
+        req.session.username = userName;
+        req.session.email = userEmail;
+        req.session.cookie.maxAge = expireTime;
+        res.redirect("/");
+    }
+});
 
 
 
@@ -394,5 +447,5 @@ app.get('*', (req, res) => {
     res.status(404)
     // res.render('errorMessages', {error: "Error 404 - Page not found", redirect: "/", button: "Go To Home Page"});
     res.send("Error 404 - Page not found");
-    res.redirect('/');
+    // res.redirect('/');
 })
