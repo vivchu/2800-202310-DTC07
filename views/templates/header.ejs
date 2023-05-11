@@ -10,11 +10,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <!-- <script src="server.js"></script> -->
     <style>
-.profile-icon {
-  font-size: 32px;
-  color: green;
-  position: absolute;
-}
+
 
 .logo {
   position: absolute;
@@ -22,11 +18,21 @@
   left: 10px;
 }
 
-img {
-  width: 100%;
+#headerImage {
+  width: 60%;
   height: auto;
   margin: 0;
-  padding: 0;
+position: absolute;
+  top: 0;
+  left: 0;
+
+}
+#logoImage{
+  width: 60%;
+  height: auto;
+  margin-top: 70px;
+  margin-bottom: 20px;
+  
 }
 
 @media (max-width: 768px) {
@@ -34,6 +40,13 @@ img {
     top: 5px;
     left: 5px;
   }
+}
+#profileIcon{
+  position: fixed;
+  top: 15px;
+  right: 40px;
+  font-size: 25px;
+  color:  #468414;
 }
     </style>
 </head>
@@ -44,10 +57,10 @@ img {
       <div class="col-md-12">
 
         <!-- <img src="/images/logo.png" alt="" width="80px"> -->
-        <img src="/images/header.png" alt="">
+        <img id="headerImage" src="/images/header.png" alt="">
       </div>
       <div class="col-md-10 text-right">
-       <!-- <a href="/profile" class="text-black profile-icon"><i class="fas fa-user"></i></a> -->
+       <a  id ="profileIcon"href="/profile" class="text-black profile-icon"><i class="fas fa-user"></i></a>
       </div>
     </div>
   </div>
