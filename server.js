@@ -167,24 +167,17 @@ app.post('/forgotPasswordSubmit', async (req, res) => {
         return;
     }
     const result = await userCollection.find({ email: userEmail }).project({ email: 1, _id: 1 }).toArray();
-    const question = await userCollection.find({ email: userEmail }).project({ secret_question: 1, _id: 0 }).toArray();
+    const question = await userCollection.find({ email: userEmail }).project({ secretquestion: 1, _id: 0 }).toArray();
 
-    if (result.length != 1) {
-        res.render(errorMessage, { errorMessage: "User not found" });
-    }
-    if (await bcrypt.compare(userEmail, result[0].useremail)) {
-        console.log("found user email");
-        req.session.authenticated = true;
-        req.session.username = question[0].secret_question;
-        req.session.usertype = result[0].usertype;
-        req.session.secret_question = question[0].secret_question;
-        req.session.cookie.maxAge = expireTime
-        res.redirect('/verifyanswer');
-        return;
+    if (result.length!=1) {
+        res.redirect("/forgotPassword?error=user not found, please try again");
     }
     else {
-        ;
-        res.render(errorMessage, { errorMessage: "User not found" });
+        req.session.secret_question = question[0].secret_question;
+        req.session.cookie.maxAge = expireTime
+        console.log(req.session.secret_question);
+        res.redirect('/verifyanswer');
+        return;
     }
 });
 
