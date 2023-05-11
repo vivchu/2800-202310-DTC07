@@ -433,3 +433,19 @@ app.get('*', (req, res) => {
     res.send("Error 404 - Page not found");
     // res.redirect('/');
 })
+
+const { ObjectId } = require('mongodb');
+
+app.get('/recipes/:id', async (req, res) => {
+    const id = req.params.id;
+    if (!ObjectId.isValid(id)) {
+        return res.status(400).send('Invalid recipe ID');
+    }
+    const recipe = await recipeCollection.findOne(
+        { _id: new ObjectId(id) },
+        { projection: { Name: 1, Description: 1, Images: 1, _id: 1, RecipeInstructions: 1, RecipeIngredientParts: 1, Image_Link: 1 } }
+    );
+    res.render('recipeDetails', { recipe: recipe });
+});
+
+
