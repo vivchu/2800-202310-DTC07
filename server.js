@@ -114,24 +114,6 @@ app.get("/createUser", (req, res) => {
     res.render("createUser.ejs", { errorMessage: errorMessage });
 });
 
-// this is for the profile page route (Corey)
-
-
-
-        var hashedPassword = await bcrypt.hashSync(userPassword, 1);
-
-        await userCollection.insertOne({ username: userName, email: userEmail, password: hashedPassword, type: "user" });
-        console.log("Inserted user");
-        if (await userCollection.find({ username: userName })) {
-        req.session.authenticated = true;
-        req.session.username = userName;
-        req.session.email = userEmail;
-        req.session.cookie.maxAge = expireTime;
-        res.render("homeLoggedIn");
-        return;
-        }
-    }
-});
 
 // this is for the profile page route (Corey) 
 
@@ -312,14 +294,16 @@ app.post('/submitUser', async (req, res) => {
 
         var hashedPassword = await bcrypt.hashSync(userPassword, 1);
 
-        await userCollection.insertOne({ username: userName, email: userEmail, password: hashedPassword, type: "user", secretquestion: secretQuestion, secretanswer: secretAnswer });
+        await userCollection.insertOne({ username: userName, email: userEmail, password: hashedPassword, type: "user" });
         console.log("Inserted user");
-        if (await userCollection.find({ username: userName }))
+        if (await userCollection.find({ username: userName })) {
             req.session.authenticated = true;
-        req.session.username = userName;
-        req.session.email = userEmail;
-        req.session.cookie.maxAge = expireTime;
-        res.redirect("/");
+            req.session.username = userName;
+            req.session.email = userEmail;
+            req.session.cookie.maxAge = expireTime;
+            res.render("homeLoggedIn");
+            return;
+        }
     }
 });
 
