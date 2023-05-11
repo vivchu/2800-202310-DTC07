@@ -151,6 +151,88 @@ app.get("/createUser", (req, res) => {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // this is for the forgot password and email page routes (Vivian)
 app.get('/forgotPassword', (req, res) => {
     res.render('forgotPassword');
@@ -158,7 +240,6 @@ app.get('/forgotPassword', (req, res) => {
 
 app.post('/forgotPasswordSubmit', async (req, res) => {
     var userEmail = req.body.email;
-
     const schema = Joi.string().max(20).required();
     const validationResult = schema.validate(userEmail);
     if (validationResult.error != null) {
@@ -173,12 +254,47 @@ app.post('/forgotPasswordSubmit', async (req, res) => {
         res.redirect("/forgotPassword?error=user not found, please try again");
     }
     else {
-        req.session.secret_question = question[0].secret_question;
+        req.session.secret_question = question[0].secretquestion;
         req.session.cookie.maxAge = expireTime
-        console.log(req.session.secret_question);
+        req.session.email = userEmail;
+        console.log(req.session.email);
         res.redirect('/verifyanswer');
         return;
     }
+});
+
+app.get('/verifyanswer', (req, res) => {
+    res.render('verifyanswer', { secret_question: req.session.secret_question });
+});
+
+app.post('/verifyanswerSubmit', async(req, res) => {
+    var userAnswer = req.body.answer;
+    const schema = Joi.string().max(100).required();
+    const validationResult = schema.validate(userAnswer);
+    if (validationResult.error != null) {
+        console.log(userAnswer);
+        res.redirect("/verifyanswer?error=incorrect answer, please try again");
+        return;
+    }
+    console.log(req.session.email)
+    var answer = await userCollection.find({ email: req.session.email }).project({ secretanswer: 1, _id: 0 }).toArray();
+    console.log(answer);
+    if (answer.length != 1) {
+        res.redirect("/verifyanswer?error=no answer found, please try again");
+    }
+    else {
+        const storedAnswer = answer[0].secretanswer;
+            if (userAnswer !== storedAnswer) {
+                console.log(userAnswer);
+                res.redirect("/verifyanswer?error=incorrect answer, please try again");
+                return;
+            }
+            req.session.secret_answer = answer[0].secretanswer;
+            req.session.cookie.maxAge = expireTime;
+            console.log(req.session.secretanswer);
+            res.redirect('/profile');
+            return;
+        }
 });
 
 app.post('/submitUser', async (req, res) => {
@@ -359,5 +475,5 @@ app.get('*', (req, res) => {
     res.status(404)
     // res.render('errorMessages', {error: "Error 404 - Page not found", redirect: "/", button: "Go To Home Page"});
     res.send("Error 404 - Page not found");
-    res.redirect('/');
+    // res.redirect('/');
 })
