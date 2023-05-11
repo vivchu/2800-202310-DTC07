@@ -189,29 +189,28 @@ app.post('/forgotPasswordSubmit', async (req, res) => {
 });
 
 app.post('/submitUser', async (req, res) => {
-    const { username, email, password, secretquestion, secretanswer } = req.body;
-    // if no user name, email, or password, redirect to signup page
-    if (!username) {
+    if (!req.body.username) {
         res.redirect("/createUser?error=Missing username field, please try again");
         return;
     }
-    if (!email) {
+    if (!req.body.email) {
         res.redirect("/createUser?error=Missing email field, please try again");
         return;
     }
-    if (!password) {
+    if (!req.body.password) {
         res.redirect("/createUser?error=Missing password field, please try again");
         return;
     }
-    if (!secretQuestion) {
+    if (!req.body.secretQuestion) {
+        console.log(secretQuestion)
         res.redirect("/createUser?error=Missing question field, please try again");
         return;
     }
-    if (!secretAnswer) {
+    if (!req.body.secretAnswer) {
         res.redirect("/createUser?error=Missing answer field, please try again");
         return;
     }
-    if (username && email && password && secretQuestion && secretAnswer) {
+    if (req.body.username && req.body.email && req.body.password && req.body.secretQuestion && req.body.secretAnswer) {
         var userName = req.body.username;
         var userEmail = req.body.email;
         var userPassword = req.body.password;
@@ -222,7 +221,7 @@ app.post('/submitUser', async (req, res) => {
                 userName: Joi.string().alphanum().max(20).required(),
                 userEmail: Joi.string().email().required(),
                 userPassword: Joi.string().max(20).required(),
-                secretQuestion: Joi.string().email().required(),
+                secretQuestion: Joi.string().max(1000).required(),
                 secretAnswer: Joi.string().max(100).required()
             });
 
@@ -236,7 +235,7 @@ app.post('/submitUser', async (req, res) => {
 
         var hashedPassword = await bcrypt.hashSync(userPassword, 1);
 
-        await userCollection.insertOne({ username: userName, email: userEmail, password: hashedPassword, type: "user", secret_question: secretQuestion, secret_answer: secretAnswer });
+        await userCollection.insertOne({ username: userName, email: userEmail, password: hashedPassword, type: "user", secretquestion: secretQuestion, secretanswer: secretAnswer });
         console.log("Inserted user");
         if (await userCollection.find({ username: userName }))
             req.session.authenticated = true;
