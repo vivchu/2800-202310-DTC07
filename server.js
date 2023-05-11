@@ -33,6 +33,7 @@ var { database } = include('databaseConnection');
 const userCollection = database.db(mongodb_database).collection('users');
 const recipeCollection = database.db(mongodb_database).collection('recipes');
 
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static("public"));
@@ -189,6 +190,22 @@ app.post('/changePassword', async (req, res) => {
     res.redirect('/profile?success=Password changed successfully');
 });
 
+app.post('/editProfile', async (req, res) => {
+    if (!req.session.authenticated) {
+        res.redirect('/');
+        return;
+    }
+    var newUsername = req.body.name;
+    var newEmail = req.body.email;
+    if (newUsername) {
+        await userCollection.updateOne({ email: req.session.email }, { $set: { username: newUsername } });
+    }
+    if (newEmail) {
+        await userCollection.updateOne({ email: req.session.email }, { $set: { email: newEmail } });
+        req.session.email = newEmail;
+    }
+    res.redirect('/profile?success=Profile updated successfully');
+});
 
 
 
