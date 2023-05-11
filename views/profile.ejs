@@ -1,0 +1,195 @@
+<%- include("templates/header") %>
+<!-- add jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- add bootstrap js -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<br><br><br>
+<div class="container">
+    <!-- space for profile picture -->
+    <div class="container">
+        <div class=" row d-flex justify-content-center">
+            <img src="/images/profile.png" alt="profile picture" width="200px">
+        </div>
+    </div><br>
+    <!-- Edit Profile Table -->
+    <div class="row d-flex justify-content-center">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <th scope="row">Name</th>
+                    <td>
+                        <%= user[0].username %>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Email</th>
+                    <td>
+                        <%= user[0].email %>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <style>
+        .btn-custom {
+            width: 150px;
+        }
+        .btn-custom-password {
+            width: 250px;
+        }
+        .btn-custom-edit {
+            width: 200px;
+        }
+    </style>
+    <!-- Edit profile button -->
+    <div class="text-center">
+        <button type="button" class="btn btn-info btn-lg rounded-pill btn-custom-edit btn-custom-password" data-toggle="modal" data-target="#editProfileModal">
+            Edit Profile
+        </button>
+    </div><br><br>
+    <!-- Edit profile Modal -->
+    <div class="modal fade" id="editProfileModal" tabindex="-1" role="dialog" aria-labelledby="editProfileModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editProfileModalLabel">Edit Profile</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="/editProfile">
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" class="form-control" id="name" name="name" value="<%= user[0].username %>">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" value="<%= user[0].email %>">
+                        </div>
+                        <button type="submit" class="text-center btn btn-info btn-lg rounded-pill btn-custom-edit">Save Changes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Skill level table -->
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Cooking type</th>
+                <th scope="col">Skill level</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">Cooking</th>
+                <td>
+                    <% if (user[0].cookingSkill) { %>
+                        <%= user[0].cookingSkill %>
+                    <% } else { %>
+                        Not Set
+                    <% } %>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">Baking</th>
+                <td>
+                    <% if (user[0].bakingSkill) { %>
+                        <%= user[0].bakingSkill %>
+                    <% } else { %>
+                        Not Set
+                    <% } %>
+                </td>
+            </tr>
+        </tbody>
+    </table><br>
+    <!-- Change Cooking and Baking Skill Level Button -->
+    <div class="text-center">
+        <button type="button" class="btn btn-info btn-lg rounded-pill btn-custom-password" data-toggle="modal"
+            data-target="#changeSkillLevelModal">
+            Edit Skill Level
+        </button>
+    </div><br><br>
+    
+    <!-- Change Cooking and Baking Skill Level Modal -->
+    <div class="modal fade" id="changeSkillLevelModal" tabindex="-1" role="dialog"
+        aria-labelledby="changeSkillLevelModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="changeSkillLevelModalLabel">Edit Skill Level</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="/editSkillLevel">
+                        <div class="form-group">
+                            <label for="cookingSkillLevel">Cooking Skill Level:</label>
+                            <select class="form-control" id="cookingSkillLevel" name="cookingSkillLevel">
+                                <option value="beginner" <% if (user[0].cookingSkill === 'beginner' || !user[0].cookingSkill) { %> selected <% } %>>Beginner</option>
+                                <option value="intermediate" <% if (user[0].cookingSkill === 'intermediate') { %> selected <% } %>>Intermediate</option>
+                                <option value="expert" <% if (user[0].cookingSkill === 'expert') { %> selected <% } %>>Expert</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="bakingSkillLevel">Baking Skill Level:</label>
+                            <select class="form-control" id="bakingSkillLevel" name="bakingSkillLevel">
+                                <option value="beginner" <% if (user[0].bakingSkill === 'beginner' || !user[0].bakingSkill) { %> selected <% } %>>Beginner</option>
+                                <option value="intermediate" <% if (user[0].bakingSkill === 'intermediate') { %> selected <% } %>>Intermediate</option>
+                                <option value="expert" <% if (user[0].bakingSkill === 'expert') { %> selected <% } %>>Expert</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="text-center btn btn-info btn-lg rounded-pill btn-custom-edit">Save Changes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Change Password Button -->
+    <div class="text-center">
+        <button type="button" class="btn btn-info btn-lg rounded-pill btn-custom-password" data-toggle="modal" data-target="#changePasswordModal">
+            Change Password
+        </button>
+    </div><br><br>
+    <!-- Change Password Modal -->
+    <div class="modal fade" id="changePasswordModal" tabindex="-1" role="dialog" aria-labelledby="changePasswordModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="changePasswordModalLabel">Change Password</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="/changePassword">
+                        <div class="form-group">
+                            <label for="newPassword">New Password</label>
+                            <input type="password" class="form-control" id="newPassword" name="newPassword" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirmPassword">Confirm Password</label>
+                            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword"
+                                required>
+                        </div>
+                        <button type="submit" class="text-center btn btn-info btn-lg rounded-pill btn-custom">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <form action="/logout" method="get">
+        <div class="text-center">
+            <button type="submit" class="btn btn-info btn-lg rounded-pill btn-custom">Logout</button>
+        </div>
+    </form>
+</div><br><br><br><br><br>
+
+
+<%- include("templates/footer") %>
