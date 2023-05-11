@@ -1,0 +1,14 @@
+<%- include("templates/header") %>
+
+
+
+<form action="/searchNameSubmit" method="POST">
+    <div class="form-group">
+        <label for="recipeName">Recipe Name:</label>
+        <input name="recipeName" type="text" class="form-control" id="recipeName" placeholder="Enter the recipe name">
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+
+<%- include("templates/footer") %>

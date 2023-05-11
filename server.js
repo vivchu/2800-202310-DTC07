@@ -151,12 +151,14 @@ app.post('/submitUser', async (req, res) => {
 
         await userCollection.insertOne({ username: userName, email: userEmail, password: hashedPassword, type: "user" });
         console.log("Inserted user");
-        if (await userCollection.find({ username: userName }))
+        if (await userCollection.find({ username: userName })) {
         req.session.authenticated = true;
         req.session.username = userName;
         req.session.email = userEmail;
         req.session.cookie.maxAge = expireTime;
-        res.redirect("/");
+        res.render("homeLoggedIn");
+        return;
+        }
     }
 });
 
@@ -293,37 +295,41 @@ app.post('/editSkillLevel', async (req, res) => {
 
 
 
-
-
 // this is for the search page route (McKenzie)
+app.get('/search', (req, res) => {
+    res.render('search');
+});
+
+app.get('/searchName', (req, res) => {    
+    res.render('searchName');
+});
+
+// populates search results based off of image availability and then rating
+const searchRecipesByName = async (keywords) => {
+    const searchRegex = new RegExp(keywords, 'i');
+    const foundRecipes = await recipeCollection.find({ Name: searchRegex }).toArray();
+
+    const sortedRecipes = foundRecipes.sort((a, b) => {
+        if (a.Image_Link === 'Unavailable' && b.Image_Link !== 'Unavailable') {
+            return 1;
+        } else if (a.Image_Link !== 'Unavailable' && b.Image_Link === 'Unavailable') {
+            return -1;
+        } else {
+            return b.AggregatedRating - a.AggregatedRating;
+        }
+    }).slice(0, 200);
+
+    return sortedRecipes;
+};
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+app.post('/searchNameSubmit', async (req, res) => {
+    const keywords = req.body.recipeName;
+    console.log(keywords)
+    const foundRecipes = await searchRecipesByName(keywords);
+    console.log(foundRecipes);
+    res.render('searchResults', { foundRecipes: foundRecipes });
+});
 
 
 
