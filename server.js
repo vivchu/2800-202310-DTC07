@@ -169,7 +169,7 @@ app.get('/profile', async (req, res) => {
         return;
     }
     // retrieve user info from database
-    var user = await userCollection.find({ email: req.session.email }).project({ username: 1, email: 1, _id: 1 }).toArray();
+    var user = await userCollection.find({ email: req.session.email }).project({ username: 1, email: 1, cookingSkill: 1, bakingSkill: 1, secretquestion: 1, secretanswer: 1, _id: 1 }).toArray();
     console.log(user);
     res.render('profile', { user: user });
 });
@@ -205,6 +205,22 @@ app.post('/editProfile', async (req, res) => {
         req.session.email = newEmail;
     }
     res.redirect('/profile?success=Profile updated successfully');
+});
+
+app.post('/editSkillLevel', async (req, res) => {
+    if (!req.session.authenticated) {
+        res.redirect('/');
+        return;
+    }
+    var cookingSkill = req.body.cookingSkillLevel
+    var bakingSkill = req.body.bakingSkillLevel
+    if (cookingSkill) {
+        await userCollection.updateOne({ email: req.session.email }, { $set: { cookingSkill: cookingSkill } });
+    }
+    if (bakingSkill) {
+        await userCollection.updateOne({ email: req.session.email }, { $set: { bakingSkill: bakingSkill } });
+    }
+    res.redirect('/profile?success=Skill level updated successfully');
 });
 
 
