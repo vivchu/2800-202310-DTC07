@@ -1,0 +1,47 @@
+<%- include("templates/header") %>
+<br>
+<br>
+<br>
+<br>
+
+
+<% if (currentUser) { %>
+    <h4><%= currentUser[0].username %>'s Preset Cooking Skills</h4>
+    <br><br>
+
+<% } %>
+
+<form action="/searchSkillLevelSubmit" method="POST">
+    <label for="cookingSkill">Cooking Skill:</label>
+    <select id="cookingSkill" name="cookingSkill">
+        <option value="beginner" <% if (currentUser[0].cookingSkill==='beginner' || !currentUser[0].cookingSkill) { %> selected <% } %>
+                >Beginner</option>
+        <option value="intermediate" <% if (currentUser[0].cookingSkill==='intermediate' ) { %> selected <% } %>>Intermediate</option>
+        <option value="expert" <% if (currentUser[0].cookingSkill==='expert' ) { %> selected <% } %>>Expert</option>
+    </select>
+
+    <br>
+    <br>
+
+    <label for="bakingSkill">Baking Skill:</label>
+    <select id="bakingSkill" name="bakingSkill">
+        <option value="beginner" <% if (currentUser[0].bakingSkill==='beginner' || !currentUser[0].bakingSkill) { %> selected <% } %>>Beginner
+        </option>
+        <option value="intermediate" <% if (currentUser[0].bakingSkill==='intermediate' ) { %> selected <% } %>>Intermediate</option>
+        <option value="expert" <% if (currentUser[0].bakingSkill==='expert' ) { %> selected <% } %>>Expert</option>
+    </select>
+
+    <br>
+    <br>
+    
+    <label for="keywords">Keywords:</label>
+    <input type="text" id="keywords" name="keywords">
+    
+    
+    <br>
+    <br>
+
+    <button type="submit" class="btn btn-success btn-block mb-4 rounded-pill">Search</button>
+</form>
+
+    <%- include("templates/footer") %>

@@ -383,6 +383,61 @@ app.post('/searchNameSubmit', async (req, res) => {
 });
 
 
+const searchRecipesBySkillAndKeywords = async (cookingSkill, bakingSkill, keywords) => {
+    let skillLevelFilter = [];
+
+    if (cookingSkill === 'beginner') {
+        skillLevelFilter = ['Easy'];
+    } else if (cookingSkill === 'intermediate') {
+        skillLevelFilter = ['Easy', 'Medium'];
+    } else if (cookingSkill === 'expert') {
+        skillLevelFilter = ['Easy', 'Medium', 'Hard'];
+    }
+
+    // if (bakingSkill === 'beginner') {
+    //     skillLevelFilter.bakingSkill = 'Easy';
+    // } else if (bakingSkill === 'intermediate') {
+    //     skillLevelFilter.bakingSkill = { $in: ['Easy', 'Medium'] };
+    // } else if (bakingSkill === 'expert') {
+    //     skillLevelFilter.bakingSkill = { $in: ['Easy', 'Medium', 'Hard'] };
+    // }
+
+    const searchRegex = new RegExp(keywords, 'i');
+    const foundRecipes = await recipeCollection.find({ Name: searchRegex }).toArray();
+
+    // filter found recipes by skill level by checking if recipe.Difficulty is in skillLevelFilter
+    const filteredRecipes = foundRecipes.filter(recipe => {
+        return skillLevelFilter.includes(recipe.Difficulty);
+    });
+        
+
+    const sortedRecipes = filteredRecipes.sort((a, b) => {
+        if (a.Image_Link === 'Unavailable' && b.Image_Link !== 'Unavailable') {
+            return 1;
+        } else if (a.Image_Link !== 'Unavailable' && b.Image_Link === 'Unavailable') {
+            return -1;
+        } else {
+            return b.AggregatedRating - a.AggregatedRating;
+        }
+    }).slice(0, 200);
+
+    return sortedRecipes;
+};
+
+app.get('/searchSkillLevel', async (req, res) => {
+    if (req.session.authenticated) {
+        var currentUser = await userCollection.find({ username: req.session.username }).toArray();
+        console.log(currentUser)
+    }
+    res.render('searchSkill', { currentUser: currentUser });
+});
+
+app.post('/searchSkillLevelSubmit', async (req, res) => {
+    const { cookingSkill, bakingSkill, keywords } = req.body;
+    const foundRecipes = await searchRecipesBySkillAndKeywords(cookingSkill, bakingSkill, keywords);
+    res.render('searchResults', { foundRecipes: foundRecipes }); 
+});
+
 
 
 
