@@ -315,7 +315,7 @@ app.post('/submitUser', async (req, res) => {
             req.session.username = userName;
             req.session.email = userEmail;
             req.session.cookie.maxAge = expireTime;
-            res.render("homeLoggedIn");
+            res.render("homeLoggedIn",{username: userName});
             return;
         }
     }
