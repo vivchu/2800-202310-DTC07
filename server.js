@@ -233,15 +233,16 @@ app.post('/verifyanswerSubmit', async(req, res) => {
         res.redirect("/verifyanswer?error=no answer found, please try again");
     }
     else {
-        const storedAnswer = answer[0].secretanswer;
-            if (userAnswer !== storedAnswer) {
-                console.log(userAnswer);
-                res.redirect("/verifyanswer?error=incorrect answer, please try again");
-                return;
-            }
+        const match = await bcrypt.compare(userAnswer, answer[0].secretanswer);
+        if (!match) {
+            console.log(userAnswer);
+            res.redirect("/verifyanswer?error=incorrect answer, please try again");
+            return;
+        }
+            req.session.authenticated = true;
             req.session.secret_answer = answer[0].secretanswer;
             req.session.cookie.maxAge = expireTime;
-            console.log(req.session.secretanswer);
+            console.log("success");
             res.redirect('/profile');
             return;
         }
@@ -291,10 +292,10 @@ app.post('/submitUser', async (req, res) => {
             res.redirect("/createUser");
             return;
         }
-
+        var hashedAnswer = await bcrypt.hashSync(secretAnswer, 1);
         var hashedPassword = await bcrypt.hashSync(userPassword, 1);
 
-        await userCollection.insertOne({ username: userName, email: userEmail, password: hashedPassword, type: "user",secretquestion: secretQuestion, secretanswer: secretAnswer });
+        await userCollection.insertOne({ username: userName, email: userEmail, password: hashedPassword, type: "user", secretquestion: secretQuestion, secretanswer: hashedAnswer });
         console.log("Inserted user");
         if (await userCollection.find({ username: userName })) {
             req.session.authenticated = true;
