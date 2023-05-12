@@ -2,7 +2,7 @@
   "name": "2800-202310-dtc07",
   "version": "1.0.0",
   "description": "Corey McTavish\r McKenzie Nicol\r Vivian Chu\r Reza Hedieloo",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
