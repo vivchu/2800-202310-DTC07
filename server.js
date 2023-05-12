@@ -178,6 +178,19 @@ app.post('/editSkillLevel', async (req, res) => {
     res.redirect('/profile?success=Skill level updated successfully');
 });
 
+app.post('/editSecretQuestion', async (req, res) => {
+    if (!req.session.authenticated) {
+        res.redirect('/');
+        return;
+    }
+    var secretQuestion = req.body.secretQuestion
+    var secretAnswer = req.body.secretAnswer
+    var hashSecretAnswer = await bcrypt.hashSync(secretAnswer, 1);
+    if (secretQuestion && secretAnswer) {
+        await userCollection.updateOne({ email: req.session.email }, { $set: { secretquestion: secretQuestion, secretanswer: hashSecretAnswer } });
+    }
+    res.redirect('/profile?success=Secret question updated successfully');
+});
 
 // this is for the forgot password and email page routes (Vivian)
 

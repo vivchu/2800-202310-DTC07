@@ -41,6 +41,9 @@
         .btn-custom-edit {
             width: 200px;
         }
+        .btn-custom-question {
+            width: 300px;
+        }
         .green {
             background-color: #468414;
             border-color: #468414;
@@ -116,7 +119,7 @@
             data-target="#changeSkillLevelModal">
             Edit Skill Level
         </button>
-    </div><br><br>
+    </div><br><br><br><br>
     
     <!-- Change Cooking and Baking Skill Level Modal -->
     <div class="modal fade" id="changeSkillLevelModal" tabindex="-1" role="dialog"
@@ -153,20 +156,60 @@
             </div>
         </div>
     </div>
+    <!-- edit security question -->
+    <div class="text-center">
+        <button type="button" class="btn btn-info btn-lg rounded-pill btn-custom-question green" data-toggle="modal"
+            data-target="#changeSecurityQuestionModal">
+            Update Security Question
+        </button>
+    </div><br>
+    
+    <!-- Change Security Question Modal -->
+    <div class="modal fade" id="changeSecurityQuestionModal" tabindex="-1" role="dialog"
+        aria-labelledby="changeSecurityQuestionModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="changeSecurityQuestionModalLabel">Update Security Question</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="/editSecretQuestion">
+                        <div class="form-group">
+                            <label for="secretQuestion">Select a security question:</label>
+                            <select name='secretQuestion' class="form-control" id="secretQuestion">
+                                <option value="What is your mother' s maiden name?">What is your mother's maiden name?</option>
+                                <option value='What was the name of your first pet?'>What was the name of your first pet?</option>
+                                <option value='What is your favorite color?'>What is your favorite color?</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="secretAnswer">Answer:</label>
+                            <input name='secretAnswer' type='text' class="form-control" id="secretAnswer" placeholder='Enter answer' required>
+                        </div>
+                        <button type="submit" class="text-center btn btn-info btn-lg rounded-pill btn-custom-edit green">Save Changes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
 
     <!-- Change Password Button -->
     <div class="text-center">
         <button type="button" class="btn btn-info btn-lg rounded-pill btn-custom-password green" data-toggle="modal" data-target="#changePasswordModal">
-            Change Password
+            Reset Password
         </button>
-    </div><br><br>
+    </div><br>
     <!-- Change Password Modal -->
     <div class="modal fade" id="changePasswordModal" tabindex="-1" role="dialog" aria-labelledby="changePasswordModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="changePasswordModalLabel">Change Password</h5>
+                    <h5 class="modal-title" id="changePasswordModalLabel">Reset Password</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
