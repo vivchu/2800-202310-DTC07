@@ -1,0 +1,56 @@
+<%- include("templates/header") %>
+
+<div class="container">
+<% if (currentUser) { %>
+    <h4><%= currentUser[0].username %>'s Preset Cooking Skills</h4>
+    <br>
+
+<% } %>
+
+<form action="/searchSkillLevelSubmit" method="POST">
+    <label for="cookingSkill">Cooking Skill:</label>
+    <select id="cookingSkill" name="cookingSkill" class="form-control">
+        <% if (currentUser) { %>
+        <option value="beginner" <% if (currentUser[0].cookingSkill==='beginner' || !currentUser[0].cookingSkill) { %> selected <% } %>
+                >Beginner</option>
+        <option value="intermediate" <% if (currentUser[0].cookingSkill==='intermediate' ) { %> selected <% } %>>Intermediate</option>
+        <option value="expert" <% if (currentUser[0].cookingSkill==='expert' ) { %> selected <% } %>>Expert</option>
+        <% } else { %>
+        <option value="beginner" selected>Beginner</option>
+        <option value="intermediate">Intermediate</option>
+        <option value="expert">Expert</option>
+        <% } %>
+    </select>
+
+    <br>
+
+    <label for="bakingSkill">Baking Skill:</label>
+    <select id="bakingSkill" name="bakingSkill" class="form-control">
+        <% if (currentUser) { %>
+        <option value="beginner" <% if (currentUser[0].bakingSkill==='beginner' || !currentUser[0].bakingSkill) { %> selected <% } %>>Beginner
+        </option>
+        <option value="intermediate" <% if (currentUser[0].bakingSkill==='intermediate' ) { %> selected <% } %>>Intermediate</option>
+        <option value="expert" <% if (currentUser[0].bakingSkill==='expert' ) { %> selected <% } %>>Expert</option>
+        <% } else { %>
+        <option value="beginner" selected>Beginner</option>
+        <option value="intermediate">Intermediate</option>
+        <option value="expert">Expert</option>
+        <% } %>
+    </select>
+
+    <br>
+    
+    <label for="keywords">Recipe Name:</label>
+    <br>
+    <input name="keywords" type="text" class="form-control" id="keywords" placeholder="Enter the recipe name">
+ 
+    
+    
+    <br>
+
+
+    <button type="submit" class="btn btn-primary">Search</button>
+</form>
+</div>
+
+    <%- include("templates/footer") %>
