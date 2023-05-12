@@ -66,7 +66,7 @@ app.get('/', async (req, res) => {
         res.render('home');
     }
     else {
-        res.render('homeLoggedIn');
+        res.render('homeLoggedIn', { username: req.session.username });
     }
 });
 
