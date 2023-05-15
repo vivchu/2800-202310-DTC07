@@ -6,6 +6,7 @@ const profileRoutes = require('./routes/profileRoutes.js')
 const searchRoutes = require('./routes/searchRoutes.js')
 const authenticationRoutes = require('./routes/authenticationRoutes.js')
 const favoritesRoutes = require('./routes/favoritesRoutes.js')
+const customizationRoutes = require('./routes/customizationRoutes.js')
 
 const express = require('express');
 
@@ -86,6 +87,9 @@ app.use('/', searchRoutes)
 
 
 app.use('/', favoritesRoutes)
+
+
+app.use('/', customizationRoutes)
 
 
 // recipe details page route (Reza)
