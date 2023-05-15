@@ -1,8 +1,11 @@
 require('./utils.js')
+require('dotenv').config();
+
+// get all the route files
 const profileRoutes = require('./routes/profileRoutes.js')
 const searchRoutes = require('./routes/searchRoutes.js')
 const authenticationRoutes = require('./routes/authenticationRoutes.js')
-require('dotenv').config();
+const favoritesRoutes = require('./routes/favoritesRoutes.js')
 
 const express = require('express');
 
@@ -72,16 +75,17 @@ app.get('/', async (req, res) => {
     }
 });
 
+
 app.use('/', authenticationRoutes)
 
 
 app.use('/', profileRoutes);
 
 
-
 app.use('/', searchRoutes)
 
 
+app.use('/', favoritesRoutes)
 
 
 // recipe details page route (Reza)
@@ -100,31 +104,11 @@ app.get('/recipes/:id', async (req, res) => {
 });
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 app.get('/logout', (req, res) => {
     req.session.destroy();
     res.redirect('/');
 });
+
 
 // catch all 404 page not found errors
 app.get('*', (req, res) => {
