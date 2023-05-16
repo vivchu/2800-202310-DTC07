@@ -13,7 +13,7 @@ app.get('/profile', async (req, res) => {
         return;
     }
     // retrieve user info from database
-    var user = await userCollection.find({ email: req.session.email }).project({ username: 1, email: 1, cookingSkill: 1, bakingSkill: 1, secretquestion: 1, secretanswer: 1, _id: 1 }).toArray();
+    var user = await userCollection.find({ email: req.session.email }).project({ username: 1, email: 1, cookingSkill: 1, bakingSkill: 1, secretquestion: 1, secretanswer: 1, UserIngredients: 1, _id: 1 }).toArray();
     console.log(user);
     res.render('profile', { user: user });
 });
@@ -90,5 +90,42 @@ app.post('/editSecretQuestion', async (req, res) => {
     res.redirect('/profile?success=Secret question updated successfully');
 });
 
+app.post('/addIngredient', async (req, res) => {
+    if (!req.session.authenticated) {
+        res.redirect('/');
+        return;
+    }
+    var ingredient = req.body.ingredient
+    if (ingredient) {
+        await userCollection.updateOne({ email: req.session.email }, { $push: { UserIngredients: ingredient } });
+    }
+    res.redirect('/profile?success=Ingredient added successfully');
+});
+
+app.post('/editIngredient', async (req, res) => {
+    if (!req.session.authenticated) {
+        res.redirect('/');
+        return;
+    }
+    var oldIngredient = req.body.oldIngredient
+    var newIngredientName = req.body.newIngredientName
+    if (oldIngredient && newIngredientName) {
+        await userCollection.updateOne({ email: req.session.email }, { $pull: { UserIngredients: oldIngredient } });
+        await userCollection.updateOne({ email: req.session.email }, { $push: { UserIngredients: newIngredientName } });
+    }
+    res.redirect('/profile?success=Ingredient edited successfully');
+});
+
+app.post('/removeIngredient', async (req, res) => {
+    if (!req.session.authenticated) {
+        res.redirect('/');
+        return;
+    }
+    var ingredient = req.body.ingredient
+    if (ingredient) {
+        await userCollection.updateOne({ email: req.session.email }, { $pull: { UserIngredients: ingredient } });
+    }
+    res.redirect('/profile?success=Ingredient removed successfully');
+});
 
 module.exports = app;
