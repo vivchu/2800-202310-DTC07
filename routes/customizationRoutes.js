@@ -11,7 +11,7 @@ const recipeCollection = database.db(mongodb_database).collection('recipes');
 
 // placeholder for whatever we need for this stuff
 app.get('/customizeRecipe', (req, res) => {
-    res.send('this is the recipe customization page');
+    res.render('customizeRecipe');
 });
 
 module.exports = app;
