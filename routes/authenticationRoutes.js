@@ -159,9 +159,17 @@ app.post('/submitUser', async (req, res) => {
         console.log(validationResult.error);
         if (validationResult.error != null) {
             console.log(validationResult.error);
-            res.redirect("/createUser");
+            res.redirect("/createUser?error=Invalid input, please try again");
             return;
         }
+
+        const existingUser = await userCollection.findOne({ email: userEmail });
+        if (existingUser) {
+            // Email already belongs to another user
+            res.redirect('/createUser?error=Email is already in use');
+            return;
+        }
+
         var hashedAnswer = await bcrypt.hashSync(secretAnswer, 1);
         var hashedPassword = await bcrypt.hashSync(userPassword, 1);
 

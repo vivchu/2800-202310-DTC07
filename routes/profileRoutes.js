@@ -46,6 +46,14 @@ app.post('/editProfile', async (req, res) => {
         req.session.username = newUsername;
     }
     if (newEmail) {
+        // Check if the new email already exists in the database
+        const existingUser = await userCollection.findOne({ email: newEmail });
+        if (existingUser) {
+            // Email already belongs to another user
+            res.redirect('/profile?error=Email is already in use');
+            return;
+        }
+
         await userCollection.updateOne({ email: req.session.email }, { $set: { email: newEmail } });
         req.session.email = newEmail;
     }
