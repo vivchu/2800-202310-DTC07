@@ -105,8 +105,10 @@ app.get('/searchByIngredients', async (req, res) => {
     if (req.session.authenticated) {
         var currentUser = await userCollection.find({ username: req.session.username }).toArray();
         console.log(currentUser)
+        res.render('searchIngredients', { user: currentUser });
+        return
     }
-    res.render('searchIngredients', { user: currentUser });
+    res.render('searchIngredientsNotLoggedIn');
 });
 
 app.post('/addSearchIngredient', async (req, res) => {
@@ -148,15 +150,37 @@ app.post('/removeSearchIngredient', async (req, res) => {
 });
 
 app.post('/searchIngredientSubmit', async (req, res) => {
-    const searchedIngredients = await userCollection.find({ username: req.session.username }).project({ SearchIngredients: 1 }).toArray();
-    // find and store UserIngredients in the database into UserIngredients variable here
-    const UserIngredients = await userCollection.find({ username: req.session.username }).project({ UserIngredients: 1 }).toArray();
-    // const foundRecipes = await recipeCollection.find({ Ingredients: { $in: searchedIngredients[0].SearchIngredients } }).toArray();
     if (req.session.authenticated) {
+        const searchedIngredients = await userCollection.find({ username: req.session.username }).project({ SearchIngredients: 1 }).toArray();
+        console.log('Search Ingredients:', searchedIngredients[0].SearchIngredients);
+
+        const UserIngredients = await userCollection.find({ username: req.session.username }).project({ UserIngredients: 1 }).toArray();
+    
+        const foundRecipes = await recipeCollection
+            .find({
+                $expr: { $setEquals: ['$UpdatedRecipeIngredientParts', searchedIngredients[0].SearchIngredients] },
+            })
+            .toArray();
+
+        const sortedRecipes = foundRecipes.sort((a, b) => {
+                if (a.Image_Link === 'Unavailable' && b.Image_Link !== 'Unavailable') {
+                    return 1;
+                } else if (a.Image_Link !== 'Unavailable' && b.Image_Link === 'Unavailable') {
+                    return -1;
+                } else {
+                    return b.AggregatedRating - a.AggregatedRating;
+                }
+            }).slice(0, 200);
+        console.log('Found Recipes:', foundRecipes);
+        console.log('Sorted Recipes:', sortedRecipes);
+    
         await userCollection.updateOne({ username: req.session.username }, { $set: { SearchIngredients: UserIngredients[0].UserIngredients } });
+    
+        res.render('searchResults', { foundRecipes: sortedRecipes });
+        return;
     }
-    // for now, just render a blank page
-    res.render('searchResults', { foundRecipes: [] });
+    
+    res.redirect('/');
 });
 
 module.exports = app;
