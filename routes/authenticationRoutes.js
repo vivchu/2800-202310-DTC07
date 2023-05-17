@@ -173,7 +173,17 @@ app.post('/submitUser', async (req, res) => {
         var hashedAnswer = await bcrypt.hashSync(secretAnswer, 1);
         var hashedPassword = await bcrypt.hashSync(userPassword, 1);
 
-        await userCollection.insertOne({ username: userName, email: userEmail, password: hashedPassword, type: "user", secretquestion: secretQuestion, secretanswer: hashedAnswer, favoritedRecipes: [], UserIngredients: [] });
+        await userCollection.insertOne({ 
+            username: userName, 
+            email: userEmail, 
+            password: hashedPassword, 
+            type: "user", 
+            secretquestion: secretQuestion, 
+            secretanswer: hashedAnswer, 
+            favoritedRecipes: [],
+            UserIngredients: [],
+            SearchIngredients: []
+        });
         console.log("Inserted user");
         if (await userCollection.find({ username: userName })) {
             req.session.authenticated = true;
