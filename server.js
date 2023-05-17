@@ -1,18 +1,22 @@
 require('./utils.js')
 require('dotenv').config();
 
+
 // get all the route files
 const profileRoutes = require('./routes/profileRoutes.js')
 const searchRoutes = require('./routes/searchRoutes.js')
 const authenticationRoutes = require('./routes/authenticationRoutes.js')
 const favoritesRoutes = require('./routes/favoritesRoutes.js')
 const customizationRoutes = require('./routes/customizationRoutes.js')
+const apiRoutes = require('./routes/apiRoutes.js')
+
 
 const express = require('express');
 
 const sessions = require('express-session');
 
 const MongoStore = require('connect-mongo');
+
 
 const bcrypt = require('bcrypt');
 
@@ -90,6 +94,10 @@ app.use('/', favoritesRoutes)
 
 
 app.use('/', customizationRoutes)
+
+
+app.use('/', apiRoutes)
+
 
 
 // recipe details page route (Reza)
