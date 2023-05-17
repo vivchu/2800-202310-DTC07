@@ -21,7 +21,9 @@
 
             <div class="row flex-row justify-content-around">
                 <div class="col-6 col-md-4 text-center">
-                    <a href="/favorite" class="btn"> <i class="fas fa-heart"></i></a>
+                    
+                    <button  class="btn" id="favoritebtn" data-recipe-id="<%= recipe._id %>"> <i class="fas fa-heart"></i></button>
+                    
                 </div>
                 <div class="col-6 col-md-4 text-center">
                     <form method="get" action="/customizeRecipe">
@@ -36,5 +38,18 @@
         </div>
     </div>
 </div>
+<script>
+const favoriteBtn = document.getElementById('favoritebtn');
+const recipeId = "<%= recipe._id %>"
+favoriteBtn.addEventListener('click', () => {
+    console.log('clicked');
+    console.log(recipeId);
+// chanege the color to green
+favoriteBtn.classList.toggle('btn-success');
+const userId = "<%= user._id %>"
+console.log(userId);
 
+
+});
+</script>
 <%- include("templates/footer") %>
