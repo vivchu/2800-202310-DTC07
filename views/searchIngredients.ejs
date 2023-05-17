@@ -1,0 +1,212 @@
+<%- include("templates/header") %>
+<!-- add jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- add bootstrap js -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<style>
+    .btn-custom-password {
+            width: 250px;
+    }
+</style>
+
+<!-- Ingredients Table -->
+<br><br><br><br><br><table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Ingredients</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% if (user[0].SearchIngredients && user[0].SearchIngredients != user[0].UserIngredients) { %>
+            <% user[0].SearchIngredients.forEach(function(ingredient) { %>
+                <tr>
+                    <td><%= ingredient %></td>
+                    <td>
+                        <button type="button" class="btn btn-info btn-sm edit-ingredient-btn" value="<%= ingredient %>">Edit</button>
+                        <button type="button" class="btn btn-danger btn-sm remove-ingredient-btn" value="<%= ingredient %>">Remove</button>
+                    </td>
+                </tr>
+            <% }); %>
+        <% } else if (user[0].UserIngredients && user[0].UserIngredients == user[0].UserIngredients) { %>
+            <% user[0].UserIngredients.forEach(function(ingredient) { %>
+                <tr>
+                    <td><%= ingredient %></td>
+                    <td>
+                        <button type="button" class="btn btn-info btn-sm edit-ingredient-btn" value="<%= ingredient %>">Edit</button>
+                        <button type="button" class="btn btn-danger btn-sm remove-ingredient-btn" value="<%= ingredient %>">Remove</button>
+                    </td>
+                </tr>
+            <% }); %>
+        <% } else { %>
+            <tr>
+                <td colspan="2">No ingredients added.</td>
+            </tr>
+        <% } %>
+    </tbody>
+</table><br>
+
+<!-- Add Ingredient Button -->
+<div class="text-center">
+    <button type="button" class="btn btn-info btn-lg rounded-pill btn-custom-password green" data-toggle="modal" data-target="#addIngredientModal">
+        Add Ingredient
+    </button>
+</div>
+
+<!-- Add Ingredient Modal -->
+<div class="modal fade" id="addIngredientModal" tabindex="-1" role="dialog" aria-labelledby="addIngredientModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addIngredientModalLabel">Add Ingredient</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body pop-up">
+                <form id="addIngredientForm">
+                    <div class="form-group">
+                        <label for="ingredientName">Ingredient Name:</label>
+                        <input type="text" class="form-control" id="ingredientName" name="ingredientName" required>
+                    </div>
+                    <button type="submit" class="text-center btn btn-info btn-lg rounded-pill btn-custom-edit green">Add Ingredient</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Ingredient Modal -->
+<div class="modal fade" id="editIngredientModal" tabindex="-1" role="dialog" aria-labelledby="editIngredientModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editIngredientModalLabel">Edit Ingredient</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body pop-up">
+                <form id="editIngredientForm">
+                    <input type="hidden" id="oldIngredient" name="oldIngredient">
+                    <div class="form-group">
+                        <label for="newIngredientName">New Ingredient Name:</label>
+                        <input type="text" class="form-control" id="newIngredientName" name="newIngredientName" required>
+                    </div>
+                    <button type="submit" class="text-center btn btn-info btn-lg rounded-pill btn-custom-edit green">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <form action="/searchIngredientSubmit" method="POST">
+        <div class="form-group">
+            <label for="recipeName">Recipe Name:</label>
+            <input name="recipeName" type="text" class="form-control" id="recipeName" placeholder="Enter the recipe name">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div><br><br><br>
+
+<!-- Add Ingredient Script -->
+<script>
+    $(document).ready(function() {
+        // Add Ingredient Form Submission
+        $("#addIngredientForm").submit(function(event) {
+            event.preventDefault();
+            var ingredient = $("#ingredientName").val();
+            if (ingredient.trim() === "") {
+                alert("Please enter an ingredient.");
+                return;
+            }
+            $.ajax({
+                url: "/addSearchIngredient",
+                type: "POST",
+                data: { ingredient: ingredient },
+                success: function(response) {
+                    // Clear the input field
+                    $("#ingredientName").val("");
+                    // Close the modal
+                    $("#addIngredientModal").modal("hide");
+                    // Refresh the page or update the ingredient list dynamically
+                    location.reload();
+                },
+                error: function(error) {
+                    console.log(error);
+                    alert("An error occurred while adding the ingredient. Please try again.");
+                }
+            });
+        });
+    });
+</script>
+<!-- Edit Ingredient Script -->
+<script>
+    $(document).ready(function() {
+        // Edit Ingredient Form Submission
+        $("#editIngredientForm").submit(function(event) {
+            event.preventDefault();
+            var oldIngredient = $("#oldIngredient").val();
+            var newIngredientName = $("#newIngredientName").val();
+            if (newIngredientName.trim() === "") {
+                alert("Please enter a new ingredient name.");
+                return;
+            }
+            $.ajax({
+                url: "/editSearchIngredient",
+                type: "POST",
+                data: {
+                    oldIngredient: oldIngredient,
+                    newIngredientName: newIngredientName
+                },
+                success: function(response) {
+                    // Close the modal
+                    $("#editIngredientModal").modal("hide");
+                    // Refresh the page or update the ingredient list dynamically
+                    location.reload();
+                },
+                error: function(error) {
+                    console.log(error);
+                    alert("An error occurred while editing the ingredient. Please try again.");
+                }
+            });
+        });
+
+        // Edit Ingredient Modal Open
+        $(".edit-ingredient-btn").click(function() {
+            var oldIngredient = $(this).val();
+            $("#oldIngredient").val(oldIngredient);
+            $("#newIngredientName").val(oldIngredient);
+            $("#editIngredientModal").modal("show");
+        });
+    });
+</script>
+<!-- Remove Ingredient Script -->
+<script>
+    $(document).ready(function() {
+        // Remove Ingredient
+        $(".remove-ingredient-btn").click(function() {
+            // get the value of the remove-ingredient-btn
+            var ingredient = $(this).val();
+            if (confirm("Are you sure you want to remove the ingredient: " + ingredient + "?")) {
+                $.ajax({
+                    url: "/removeSearchIngredient",
+                    type: "POST",
+                    data: { ingredient: ingredient },
+                    success: function(response) {
+                        // Refresh the page or update the ingredient list dynamically
+                        location.reload();
+                    },
+                    error: function(error) {
+                        console.log(error);
+                        alert("An error occurred while removing the ingredient. Please try again.");
+                    }
+                });
+            }
+        });
+    });
+</script>
+
+<%- include("templates/footer") %>

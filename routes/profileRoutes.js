@@ -97,7 +97,7 @@ app.post('/addIngredient', async (req, res) => {
     }
     var ingredient = req.body.ingredient
     if (ingredient) {
-        await userCollection.updateOne({ email: req.session.email }, { $push: { UserIngredients: ingredient } });
+        await userCollection.updateOne({ email: req.session.email }, { $push: { UserIngredients: ingredient, SearchIngredients: ingredient } });
     }
     res.redirect('/profile?success=Ingredient added successfully');
 });
@@ -110,8 +110,8 @@ app.post('/editIngredient', async (req, res) => {
     var oldIngredient = req.body.oldIngredient
     var newIngredientName = req.body.newIngredientName
     if (oldIngredient && newIngredientName) {
-        await userCollection.updateOne({ email: req.session.email }, { $pull: { UserIngredients: oldIngredient } });
-        await userCollection.updateOne({ email: req.session.email }, { $push: { UserIngredients: newIngredientName } });
+        await userCollection.updateOne({ email: req.session.email }, { $pull: { UserIngredients: oldIngredient, SearchIngredients: oldIngredient } });
+        await userCollection.updateOne({ email: req.session.email }, { $push: { UserIngredients: newIngredientName, SearchIngredients: newIngredientName } });
     }
     res.redirect('/profile?success=Ingredient edited successfully');
 });
@@ -123,7 +123,7 @@ app.post('/removeIngredient', async (req, res) => {
     }
     var ingredient = req.body.ingredient
     if (ingredient) {
-        await userCollection.updateOne({ email: req.session.email }, { $pull: { UserIngredients: ingredient } });
+        await userCollection.updateOne({ email: req.session.email }, { $pull: { UserIngredients: ingredient, SearchIngredients: ingredient } });
     }
     res.redirect('/profile?success=Ingredient removed successfully');
 });

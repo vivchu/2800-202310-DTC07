@@ -101,6 +101,64 @@ app.post('/searchSkillLevelSubmit', async (req, res) => {
     res.render('searchResults', { foundRecipes: foundRecipes }); 
 });
 
+app.get('/searchByIngredients', async (req, res) => {
+    if (req.session.authenticated) {
+        var currentUser = await userCollection.find({ username: req.session.username }).toArray();
+        console.log(currentUser)
+    }
+    res.render('searchIngredients', { user: currentUser });
+});
+
+app.post('/addSearchIngredient', async (req, res) => {
+    if (!req.session.authenticated) {
+        res.redirect('/');
+        return;
+    }
+    var ingredient = req.body.ingredient
+    if (ingredient) {
+        await userCollection.updateOne({ email: req.session.email }, { $push: { SearchIngredients: ingredient } });
+    }
+    res.redirect('/profile?success=Ingredient added successfully');
+});
+
+app.post('/editSearchIngredient', async (req, res) => {
+    if (!req.session.authenticated) {
+        res.redirect('/');
+        return;
+    }
+    var oldIngredient = req.body.oldIngredient
+    var newIngredientName = req.body.newIngredientName
+    if (oldIngredient && newIngredientName) {
+        await userCollection.updateOne({ email: req.session.email }, { $pull: { SearchIngredients: oldIngredient } });
+        await userCollection.updateOne({ email: req.session.email }, { $push: { SearchIngredients: newIngredientName } });
+    }
+    res.redirect('/profile?success=Ingredient edited successfully');
+});
+
+app.post('/removeSearchIngredient', async (req, res) => {
+    if (!req.session.authenticated) {
+        res.redirect('/');
+        return;
+    }
+    var ingredient = req.body.ingredient
+    if (ingredient) {
+        await userCollection.updateOne({ email: req.session.email }, { $pull: { SearchIngredients: ingredient } });
+    }
+    res.redirect('/profile?success=Ingredient removed successfully');
+});
+
+app.post('/searchIngredientSubmit', async (req, res) => {
+    const searchedIngredients = await userCollection.find({ username: req.session.username }).project({ SearchIngredients: 1 }).toArray();
+    // find and store UserIngredients in the database into UserIngredients variable here
+    const UserIngredients = await userCollection.find({ username: req.session.username }).project({ UserIngredients: 1 }).toArray();
+    // const foundRecipes = await recipeCollection.find({ Ingredients: { $in: searchedIngredients[0].SearchIngredients } }).toArray();
+    if (req.session.authenticated) {
+        await userCollection.updateOne({ username: req.session.username }, { $set: { SearchIngredients: UserIngredients[0].UserIngredients } });
+    }
+    // for now, just render a blank page
+    res.render('searchResults', { foundRecipes: [] });
+});
+
 module.exports = app;
 module.exports.searchRecipesByName = searchRecipesByName;
 module.exports.searchRecipesBySkillAndKeywords = searchRecipesBySkillAndKeywords;
