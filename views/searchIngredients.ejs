@@ -101,15 +101,18 @@
     </div>
 </div>
 
+<!-- Search in the database -->
 <div class="container">
     <form action="/searchIngredientSubmit" method="POST">
-        <div class="form-group">
-            <label for="recipeName">Recipe Name:</label>
-            <input name="recipeName" type="text" class="form-control" id="recipeName" placeholder="Enter the recipe name">
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-primary">Search recipes in our database</button>
     </form>
-</div><br><br><br>
+</div><br>
+<!-- ask chat gbt to generat some recipes for us -->
+<div class="container">
+    <form action="/generateIngredientSubmit" method="POST">
+        <button type="submit" class="btn btn-primary">AI generated recipes</button>
+    </form>
+</div><br><br><br><br>
 
 <!-- Add Ingredient Script -->
 <script>

@@ -8,6 +8,13 @@ const Joi = require('joi');
 const userCollection = database.db(mongodb_database).collection('users');
 const recipeCollection = database.db(mongodb_database).collection('recipes');
 
+const { Configuration, OpenAIApi } = require("openai");
+
+const config = new Configuration({
+    apiKey: process.env.OPENAI_API_KEY,
+});
+
+const openai = new OpenAIApi(config);
 
 
 app.get('/search', (req, res) => {
