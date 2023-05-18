@@ -12,15 +12,16 @@
             <ul>
               <% let i = 0; %>
                 <% recipe.UpdatedRecipeIngredientParts.forEach((recipeIngredientPart) => { %>
-                    <li><%= recipe.UpdatedRecipeIngredientQuantities[i] %> <%= measureUnits[i] %> <%= recipeIngredientPart %></li>
+                    <li><%= recipe.UpdatedRecipeIngredientQuantities[i] %> <%= measureUnits[i] %> - <%= recipeIngredientPart %></li>
                     <% i++; %>
                 <% }); %>
             </ul>
 
             <h3>Instructions</h3>
             <ol>
-                <li><%= recipe.RecipeInstructions %></li>
-
+                <% recipe.UpdatedRecipeInstructions.forEach((recipeInstruction) => { %>
+                    <li><%= recipeInstruction %></li>
+                <% }); %>
             </ol>
 
             <div class="row flex-row justify-content-around">
