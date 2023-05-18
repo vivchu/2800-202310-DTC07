@@ -7,7 +7,7 @@ const Joi = require('joi');
 const expireTime = 1 * 60 * 60 * 1000;
 
 const userCollection = database.db(mongodb_database).collection('users');
-const recipeCollection = database.db(mongodb_database).collection('recipes_test');
+const recipeCollection = database.db(mongodb_database).collection('recipes');
 
 
 
@@ -84,11 +84,11 @@ app.get('/cleanDatabaseInstructions', async (req, res) => {
 
         const updateOperations = documents.map((document) => {
             const recipeInstructionsString = document.RecipeInstructions;
-            const regex = /"([^"]*)"/g;
+            const regex = /"([^"\\]*)"/g;
             const recipeInstructionsArray = [];
             let match;
             while ((match = regex.exec(recipeInstructionsString))) {
-                recipeInstructionsArray.push(match[1]);
+                recipeInstructionsArray.push(match[1].replace(/\\\"/g, '"'));
             }
 
             return recipeCollection.updateOne(
