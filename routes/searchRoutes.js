@@ -190,6 +190,38 @@ app.post('/searchIngredientSubmit', async (req, res) => {
     res.redirect('/');
 });
 
+app.post('/generateIngredientSubmit', async (req, res) => {
+    if (req.session.authenticated) {
+        const searchedIngredients = await userCollection.find({ username: req.session.username }).project({ SearchIngredients: 1 }).toArray();
+        console.log('Search Ingredients:', searchedIngredients[0].SearchIngredients);
+        const UserIngredients = await userCollection.find({ username: req.session.username }).project({ UserIngredients: 1 }).toArray();
+        const prompt = `
+        
+        Can you please generate a recipe that only includes the following ingredients: ${searchedIngredients[0].SearchIngredients.join(", ")}?
+        
+        Could you format so you have the title of the recipe, 2 line breaks: the ingredients, and then 2 more line breaks: then instructions?`;
+        
+        const runPrompt = async () => {
+            const response = await openai.createChatCompletion({
+                model: "gpt-3.5-turbo",
+                messages: [
+                    { "role": "user", "content": prompt }
+                ],
+                max_tokens: 200,
+                temperature: 1,
+            });
+            return response.data.choices[0].message.content
+        }
+        const generatedRecipes = await runPrompt();
+
+        await userCollection.updateOne({ username: req.session.username }, { $set: { SearchIngredients: UserIngredients[0].UserIngredients } });
+
+        res.render('generatedAIResults', { generatedRecipes: generatedRecipes });
+        return;
+    }
+    res.redirect('/');
+});
+
 module.exports = app;
 module.exports.searchRecipesByName = searchRecipesByName;
 module.exports.searchRecipesBySkillAndKeywords = searchRecipesBySkillAndKeywords;
