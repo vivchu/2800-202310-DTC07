@@ -10,8 +10,12 @@
     }
 </style>
 
+
 <!-- Ingredients Table -->
-<br><br><br><br><br><table class="table">
+<br><br><br><br><br><br><br>
+<h3>Search Ingredients</h3>
+<br>
+<table class="table">
     <thead>
         <tr>
             <th scope="col">Ingredients</th>
@@ -49,7 +53,7 @@
 
 <!-- Add Ingredient Button -->
 <div class="text-center">
-    <button type="button" class="btn btn-info btn-lg rounded-pill btn-custom-password green" data-toggle="modal" data-target="#addIngredientModal">
+    <button type="button" class="btn btn-info btn btn-custom-password green" data-toggle="modal" data-target="#addIngredientModal">
         Add Ingredient
     </button>
 </div>
@@ -99,18 +103,21 @@
             </div>
         </div>
     </div>
-</div>
+</div><br><br><br>
 
 <!-- Search in the database -->
-<div class="container">
+<div class="text-center">
     <form action="/searchIngredientSubmit" method="POST">
-        <button type="submit" class="btn btn-primary">Search recipes in our database</button>
+        <button type="submit" class="btn btn-lg ">Search recipes in our database</button>
     </form>
 </div><br>
+<div class="text-center">
+    <h5>OR</h5>
+</div><br>
 <!-- ask chat gbt to generat some recipes for us -->
-<div class="container">
+<div class="text-center">
     <form action="/generateIngredientSubmit" method="POST">
-        <button type="submit" class="btn btn-primary">AI generated recipes</button>
+        <button type="submit" class=" btn btn-lg ">AI generated recipe</button>
     </form>
 </div><br><br><br><br>
 
