@@ -10,6 +10,7 @@ const favoritesRoutes = require('./routes/favoritesRoutes.js')
 const customizationRoutes = require('./routes/customizationRoutes.js')
 const apiRoutes = require('./routes/apiRoutes.js')
 const cleanDatabaseRecipeParts = require('./routes/cleanDatabaseRecipeParts.js')
+const recipeDetailsRoutes = require('./routes/recipeDetailsRoutes.js')
 
 
 const express = require('express');
@@ -71,8 +72,6 @@ app.set('view engine', 'ejs');
 
 // home route
 app.get('/', async (req, res) => {
-    var result = await recipeCollection.find().limit(3).toArray();
-    console.log(result);
     if (!req.session.authenticated) {
         res.render('home');
     }
@@ -100,6 +99,7 @@ app.use('/', cleanDatabaseRecipeParts)
 
 app.use('/', apiRoutes)
 
+app.use('/', recipeDetailsRoutes)
 
 
 // recipe details page route (Reza)

@@ -8,7 +8,13 @@
           <img src="<%= recipe.Image_Link %>" alt="<%= recipe.Name %>" class="card-img-top">
           <div class="card-body">
             <h5 class="card-title"><%= recipe.Name %></h5>
-            <a href="/recipes/<%= recipe._id %>" class="btn btn-primary">View Recipe</a>
+            <div class="container">
+              <form action="/generateMeasureUnits" method="POST">
+                <div class="form-group">
+                <button type="text" class="btn btn-primary" id="recipeID" name="recipeID" value="<%= recipe._id %>">View Recipe</button>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       </div>
