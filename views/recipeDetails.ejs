@@ -12,14 +12,14 @@
             <ul>
               <% let i = 0; %>
                 <% recipe.UpdatedRecipeIngredientParts.forEach((recipeIngredientPart) => { %>
-                    <li><%= measureUnits[i] %> <%= recipeIngredientPart %></li>
+                    <li><%= recipe.UpdatedRecipeIngredientQuantities[i] %> <%= measureUnits[i] %> <%= recipeIngredientPart %></li>
                     <% i++; %>
                 <% }); %>
             </ul>
 
             <h3>Instructions</h3>
             <ol>
-                <li><%=recipe.RecipeInstructions%></li>
+                <li><%= recipe.RecipeInstructions %></li>
 
             </ol>
 
