@@ -195,11 +195,15 @@ app.post('/generateIngredientSubmit', async (req, res) => {
         const searchedIngredients = await userCollection.find({ username: req.session.username }).project({ SearchIngredients: 1 }).toArray();
         console.log('Search Ingredients:', searchedIngredients[0].SearchIngredients);
         const UserIngredients = await userCollection.find({ username: req.session.username }).project({ UserIngredients: 1 }).toArray();
+        console.log(`searchedIngredients: ${searchedIngredients[0].SearchIngredients.join(", ")}`);
         const prompt = `
-        
-        Can you please generate a recipe that only includes the following ingredients: ${searchedIngredients[0].SearchIngredients.join(", ")}?
-        
-        Could you format so you have the title of the recipe, 2 line breaks: the ingredients, and then 2 more line breaks: then instructions?`;
+        can you generate a recipe based on the below list of ingredients?
+
+        ${searchedIngredients[0].SearchIngredients}
+
+        please make your answer be an array where each array element is taken from the below list. Can you format the response as an array only? can you make the response the least number of tokens as possible?
+
+        ["Recipe Title", "Image Link", "list of quantities/units/ingredients", "list of steps"]`
         
         const runPrompt = async () => {
             const response = await openai.createChatCompletion({
@@ -207,18 +211,39 @@ app.post('/generateIngredientSubmit', async (req, res) => {
                 messages: [
                     { "role": "user", "content": prompt }
                 ],
-                max_tokens: 200,
-                temperature: 1,
+                max_tokens: 1024,
+                temperature: 0,
             });
-            return response.data.choices[0].message.content
+            return response.data.choices[0].message.content;
         }
-        const generatedRecipes = await runPrompt();
+        const recipe = await runPrompt();
+
+        // Extract the array elements
+        const elements = recipe.match(/"([^"]*)"/g).map(element => element.replace(/"/g, ''));
+        const title = elements[0];
+        const imageLink = elements[1];
+        const ingredientsString = elements[2];
+        const ingredients = ingredientsString.split('|');
+        const instructionsString = elements[3];
+        const instructionSteps = instructionsString.split(/\d+\./)
+
+        // Remove empty strings and leading/trailing whitespace from instructionSteps
+        const filteredSteps = instructionSteps.filter(step => step.trim() !== '');
+
+        // Remove the first element if it is blank
+        if (filteredSteps.length > 0 && filteredSteps[0].trim() === '') {
+            filteredSteps.shift();
+        }
+        console.log(`here is the unfiltered recipe: ${recipe}`)
+        console.log(`here are the instructions: ${filteredSteps}`)
+
 
         await userCollection.updateOne({ username: req.session.username }, { $set: { SearchIngredients: UserIngredients[0].UserIngredients } });
 
-        res.render('generatedAIResults', { generatedRecipes: generatedRecipes });
+        res.render('generatedAIResults', { title: title, imageLink: imageLink, ingredients: ingredients, instructions: filteredSteps });
         return;
     }
+
     res.redirect('/');
 });
 

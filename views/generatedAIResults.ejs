@@ -1,10 +1,25 @@
 <%- include("templates/header") %>
 
-<br><br><br><br>
-<h3>Here is a customized result based on the ingredients you searched</h3>
-<p>
-    <%= generatedRecipes %>
-</p>
+<br><br><br><br><br><br><br>
+<h3>Customized recipe:</h3><br>
+
+
+
+<h2>
+    <%= title %>
+</h2><br><br>
+
+<ul>
+    <% ingredients.forEach(ingredient => { %>
+        <li><%= ingredient %></li>
+    <% }); %>
+</ul><br>
+
+<ol>
+    <% instructions.forEach(instruction => { %>
+        <li><%= instruction %></li>
+    <% }); %>
+</ol>
 
 
 <%- include("templates/footer") %>
