@@ -163,11 +163,21 @@ app.post('/searchIngredientSubmit', async (req, res) => {
 
         const UserIngredients = await userCollection.find({ username: req.session.username }).project({ UserIngredients: 1 }).toArray();
     
+        // const foundRecipes = await recipeCollection
+        //     .find({
+        //         $expr: { $setEquals: ['$UpdatedRecipeIngredientParts', searchedIngredients[0].SearchIngredients] },
+        //     })
+        //     .toArray();
+
         const foundRecipes = await recipeCollection
-            .find({
-                $expr: { $setEquals: ['$UpdatedRecipeIngredientParts', searchedIngredients[0].SearchIngredients] },
-            })
-            .toArray();
+    .find({
+        UpdatedRecipeIngredientParts: {
+            $all: searchedIngredients[0].SearchIngredients.map((ingredient) => ({
+                $elemMatch: { $eq: ingredient }
+            }))
+        }
+    })
+    .toArray();
 
         const sortedRecipes = foundRecipes.sort((a, b) => {
                 if (a.Image_Link === 'Unavailable' && b.Image_Link !== 'Unavailable') {
@@ -203,7 +213,9 @@ app.post('/generateIngredientSubmit', async (req, res) => {
 
         please make your answer be an array where each array element is taken from the below list. Can you format the response as an array only? can you make the response the least number of tokens as possible?
 
-        ["Recipe Title", "Image Link", "list of quantities/units/ingredients", "list of steps"]`
+        ["Recipe Title", "Image Link", "list of quantities/units/ingredients", "list of steps"]
+        
+        do not include newline characters and have the list of steps numbered`
         
         const runPrompt = async () => {
             const response = await openai.createChatCompletion({
