@@ -1,0 +1,40 @@
+<%- include("templates/header") %>
+
+    <br><br><br><br><br><br><br>
+    <h3>Customized recipe:</h3><br>
+
+
+
+    <h2>
+        <%= title %>
+    </h2><br><br>
+
+    <h7>
+        Total Prep Time: <%= totalPT %>
+    </h7><br>
+    <h7>
+        Total Cook Time: <%= totalCT %>
+    </h7><br>
+    <h7>
+        Total Time: <%= totalT %>
+    </h7><br><br><br>
+
+    <ul>
+        <% ingredients.forEach(ingredient=> { %>
+            <li>
+                <%= ingredient %>
+            </li>
+            <% }); %>
+    </ul><br>
+
+
+    <ul>
+        <% instructions.forEach(instruction=> { %>
+            <li>
+                <%= instruction %>
+            </li>
+            <% }); %>
+    </ul>
+
+
+    <%- include("templates/footer") %>
