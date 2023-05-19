@@ -182,7 +182,8 @@ app.post('/submitUser', async (req, res) => {
             secretanswer: hashedAnswer, 
             favoritedRecipes: [],
             UserIngredients: [],
-            SearchIngredients: []
+            SearchIngredients: [],
+            CustomizedRecipe: []
         });
         console.log("Inserted user");
         if (await userCollection.find({ username: userName })) {

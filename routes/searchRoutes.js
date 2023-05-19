@@ -213,9 +213,10 @@ app.post('/generateIngredientSubmit', async (req, res) => {
 
         please make your answer be an array where each array element is taken from the below list. Can you format the response as an array only? can you make the response the least number of tokens as possible?
 
-        ["Recipe Title", "Image Link", "list of quantities/units/ingredients", "list of steps"]
+        ["Recipe Title", "Image Link", "list of quantities/units/ingredients separated by &&&", "list of steps separated by &&&"]
         
-        do not include newline characters and have the list of steps numbered`
+        here is an example response:
+        ["Cake", "ImageLink", "1 cup of flour&&&2 eggs&&&1 cup of sugar", "mix the ingredients together&&&bake at 350 degrees for 30 minutes&&&enjoy!"]`
         
         const runPrompt = async () => {
             const response = await openai.createChatCompletion({
@@ -235,29 +236,85 @@ app.post('/generateIngredientSubmit', async (req, res) => {
         const title = elements[0];
         const imageLink = elements[1];
         const ingredientsString = elements[2];
-        const ingredients = ingredientsString.split('|');
+        const ingredients = ingredientsString.split("&&&");
         const instructionsString = elements[3];
-        const instructionSteps = instructionsString.split(/\d+\./)
-
-        // Remove empty strings and leading/trailing whitespace from instructionSteps
-        const filteredSteps = instructionSteps.filter(step => step.trim() !== '');
-
-        // Remove the first element if it is blank
-        if (filteredSteps.length > 0 && filteredSteps[0].trim() === '') {
-            filteredSteps.shift();
+        let instructionSteps;
+        if (instructionsString.includes("&&&")) {
+            instructionSteps = instructionsString.split("&&&");
+        } else if (instructionsString.match(/^\d+\.\s/gm)) {
+            instructionSteps = instructionsString.split(/^\d+\.\s/gm).filter((step) => step.trim() !== "");
+        } else {
+            instructionSteps = instructionsString.split(".");
         }
-        console.log(`here is the unfiltered recipe: ${recipe}`)
-        console.log(`here are the instructions: ${filteredSteps}`)
+
+        // combine the title, ingredients, and instructions into a single array
+        const extractedRecipe = [title, ingredients, instructionSteps];
+        console.log(`here is the extracted recipe: ${extractedRecipe}`)
+
+        // // Remove empty strings and leading/trailing whitespace from instructionSteps
+        // const filteredSteps = instructionSteps.filter(step => step.trim() !== '');
+
+        // // Remove the first element if it is blank
+        // if (filteredSteps.length > 0 && filteredSteps[0].trim() === '') {
+        //     filteredSteps.shift();
+        // }
+        // console.log(`here is the unfiltered recipe: ${recipe}`)
+        console.log(`here is the instruction string: ${instructionsString}`)
+        console.log(`here are the instructions: ${instructionSteps}`)
 
 
         await userCollection.updateOne({ username: req.session.username }, { $set: { SearchIngredients: UserIngredients[0].UserIngredients } });
 
-        res.render('generatedAIResults', { title: title, imageLink: imageLink, ingredients: ingredients, instructions: filteredSteps });
+        res.render('generatedAIResults', { extractedRecipe: extractedRecipe });
         return;
     }
 
     res.redirect('/');
 });
+
+app.post('/addCustomizedRecipe', async (req, res) => {
+    if (!req.session.authenticated) {
+        res.redirect('/');
+        return;
+    }
+    const title = JSON.parse(req.body.title);
+    const ingredients = JSON.parse(req.body.ingredients);
+    const instructions = JSON.parse(req.body.instructions);
+    const recipe = [title, ingredients, instructions];
+    console.log(`here is the recipe: ${recipe}`)
+
+    await userCollection.updateOne({ username: req.session.username }, { $push: { CustomizedRecipe: recipe } }); 
+
+    res.redirect('/savedCustomizedRecipes');
+    return;
+});
+
+app.get('/savedCustomizedRecipes', async (req, res) => {
+    if (!req.session.authenticated) {
+        res.redirect('/');
+        return;
+    }
+    const customizedRecipes = await userCollection.find({ username: req.session.username }).project({ CustomizedRecipe: 1 }).toArray();
+    console.log('Customized Recipes:', customizedRecipes[0].CustomizedRecipe);
+    console.log('Customized Recipes Length:', customizedRecipes[0]);
+    res.render('savedCustomizedRecipes', { customizedRecipes: customizedRecipes[0].CustomizedRecipe });
+    return;
+});
+
+app.post('/viewCustomizedRecipe', async (req, res) => {
+    if (!req.session.authenticated) {
+        res.redirect('/');
+        return;
+    }
+    const title = JSON.parse(req.body.title);
+    const ingredients = JSON.parse(req.body.ingredients);
+    const instructions = JSON.parse(req.body.instructions);
+    const recipe = [title, ingredients, instructions];
+    console.log(`here is the recipe: ${recipe}`)
+    res.render('viewCustomizedRecipe', { recipe: recipe });
+    return;
+});
+
 
 module.exports = app;
 module.exports.searchRecipesByName = searchRecipesByName;
