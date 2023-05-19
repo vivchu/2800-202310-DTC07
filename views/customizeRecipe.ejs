@@ -7,19 +7,16 @@
         <br>
         <br>
         <div>
-          <form method="post" action="/customizedByIngredients">
+          <!-- <form method="post" action="/customizedByIngredients">
             <div class="form-group">
               <button type="text" id="recipeId" name="recipeId" value="<%=recipe._id %>"
                 class=" btn btn-block mt-10 mb-0 rounded-pill">Customize by Ingredients</button>
             </div>
-          </form>
-          
-          <br>
-          <br>
+          </form> -->   
           <form method="post" action="/customizedByCookingTimeSubmit">
             <div class="form-group">
               <button type="text" id="recipeId" name="recipeId" value="<%=recipe._id %>"
-                class=" btn btn-block mt-10 mb-0 rounded-pill">Customize by Time</button>
+                class=" btn btn-block mt-10 mb-0 rounded-pill">Make this quicker!</button>
             </div>
           </form>
           <br>
@@ -27,25 +24,10 @@
           <div>
             <form action="/customizedBySkillLevelSubmit" method="POST">
               <button type="text" id="recipeId" name="recipeId" value="<%=recipe._id %>"
-                class=" btn btn-block mt-10 mb-0 rounded-pill">Customize by Skill Level</button>
+                class=" btn btn-block mt-10 mb-0 rounded-pill">Make this easier!</button>
             </form>
           </div>
 
-
-
-          <!--       
-      <a href="/searchIngredientsOnHand" class="btn  btn-block mt-10 mb-0 rounded-pill">Customize by ingredients on hand</a> -->
-          <!-- <br>
-        <br>
-        <a href="/searchCookTime" class="btn  btn-block mb-4 mb-0 rounded-pill"> Customize by cooking Time</a>
-        <br> -->
-          <!-- 
-        <a href="/searchSkillLevel" class="btn  btn-block mb-4 rounded-pill"> Customize by skill Level</a>
-        <br>
-        <br>
-
-      </div> -->
-          <!-- </div> -->
         </div>
 
         <%- include("templates/footer") %>
