@@ -273,7 +273,7 @@ app.post('/addCustomizedRecipe', async (req, res) => {
 });
 
 app.get('/savedCustomizedRecipes', async (req, res) => {
-    if (!req.session.authenticated) {
+    if (!req.session.authenticated || !req.session.username) {
         res.redirect('/');
         return;
     }

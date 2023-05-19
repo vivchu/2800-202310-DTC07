@@ -12,6 +12,10 @@ const recipeCollection = database.db(mongodb_database).collection('recipes');
 
 // add all app.get and app.post routes related to favorites here
 app.get('/favorite', async (req, res) => {
+    if (!req.session.authenticated || !req.session.username) {
+        res.redirect('/');
+        return;
+    }
     try {
         const email = req.session.email;
         if (!email) {
