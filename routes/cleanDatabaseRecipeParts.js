@@ -7,7 +7,7 @@ const Joi = require('joi');
 const expireTime = 1 * 60 * 60 * 1000;
 
 const userCollection = database.db(mongodb_database).collection('users');
-const recipeCollection = database.db(mongodb_database).collection('recipes');
+const recipeCollection = database.db(mongodb_database).collection('ENTER COLLECTION NAME HERE');
 
 
 
