@@ -68,7 +68,7 @@ app.listen(port, () =>
     console.log(`Listening on port ${port}`)
 );
 
-app.set('view engine', 'ejs');
+app.set('view engine', 'ejs'); 
 
 // home route
 app.get('/', async (req, res) => {
