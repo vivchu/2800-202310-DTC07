@@ -1,6 +1,8 @@
 <%- include("templates/header") %> 
 
 <div class="container">
+      <h3><%= user.username %>'s Favorite Recipes:</h3>
+      <br>
   <div class="row">
     <% favoritedRecipes.forEach((recipe, index) => { %>
       <div class="col-md-4 mb-3">

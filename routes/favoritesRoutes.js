@@ -29,7 +29,7 @@ app.get('/favorite', async (req, res) => {
       
         const favoritedRecipes = await recipeCollection.find({ _id: { $in: recipeId.map(id => new ObjectId(id)) } }).toArray();
         console.log(favoritedRecipes);
-        res.render('favorite', { favoritedRecipes: favoritedRecipes });
+        res.render('favorite', { favoritedRecipes: favoritedRecipes, user: user });
     } catch (error) {
         console.error(error);
         res.status(500).send('Error retrieving favorite recipes');

@@ -277,10 +277,12 @@ app.get('/savedCustomizedRecipes', async (req, res) => {
         res.redirect('/');
         return;
     }
+    const email = req.session.email;
+    const user = await userCollection.findOne({ email })
     const customizedRecipes = await userCollection.find({ username: req.session.username }).project({ CustomizedRecipe: 1 }).toArray();
     console.log('Customized Recipes:', customizedRecipes[0].CustomizedRecipe);
     console.log('Customized Recipes Length:', customizedRecipes[0]);
-    res.render('savedCustomizedRecipes', { customizedRecipes: customizedRecipes[0].CustomizedRecipe });
+    res.render('savedCustomizedRecipes', { customizedRecipes: customizedRecipes[0].CustomizedRecipe, user: user });
     return;
 });
 
