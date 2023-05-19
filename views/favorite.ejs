@@ -1,0 +1,33 @@
+<%- include("templates/header") %> 
+
+<div class="container">
+      <h3><%= user.username %>'s Favorite Recipes:</h3>
+      <br>
+  <div class="row">
+    <% favoritedRecipes.forEach((recipe, index) => { %>
+      <div class="col-md-4 mb-3">
+        <div class="card">
+          <img src="<%= recipe.Image_Link %>" alt="<%= recipe.Name %>" class="card-img-top">
+          <div class="card-body">
+            <h5 class="card-title"><%= recipe.Name %></h5>
+            <form action="/generateMeasureUnits" method="POST">
+              <div class="form-group">
+                <button type="text" class="btn btn-primary" id="recipeID" name="recipeID" value="<%= recipe._id %>">View
+                  Recipe</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <% if ((index + 1) % 3 === 0) { %>
+        </div>
+        <div class="row">
+      <% } %>
+    <% }); %>
+  </div>
+</div>
+
+
+
+
+<%- include("templates/footer") %> 

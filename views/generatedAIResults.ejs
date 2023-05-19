@@ -1,0 +1,47 @@
+<%- include("templates/header") %>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-md-6">
+            <h2><%= extractedRecipe[0] %></h2>
+            <img src="/images/logo.png" alt="<%= extractedRecipe[0] %>" class="img-fluid">   
+        </div>
+        <div class="col-12 col-md-6">
+            <h3>Ingredients</h3>
+            <ul>
+                <% extractedRecipe[1].forEach(ingredient => { %>
+                    <li><%= ingredient %></li>
+                <% }); %>
+            </ul>
+
+            <h3>Instructions</h3>
+            <ul>
+                <% extractedRecipe[2].forEach(instruction => { %>
+                    <li><%= instruction %></li>
+                <% }); %>
+            </ul>
+
+            <div class="row flex-row justify-content-around">
+                <div class="col-6 col-md-4 text-center">
+                    <button  class="btn" id="favoritebtn"><i class="fas fa-heart"></i></button>
+                </div>
+                <div class="col-6 col-md-4 text-center">
+                    <form method="post" action="/addCustomizedRecipe">
+                        <input type="hidden" name="title" value="<%= JSON.stringify(extractedRecipe[0]) %>">
+                        <input type="hidden" name="ingredients" value="<%= JSON.stringify(extractedRecipe[1]) %>">
+                        <input type="hidden" name="instructions" value="<%= JSON.stringify(extractedRecipe[2]) %>">
+                        <button id="customizeBtn" class="btn" >Save Recipe</button>
+                    </form>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<%- include("templates/footer") %>

@@ -1,0 +1,33 @@
+<%- include("templates/header") %>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6 offset-md-3 text-center">
+
+        <h3>Please choose the customization method:</h3>
+        <br>
+        <br>
+        <div>
+          <!-- <form method="post" action="/customizedByIngredients">
+            <div class="form-group">
+              <button type="text" id="recipeId" name="recipeId" value="<%=recipe._id %>"
+                class=" btn btn-block mt-10 mb-0 rounded-pill">Customize by Ingredients</button>
+            </div>
+          </form> -->   
+          <form method="post" action="/customizedByCookingTimeSubmit">
+            <div class="form-group">
+              <button type="text" id="recipeId" name="recipeId" value="<%=recipe._id %>"
+                class=" btn btn-block mt-10 mb-0 rounded-pill">Make this quicker!</button>
+            </div>
+          </form>
+          <br>
+          <br>
+          <div>
+            <form action="/customizedBySkillLevelSubmit" method="POST">
+              <button type="text" id="recipeId" name="recipeId" value="<%=recipe._id %>"
+                class=" btn btn-block mt-10 mb-0 rounded-pill">Make this easier!</button>
+            </form>
+          </div>
+
+        </div>
+
+        <%- include("templates/footer") %>
