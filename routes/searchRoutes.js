@@ -162,12 +162,6 @@ app.post('/searchIngredientSubmit', async (req, res) => {
         console.log('Search Ingredients:', searchedIngredients[0].SearchIngredients);
 
         const UserIngredients = await userCollection.find({ username: req.session.username }).project({ UserIngredients: 1 }).toArray();
-    
-        // const foundRecipes = await recipeCollection
-        //     .find({
-        //         $expr: { $setEquals: ['$UpdatedRecipeIngredientParts', searchedIngredients[0].SearchIngredients] },
-        //     })
-        //     .toArray();
 
         const foundRecipes = await recipeCollection
     .find({
@@ -247,21 +241,10 @@ app.post('/generateIngredientSubmit', async (req, res) => {
             instructionSteps = instructionsString.split(".");
         }
 
-        // combine the title, ingredients, and instructions into a single array
         const extractedRecipe = [title, ingredients, instructionSteps];
         console.log(`here is the extracted recipe: ${extractedRecipe}`)
-
-        // // Remove empty strings and leading/trailing whitespace from instructionSteps
-        // const filteredSteps = instructionSteps.filter(step => step.trim() !== '');
-
-        // // Remove the first element if it is blank
-        // if (filteredSteps.length > 0 && filteredSteps[0].trim() === '') {
-        //     filteredSteps.shift();
-        // }
-        // console.log(`here is the unfiltered recipe: ${recipe}`)
         console.log(`here is the instruction string: ${instructionsString}`)
         console.log(`here are the instructions: ${instructionSteps}`)
-
 
         await userCollection.updateOne({ username: req.session.username }, { $set: { SearchIngredients: UserIngredients[0].UserIngredients } });
 
