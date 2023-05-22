@@ -13,7 +13,7 @@ app.get('/profile', async (req, res) => {
         return;
     }
     // retrieve user info from database
-    var user = await userCollection.find({ email: req.session.email }).project({ username: 1, email: 1, cookingSkill: 1, bakingSkill: 1, secretquestion: 1, secretanswer: 1, UserIngredients: 1, _id: 1 }).toArray();
+    var user = await userCollection.find({ email: req.session.email }).project({ username: 1, email: 1, cookingSkill: 1, bakingSkill: 1, secretquestion: 1, secretanswer: 1, UserIngredients: 1, DietaryRestriction: 1, _id: 1 }).toArray();
     console.log(user);
     res.render('profile', { user: user });
 });
@@ -179,6 +179,18 @@ app.post('/removeIngredient', async (req, res) => {
         await userCollection.updateOne({ email: req.session.email }, { $pull: { UserIngredients: ingredient, SearchIngredients: ingredient } });
     }
     res.redirect('/profile?success=Ingredient removed successfully');
+});
+
+app.post('/editDietaryRestriction', async (req, res) => {
+    if (!req.session.authenticated) {
+        res.redirect('/');
+        return;
+    }
+    var DietaryRestriction = req.body.DietaryRestriction
+    if (DietaryRestriction) {
+        await userCollection.updateOne({ email: req.session.email }, { $set: { DietaryRestriction: DietaryRestriction } });
+    }
+    res.redirect('/profile?success=Dietary restriction updated successfully');
 });
 
 module.exports = app;

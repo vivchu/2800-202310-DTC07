@@ -183,7 +183,8 @@ app.post('/submitUser', async (req, res) => {
             favoritedRecipes: [],
             UserIngredients: [],
             SearchIngredients: [],
-            CustomizedRecipe: []
+            CustomizedRecipe: [],
+            DietaryRestriction: "none",
         });
         console.log("Inserted user");
         if (await userCollection.find({ username: userName })) {
