@@ -1,0 +1,44 @@
+<%- include("templates/header") %>
+<!-- add jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- add bootstrap js -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<style>
+    .pop-up {
+            margin-top: 20%;
+        }
+</style>
+
+<div class="container">
+    <% if (user) { %>
+        <h4><%= user[0].username %>'s Preset Dietary Restriction</h4>
+        <br>
+    
+    <% } %>
+    
+    <form action="/searchDietaryRestrictionSubmit" method="POST">
+        <label for="DietaryRestriction">Dietary Restriction:</label>
+        <select id="DietaryRestriction" name="DietaryRestriction" class="form-control">
+            <option value="none" <% if (user[0].DietaryRestriction === 'none' || !user[0].DietaryRestriction) { %> selected <% } %>>None</option>
+            <option value="vegetarian" <% if (user[0].DietaryRestriction === 'vegetarian') { %> selected <% } %>>Vegetarian</option>
+            <option value="vegan" <% if (user[0].DietaryRestriction === 'vegan') { %> selected <% } %>>Vegan</option>
+            <option value="dairy-free" <% if (user[0].DietaryRestriction === 'dairy-free') { %> selected <% } %>>Dairy-Free</option>
+            <option value="gluten-free" <% if (user[0].DietaryRestriction === 'gluten-free') { %> selected <% } %>>Gluten-Free</option>
+        </select>
+    
+        <br>
+        
+        <label for="keywords">Recipe Name:</label>
+        <br>
+        <input name="keywords" type="text" class="form-control" id="keywords" placeholder="Enter the recipe name">
+        <br>
+    
+    
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+    </div>
+
+
+
+<%- include("templates/footer") %>

@@ -332,6 +332,16 @@ app.post('/viewCustomizedRecipe', async (req, res) => {
     return;
 });
 
+app.get('/searchByDietaryRestriction', async (req, res) => {
+    if (!req.session.authenticated) {
+        res.redirect('/');
+        return;
+    }
+    var currentUser = await userCollection.find({ username: req.session.username }).toArray();
+    console.log(currentUser)
+    res.render('searchDietaryRestriction', { user: currentUser });
+    return
+});
 
 module.exports = app;
 module.exports.searchRecipesByName = searchRecipesByName;
