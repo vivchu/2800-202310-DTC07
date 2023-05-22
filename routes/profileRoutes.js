@@ -90,7 +90,7 @@ app.post('/editSecretQuestion', async (req, res) => {
     res.redirect('/profile?success=Secret question updated successfully');
 });
 
-app.post('/addIngredient', async (req, res) => {
+app.post('/addIngredient', async (req, res) => { 
     if (!req.session.authenticated) {
         res.redirect('/');
         return;
