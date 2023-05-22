@@ -46,6 +46,14 @@ const searchRecipesByName = async (keywords) => {
 
 app.post('/searchNameSubmit', async (req, res) => {
     const keywords = req.body.recipeName;
+    // check if the keywords are valid
+    const schema = Joi.object({
+        recipeName: Joi.string().pattern(/^[^${}[\]"'`:,.<>]{3,20}$/).required()
+    });
+    if (schema.validate({ recipeName: keywords }).error) {
+        res.redirect('/searchName?error=Invalid keywords');
+        return;
+    }
     console.log(keywords)
     const foundRecipes = await searchRecipesByName(keywords);
     console.log(foundRecipes);
@@ -104,6 +112,16 @@ app.get('/searchSkillLevel', async (req, res) => {
 
 app.post('/searchSkillLevelSubmit', async (req, res) => {
     const { cookingSkill, bakingSkill, keywords } = req.body;
+    // check if the keywords are valid
+    const schema = Joi.object({
+        cookingSkill: Joi.string().valid('beginner', 'intermediate', 'expert').required(),
+        bakingSkill: Joi.string().valid('beginner', 'intermediate', 'expert').required(),
+        keywords: Joi.string().pattern(/^[^${}[\]"'`:,.<>]{3,20}$/).required()
+    });
+    if (schema.validate({ cookingSkill: cookingSkill, bakingSkill: bakingSkill, keywords: keywords }).error) {
+        res.redirect('/searchSkillLevel?error=Invalid keywords');
+        return;
+    }
     const foundRecipes = await searchRecipesBySkillAndKeywords(cookingSkill, bakingSkill, keywords);
     res.render('searchResults', { foundRecipes: foundRecipes }); 
 });
@@ -125,6 +143,14 @@ app.post('/addSearchIngredient', async (req, res) => {
     }
     var ingredient = req.body.ingredient
     if (ingredient) {
+        // check if the ingredient is valid
+        const schema = Joi.object({
+            ingredient: Joi.string().pattern(/^[^${}[\]"'`:,.<>]{3,20}$/).required()
+        });
+        if (schema.validate({ ingredient: ingredient }).error) {
+            res.redirect('/searchByIngredients?error=Invalid ingredient');
+            return;
+        }
         await userCollection.updateOne({ email: req.session.email }, { $push: { SearchIngredients: ingredient } });
     }
     res.redirect('/profile?success=Ingredient added successfully');
@@ -138,6 +164,14 @@ app.post('/editSearchIngredient', async (req, res) => {
     var oldIngredient = req.body.oldIngredient
     var newIngredientName = req.body.newIngredientName
     if (oldIngredient && newIngredientName) {
+        // check if the newIngredientName is valid
+        const schema = Joi.object({
+            newIngredientName: Joi.string().pattern(/^[^${}[\]"'`:,.<>]{3,20}$/).required()
+        });
+        if (schema.validate({ newIngredientName: newIngredientName }).error) {
+            res.redirect('/searchByIngredients?error=Invalid ingredient');
+            return;
+        }
         await userCollection.updateOne({ email: req.session.email }, { $pull: { SearchIngredients: oldIngredient } });
         await userCollection.updateOne({ email: req.session.email }, { $push: { SearchIngredients: newIngredientName } });
     }
@@ -163,15 +197,13 @@ app.post('/searchIngredientSubmit', async (req, res) => {
 
         const UserIngredients = await userCollection.find({ username: req.session.username }).project({ UserIngredients: 1 }).toArray();
 
-        const foundRecipes = await recipeCollection
-    .find({
-        UpdatedRecipeIngredientParts: {
-            $all: searchedIngredients[0].SearchIngredients.map((ingredient) => ({
-                $elemMatch: { $eq: ingredient }
-            }))
-        }
-    })
-    .toArray();
+        const foundRecipes = await recipeCollection.find({
+                                                        UpdatedRecipeIngredientParts: {
+                                                            $all: searchedIngredients[0].SearchIngredients.map((ingredient) => ({
+                                                                $elemMatch: { $eq: ingredient }
+                                                            }))
+                                                        }
+                                                    }).toArray();
 
         const sortedRecipes = foundRecipes.sort((a, b) => {
                 if (a.Image_Link === 'Unavailable' && b.Image_Link !== 'Unavailable') {

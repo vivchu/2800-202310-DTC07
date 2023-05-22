@@ -25,6 +25,17 @@ app.post('/changePassword', async (req, res) => {
     }
     var newPasword = req.body.newPassword;
     var confirmPassword = req.body.confirmPassword;
+    // Check if the new password is valid
+    const schema = Joi.object({
+        newPassword: Joi.string().pattern(/^[^${}[\]"'`:,.<>]{3,20}$/).required(),
+        confirmPassword: Joi.string().pattern(/^[^${}[\]"'`:,.<>]{3,20}$/).required()
+    });
+
+    if (schema.validate({ newPassword: newPasword, confirmPassword: confirmPassword }).error) {
+        res.redirect('/profile?error=Invalid password');
+        return;
+    }
+
     if (newPasword != confirmPassword) {
         res.redirect('/profile?error=Passwords do not match');
         return;
@@ -41,11 +52,29 @@ app.post('/editProfile', async (req, res) => {
     }
     var newUsername = req.body.name;
     var newEmail = req.body.email;
+
     if (newUsername) {
+        // check if the newUsername is valid
+        const schema = Joi.object({
+            name: Joi.string().pattern(/^[^${}[\]"'`:,.<>]{3,20}$/).required()
+        });
+        if (schema.validate({ name: newUsername }).error) {
+            res.redirect('/profile?error=Invalid username');
+            return;
+        }
+
         await userCollection.updateOne({ email: req.session.email }, { $set: { username: newUsername } });
         req.session.username = newUsername;
     }
     if (newEmail) {
+        // check if the newEmail is valid
+        const schema = Joi.object({
+            email: Joi.string().email().required()
+        });
+        if (schema.validate({ email: newEmail }).error) {
+            res.redirect('/profile?error=Invalid email');
+            return;
+        }
         // Check if the new email already exists in the database
         const existingUser = await userCollection.findOne({ email: newEmail });
         if (existingUser) {
@@ -85,6 +114,14 @@ app.post('/editSecretQuestion', async (req, res) => {
     var secretAnswer = req.body.secretAnswer
     var hashSecretAnswer = await bcrypt.hashSync(secretAnswer, 1);
     if (secretQuestion && secretAnswer) {
+        // check if the secretAnswer is valid
+        const schema = Joi.object({
+            secretAnswer: Joi.string().pattern(/^[^${}[\]"'`:,.<>]{3,20}$/).required()
+        });
+        if (schema.validate({ secretAnswer: secretAnswer }).error) {
+            res.redirect('/profile?error=Invalid secret answer');
+            return;
+        }
         await userCollection.updateOne({ email: req.session.email }, { $set: { secretquestion: secretQuestion, secretanswer: hashSecretAnswer } });
     }
     res.redirect('/profile?success=Secret question updated successfully');
@@ -97,6 +134,14 @@ app.post('/addIngredient', async (req, res) => {
     }
     var ingredient = req.body.ingredient
     if (ingredient) {
+        // check if the ingredient is valid
+        const schema = Joi.object({
+            ingredient: Joi.string().pattern(/^[^${}[\]"'`:,.<>]{3,20}$/).required()
+        });
+        if (schema.validate({ ingredient: ingredient }).error) {
+            res.redirect('/profile?error=Invalid ingredient');
+            return;
+        }
         await userCollection.updateOne({ email: req.session.email }, { $push: { UserIngredients: ingredient, SearchIngredients: ingredient } });
     }
     res.redirect('/profile?success=Ingredient added successfully');
@@ -110,6 +155,14 @@ app.post('/editIngredient', async (req, res) => {
     var oldIngredient = req.body.oldIngredient
     var newIngredientName = req.body.newIngredientName
     if (oldIngredient && newIngredientName) {
+        // check if the newIngredientName is valid
+        const schema = Joi.object({
+            newIngredientName: Joi.string().pattern(/^[^${}[\]"'`:,.<>]{3,20}$/).required()
+        });
+        if (schema.validate({ newIngredientName: newIngredientName }).error) {
+            res.redirect('/profile?error=Invalid ingredient');
+            return;
+        }
         await userCollection.updateOne({ email: req.session.email }, { $pull: { UserIngredients: oldIngredient, SearchIngredients: oldIngredient } });
         await userCollection.updateOne({ email: req.session.email }, { $push: { UserIngredients: newIngredientName, SearchIngredients: newIngredientName } });
     }
