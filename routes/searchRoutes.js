@@ -332,6 +332,99 @@ app.post('/viewCustomizedRecipe', async (req, res) => {
     return;
 });
 
+app.get('/searchByDietaryRestriction', async (req, res) => {
+    if (!req.session.authenticated) {
+        res.redirect('/');
+        return;
+    }
+    var currentUser = await userCollection.find({ username: req.session.username }).toArray();
+    console.log(currentUser)
+    res.render('searchDietaryRestriction', { user: currentUser });
+    return
+});
+
+const searchDietaryRestriction = async (foundRecipes, DietaryRestriction) => {
+    let exclusionKeywords = [];
+    if (DietaryRestriction === "vegetarian") {
+        exclusionKeywords = [
+            'meat', 'chicken', 'pork', 'bacon', 'sausage', 'beef', 'steak', 'ham', 'lamb', 'duck', 'turkey', 'spam', 'salmon', 'halibut', 'fish', 'shrimp',
+            'crab', 'lobster', 'clam', 'mussel', 'oyster', 'anchovy', 'sardine', 'tuna', 'trout', 'cod', 'tilapia', 'catfish', 'bass', 'pepperoni', 'prosciutto',
+            'salami', 'chorizo'];
+    } else if (DietaryRestriction === "vegan") {
+        exclusionKeywords = [
+            'meat', 'chicken', 'pork', 'bacon', 'sausage', 'beef', 'steak', 'ham', 'lamb', 'duck', 'turkey', 'spam', 'salmon', 'halibut', 'fish', 'shrimp',
+            'crab', 'lobster', 'clam', 'mussel', 'oyster', 'anchovy', 'sardine', 'tuna', 'trout', 'cod', 'tilapia', 'catfish', 'bass', 'pepperoni', 'prosciutto',
+            'salami', 'chorizo', 'egg', 'milk', 'cheese', 'butter', 'yogurt', 'cream', 'honey', 'mayonnaise', 'gelatin', 'lard', 'whey', 'casein', 'albumin',
+            'isenglass', 'carmine', 'cochineal', 'shellac', 'vitamin d3', 'whey', 'casein', 'albumin', 'isenglass', 'carmine', 'cochineal', 'shellac', 'vitamin d3'];
+    } else if (DietaryRestriction === "dairy-free") {
+        exclusionKeywords = [
+            'milk', 'cheese', 'butter', 'yogurt', 'cream', 'honey', 'mayonnaise', 'gelatin', 'lard', 'whey', 'casein', 'albumin',
+            'feta', 'ghee', 'goat cheese', 'ice cream', 'margarine', 'parmesan', 'ricotta', 'brie', 'cheddar', 'mozzarella', 'provolone', 'swiss', 
+            'isenglass', 'carmine', 'cochineal', 'shellac', 'vitamin d3', 'whey', 'casein', 'albumin', 'isenglass', 'carmine', 'cochineal', 'shellac', 'vitamin d3'];
+    } else if (DietaryRestriction === "gluten-free") {
+        exclusionKeywords = [
+            'wheat', 'barley', , 'flour', 'rye', 'triticale', 'malt', 'brewer\'s yeast', 'oats', 'spelt', 'kamut', 'semolina', 'durum', 'farina', 'farro', 'einkorn', 'emmer',
+            'wheat germ', 'wheat bran', 'bulgur', 'couscous', 'pasta', 'bread', 'cracker', 'cake', 'cookie', 'pie', 'pastry', 'dough', 'biscuit', 'muffin', 'roll',
+            'bagel', 'pretzel', 'croissant', 'crouton', 'stuffing', 'noodle', 'cereal', 'beer', 'ale', 'lager', 'stout', 'porter', 'malt', 'malt vinegar', 'soy sauce',
+            'teriyaki sauce', 'hoisin sauce', 'oyster sauce', 'barley malt', 'malt extract', 'malt flavoring', 'malt vinegar', 'malt syrup', 'maltodextrin', 'maltol']
+    }
+
+    const filteredRecipes = foundRecipes.filter(recipe => {
+        for (const keyword of exclusionKeywords) {
+            const regex = new RegExp(`\\b${keyword}\\b`, 'i');
+            for (const property in recipe) {
+                if (regex.test(recipe[property])) {
+                    return false; // Exclude recipes containing the keyword
+                }
+            }
+        }
+        return true; // Include recipes that don't contain any of the keywords
+    });
+
+    // const filteredRecipes = foundRecipes.filter(recipe => {
+    //     for (const keyword of exclusionKeywords) {
+    //         const regex = new RegExp(`\\b${keyword}\\b`, 'i');
+    //         if (regex.test(recipe.UpdatedRecipeIngredientParts)) {
+    //             return false; // Exclude recipes containing the keyword
+    //         }
+    //     }
+    //     return true; // Include recipes that don't contain any of the keywords
+    // });
+
+    const sortedRecipes = filteredRecipes.sort((a, b) => {
+        if (a.Image_Link === 'Unavailable' && b.Image_Link !== 'Unavailable') {
+            return 1;
+        } else if (a.Image_Link !== 'Unavailable' && b.Image_Link === 'Unavailable') {
+            return -1;
+        } else {
+            return b.AggregatedRating - a.AggregatedRating;
+        }
+    }).slice(0, 200);
+    return sortedRecipes;
+};
+
+app.post('/searchDietaryRestrictionSubmit', async (req, res) => {
+    if (!req.session.authenticated) {
+        res.redirect('/');
+        return;
+    }
+    const DietaryRestriction = req.body.DietaryRestriction;
+    console.log(DietaryRestriction);
+    const keywords = req.body.keywords;
+    // check if keywords is valid
+    const schema = Joi.object({
+        keywords: Joi.string().pattern(/^[^${}[\]"'`:,.<>]{3,20}$/).required()
+    });
+    if (schema.validate({ keywords: keywords }).error) {
+        res.redirect('/searchName?error=Invalid keywords');
+        return;
+    }
+    const searchRegex = new RegExp(keywords, 'i');
+    const foundRecipes = await recipeCollection.find({ Name: searchRegex }).toArray();
+
+    const sortedRecipes = await searchDietaryRestriction(foundRecipes, DietaryRestriction);
+    res.render('searchResults', { foundRecipes: sortedRecipes });
+})
 
 module.exports = app;
 module.exports.searchRecipesByName = searchRecipesByName;
