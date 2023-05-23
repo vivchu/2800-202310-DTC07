@@ -11,17 +11,21 @@ const userCollection = database.db(mongodb_database).collection('users');
 app.get('/login', (req, res) => {
     var errorMessage = req.query.error;
     console.log(errorMessage);
-    res.render("login", { errorMessage: errorMessage });
+    res.render("login", { error: errorMessage });
 });
 
 app.post("/loginSubmit", async (req, res) => {
     var userEmail = req.body.email;
     var userPassword = req.body.password;
 
-    const schema = Joi.string().email().required();
-    const validationResult = schema.validate(userEmail);
+    const schema = Joi.object({
+        userEmail: Joi.string().email().required(),
+        userPassword: Joi.string().pattern(/^[^${}[\]"'`:,.<>]{3,20}$/).required()
+    });
+
+    const validationResult = schema.validate({ userEmail: userEmail, userPassword: userPassword });
     if (validationResult.error != null) {
-        res.redirect("/login?error=Missing field, please try again");
+        res.redirect("/login?error=Invalid Input, please try again");
         return;
     }
 
@@ -49,22 +53,24 @@ app.post("/loginSubmit", async (req, res) => {
 app.get("/createUser", (req, res) => {
     var errorMessage = req.query.error;
     console.log(errorMessage);
-    res.render("createUser.ejs", { errorMessage: errorMessage });
+    res.render("createUser.ejs", { error: errorMessage });
 });
 
 
 // this is for the forgot password and email page routes (Vivian)
 app.get('/forgotPassword', (req, res) => {
-    res.render('forgotPassword');
+    var errorMessage = req.query.error;
+    console.log(errorMessage);
+    res.render('forgotPassword', { error: errorMessage });
 });
 
 app.post('/forgotPasswordSubmit', async (req, res) => {
     var userEmail = req.body.email;
-    const schema = Joi.string().max(20).required();
+    const schema = Joi.string().email().required();
     const validationResult = schema.validate(userEmail);
     if (validationResult.error != null) {
         console.log(userEmail);
-        res.redirect("/forgotPassword");
+        res.redirect("/forgotPassword?error=Invalid Input, please try again");
         return;
     }
     const result = await userCollection.find({ email: userEmail }).project({ email: 1, _id: 1 }).toArray();
@@ -84,12 +90,14 @@ app.post('/forgotPasswordSubmit', async (req, res) => {
 });
 
 app.get('/verifyanswer', (req, res) => {
-    res.render('verifyanswer', { secret_question: req.session.secret_question });
+    var errorMessage = req.query.error;
+    console.log(errorMessage);
+    res.render('verifyanswer', { secret_question: req.session.secret_question, error: errorMessage });
 });
 
 app.post('/verifyanswerSubmit', async(req, res) => {
     var userAnswer = req.body.answer;
-    const schema = Joi.string().max(100).required();
+    const schema = Joi.string().pattern(/^[^${}[\]"'`:,.<>]{3,20}$/).required();
     const validationResult = schema.validate(userAnswer);
     if (validationResult.error != null) {
         console.log(userAnswer);
