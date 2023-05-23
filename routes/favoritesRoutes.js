@@ -22,15 +22,11 @@ app.get('/favorite', async (req, res) => {
             throw new Error('Email not found in session');
         }
         const user = await userCollection.findOne({ email });
-    
         if (!user) {
             throw new Error('User not found');
         }
         const recipeId = user.favoritedRecipes
         console.log(recipeId);
-
-       
-      
         const favoritedRecipes = await recipeCollection.find({ _id: { $in: recipeId.map(id => new ObjectId(id)) } }).toArray();
         console.log(favoritedRecipes);
         res.render('favorite', { favoritedRecipes: favoritedRecipes, user: user });
@@ -75,9 +71,7 @@ app.post('/favorites/add', async (req, res) => {
     await userCollection.updateOne(
       { email: email },
         { $addToSet: { favoritedRecipes: recipeId } }
-        
     );
-    
     res.json({ success: true });
   } catch (error) {
     console.error('Error adding recipe to favorites:', error);

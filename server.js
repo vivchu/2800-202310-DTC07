@@ -1,16 +1,17 @@
-require('./utils.js')
+/*jslint es6:true */
+require('./utils.js');
 require('dotenv').config();
 
 
 // get all the route files
-const profileRoutes = require('./routes/profileRoutes.js')
-const searchRoutes = require('./routes/searchRoutes.js')
-const authenticationRoutes = require('./routes/authenticationRoutes.js')
-const favoritesRoutes = require('./routes/favoritesRoutes.js')
-const customizationRoutes = require('./routes/customizationRoutes.js')
-const apiRoutes = require('./routes/apiRoutes.js')
-const cleanDatabaseRecipeParts = require('./routes/cleanDatabaseRecipeParts.js')
-const recipeDetailsRoutes = require('./routes/recipeDetailsRoutes.js')
+const profileRoutes = require('./routes/profileRoutes.js');
+const searchRoutes = require('./routes/searchRoutes.js');
+const authenticationRoutes = require('./routes/authenticationRoutes.js');
+const favoritesRoutes = require('./routes/favoritesRoutes.js');
+const customizationRoutes = require('./routes/customizationRoutes.js');
+const apiRoutes = require('./routes/apiRoutes.js');
+const cleanDatabaseRecipeParts = require('./routes/cleanDatabaseRecipeParts.js');
+const recipeDetailsRoutes = require('./routes/recipeDetailsRoutes.js');
 
 
 const express = require('express');
@@ -58,7 +59,7 @@ var mongoStore = MongoStore.create({
 
 app.use(sessions({
     secret: node_session_secret,
-    store: mongoStore, //default is memory store 
+    store: mongoStore, //default is memory store
     saveUninitialized: false,
     resave: true
 }
@@ -68,7 +69,7 @@ app.listen(port, () =>
     console.log(`Listening on port ${port}`)
 );
 
-app.set('view engine', 'ejs'); 
+app.set('view engine', 'ejs');
 
 // home route
 app.get('/', async (req, res) => {

@@ -24,7 +24,7 @@ app.post('/customizedByCookingTimeSubmit', async(req, res) => {
     const recipeId = req.body.recipeId;
     const clickedRecipe = await recipeCollection.findOne({ _id: new ObjectId(recipeId) });
     const prompt = `This is the recipe ${clickedRecipe.Name}, this is the Cook Time ${clickedRecipe.CookTime},this is the Prep Time ${clickedRecipe.PrepTime},
-    and this is the Total time ${clickedRecipe.TotalTime},and these are the instructions${clickedRecipe.UpdatedRecipeInstructions}. 
+    and this is the Total time ${clickedRecipe.TotalTime},and these are the instructions${clickedRecipe.UpdatedRecipeInstructions}.
     Can you modify this recipe so that it takes less time to make?
     Please make your answer be an array where each array element is taken from the below list.
     ["Recipe Title","Total Prep Time","Total Cook Time","Total Time", "list of quantities/units/ingredients  separated by &&&", "list of steps separated by &&&"]
@@ -80,7 +80,7 @@ app.post('/customizedBySkillLevelSubmit', async (req, res) => {
 
         const prompt = `This is the recipe ${clickedRecipe.Name}, this is my cooking level ${userCookingLevel},this is my baking level${userBakingLevel},this is the Cook Time ${clickedRecipe.CookTime},this is the Prep Time ${clickedRecipe.PrepTime},
     and this is the Total time ${clickedRecipe.TotalTime},
-    and these are the instructions${clickedRecipe.UpdatedRecipeInstructions}. 
+    and these are the instructions${clickedRecipe.UpdatedRecipeInstructions}.
     Can you modify this recipe so that it matches my cooking and baking level?
     Please make your answer be an array where each array element is taken from the below list.
     ["Recipe Title","Total Prep Time","Total Cook Time","Total Time", "list of quantities/units/ingredients  separated by &&&", "list of steps separated by &&&"]

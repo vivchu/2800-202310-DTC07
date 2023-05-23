@@ -21,7 +21,7 @@ app.get('/search', (req, res) => {
     res.render('search');
 });
 
-app.get('/searchName', (req, res) => {    
+app.get('/searchName', (req, res) => {
     res.render('searchName');
 });
 
@@ -48,7 +48,7 @@ app.post('/searchNameSubmit', async (req, res) => {
     const keywords = req.body.recipeName;
     // check if the keywords are valid
     const schema = Joi.object({
-        recipeName: Joi.string().pattern(/^[^${}[\]"'`:,.<>]{3,20}$/).required()
+        recipeName: Joi.string().pattern(/^[^${}/\]"'`:,.<>]{3,20}$/).required()
     });
     if (schema.validate({ recipeName: keywords }).error) {
         res.redirect('/searchName?error=Invalid keywords');
