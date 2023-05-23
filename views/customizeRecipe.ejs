@@ -27,7 +27,17 @@
                 class=" btn btn-block mt-10 mb-0 rounded-pill">Make this easier!</button>
             </form>
           </div>
+          <br>
+          <br>
+          <br>
+          <form method="post" action="/customizedByPrice">
+            <div class="form-group">
+              <button type="text" id="recipeId" name="recipeId" value="<%=recipe._id %>"
+                class=" btn btn-block mt-10 mb-0 rounded-pill">Make this cheaper!</button>
+            </div>
 
+
+          </form>
         </div>
 
         <%- include("templates/footer") %>
