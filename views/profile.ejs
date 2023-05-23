@@ -103,7 +103,7 @@
             width: 300px;
         }
         .pop-up {
-            margin-top: 20%;
+            margin-top: 150px;
         }
         body {
             color: #468414;
@@ -120,14 +120,14 @@
     <div class="modal fade" id="editProfileModal" tabindex="-1" role="dialog" aria-labelledby="editProfileModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
-            <div class="modal-content">
+            <div class="modal-content pop-up">
                 <div class="modal-header">
                     <h5 class="modal-title" id="editProfileModalLabel">Edit Profile</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body pop-up">
+                <div class="modal-body">
                     <form method="POST" action="/editProfile">
                         <div class="form-group">
                             <label for="name">Name</label>
@@ -186,14 +186,14 @@
     <div class="modal fade" id="changeSkillLevelModal" tabindex="-1" role="dialog"
         aria-labelledby="changeSkillLevelModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
-            <div class="modal-content">
+            <div class="modal-content pop-up">
                 <div class="modal-header">
                     <h5 class="modal-title" id="changeSkillLevelModalLabel">Edit Skill Level</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body pop-up">
+                <div class="modal-body">
                     <form method="POST" action="/editSkillLevel">
                         <div class="form-group">
                             <label for="cookingSkillLevel">Cooking Skill Level:</label>
@@ -253,16 +253,16 @@
     </div><br><br>
 
     <!-- Add Ingredient Modal -->
-    <div class="modal fade" id="addIngredientModal" tabindex="-1" role="dialog" aria-labelledby="addIngredientModalLabel" aria-hidden="true">
+    <div class="modal fade " id="addIngredientModal" tabindex="-1" role="dialog" aria-labelledby="addIngredientModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
-            <div class="modal-content">
+            <div class="modal-content pop-up">
                 <div class="modal-header">
                     <h5 class="modal-title" id="addIngredientModalLabel">Add Ingredient</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body pop-up">
+                <div class="modal-body">
                     <form id="addIngredientForm">
                         <div class="form-group">
                             <label for="ingredientName">Ingredient Name:</label>
@@ -278,14 +278,14 @@
     <!-- Edit Ingredient Modal -->
     <div class="modal fade" id="editIngredientModal" tabindex="-1" role="dialog" aria-labelledby="editIngredientModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
-            <div class="modal-content">
+            <div class="modal-content pop-up">
                 <div class="modal-header">
                     <h5 class="modal-title" id="editIngredientModalLabel">Edit Ingredient</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body pop-up">
+                <div class="modal-body">
                     <form id="editIngredientForm">
                         <input type="hidden" id="oldIngredient" name="oldIngredient">
                         <div class="form-group">
@@ -316,20 +316,20 @@
             data-target="#changeDietaryRestrictionModal">
             Edit Dietary Restriction
         </button>
-    </div><br><br><br><br>
+    </div><br>
 
     <!-- Dietary Restriction Modal -->
     <div class="modal fade" id="changeDietaryRestrictionModal" tabindex="-1" role="dialog"
         aria-labelledby="changeDietaryRestrictionModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
-            <div class="modal-content">
+            <div class="modal-content pop-up">
                 <div class="modal-header">
                     <h5 class="modal-title" id="changeDietaryRestrictionModalLabel">Edit Dietary Restriction</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body pop-up">
+                <div class="modal-body">
                     <form method="POST" action="/editDietaryRestriction">
                         <div class="form-group">
                             <label for="DietaryRestriction">Dietary Restriction:</label>
@@ -348,6 +348,12 @@
         </div>
     </div>
 
+    <form action="/resetToDefault" method="post">
+        <div style="display: flex; justify-content: center; align-items: center;">
+            <button id="resetToDefault" type="submit" class="btn btn-custom-question mb-4 mb-0 mt-6 rounded-pill">Reset all Fields to Default</button>
+        </div>
+    </form><br><br><br><br>
+
     <!-- edit security question -->
     <div style="display: flex; justify-content: center; align-items: center;">
         <button type="button" class="btn btn-custom-question mb-4 mb-0 mt-6 rounded-pill" data-toggle="modal"
@@ -360,14 +366,14 @@
     <div class="modal fade" id="changeSecurityQuestionModal" tabindex="-1" role="dialog"
         aria-labelledby="changeSecurityQuestionModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
-            <div class="modal-content">
+            <div class="modal-content pop-up">
                 <div class="modal-header">
                     <h5 class="modal-title" id="changeSecurityQuestionModalLabel">Update Security Question</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body pop-up">
+                <div class="modal-body">
                     <form method="POST" action="/editSecretQuestion">
                         <div class="form-group">
                             <label for="secretQuestion">Select a security question:</label>
@@ -399,14 +405,14 @@
     <div class="modal fade" id="changePasswordModal" tabindex="-1" role="dialog" aria-labelledby="changePasswordModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
-            <div class="modal-content">
+            <div class="modal-content pop-up">
                 <div class="modal-header">
                     <h5 class="modal-title" id="changePasswordModalLabel">Reset Password</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body pop-up">
+                <div class="modal-body">
                     <form method="POST" action="/changePassword">
                         <div class="form-group">
                             <label for="newPassword">New Password</label>
@@ -423,11 +429,11 @@
             </div>
         </div>
     </div>
-    <form action="/logout" method="get">
-        <div style="display: flex; justify-content: center; align-items: center;">
-            <button type="submit" class="btn btn-custom mb-4 mb-0 mt-6 rounded-pill">Logout</button>
-        </div>
-    </form>
+
+    <div style="display: flex; justify-content: center; align-items: center;">
+        <button id="logout" type="submit" class="btn btn-custom mb-4 mb-0 mt-6 rounded-pill">Logout</button>
+    </div>
+
 </div><br><br><br>
 
 <!-- Add Ingredient Script -->
@@ -516,6 +522,51 @@
                     data: { ingredient: ingredient },
                     success: function(response) {
                         // Refresh the page or update the ingredient list dynamically
+                        location.reload();
+                    },
+                    error: function(error) {
+                        console.log(error);
+                        alert("An error occurred while removing the ingredient. Please try again.");
+                    }
+                });
+            }
+        });
+    });
+</script>
+<!-- Reset all fields to default script -->
+<script>
+    $(document).ready(function() {
+        // Remove Ingredient
+        $("#resetToDefault").click(function() {
+            var ingredient = $(this).val();
+            if (confirm("Are you sure you want to reset all fields?")) {
+                $.ajax({
+                    url: "/resetToDefault",
+                    type: "POST",
+                    success: function(response) {
+                        // Refresh the page
+                        location.reload();
+                    },
+                    error: function(error) {
+                        console.log(error);
+                        alert("An error occurred while removing the ingredient. Please try again.");
+                    }
+                });
+            }
+        });
+    });
+</script>
+<!-- Logout Script -->
+<script>
+    $(document).ready(function() {
+        // Logout
+        $("#logout").click(function() {
+            if (confirm("Are you sure you want to logout?")) {
+                $.ajax({
+                    url: "/logout",
+                    type: "GET",
+                    success: function(response) {
+                        // Refresh the page
                         location.reload();
                     },
                     error: function(error) {

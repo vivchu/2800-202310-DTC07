@@ -203,4 +203,13 @@ app.post('/editDietaryRestriction', async (req, res) => {
     res.redirect('/profile?success=Dietary restriction updated successfully');
 });
 
+app.post('/resetToDefault', async (req, res) => {
+    if (!req.session.authenticated) {
+        res.redirect('/');
+        return;
+    }
+    await userCollection.updateOne({ email: req.session.email }, { $set: { UserIngredients: [], SearchIngredients: [], cookingSkill: null, bakingSkill: null, DietaryRestriction: "none" } });
+    res.redirect('/profile?success=Profile reset to default successfully');
+});
+
 module.exports = app;
