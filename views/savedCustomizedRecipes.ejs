@@ -54,6 +54,7 @@
                             <div class="card-body-recipeResults">
 
                     <p class="card-text"><%= recipe[1] %></p>
+                    <form action="/viewCustomizedRecipe" method="POST">
                             <input type="hidden" name="title" value="<%= JSON.stringify(recipe[0]) %>">
                             <input type="hidden" name="ingredients" value="<%= JSON.stringify(recipe[1]) %>">
                             <input type="hidden" name="instructions" value="<%= JSON.stringify(recipe[2]) %>">
