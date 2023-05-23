@@ -371,7 +371,7 @@ const searchDietaryRestriction = async (foundRecipes, DietaryRestriction) => {
 
     const filteredRecipes = foundRecipes.filter(recipe => {
         for (const keyword of exclusionKeywords) {
-            const regex = new RegExp(`\\b${keyword}\\b`, 'i');
+            const regex = new RegExp(keyword, 'i');
             for (const property in recipe) {
                 if (regex.test(recipe[property])) {
                     return false; // Exclude recipes containing the keyword
