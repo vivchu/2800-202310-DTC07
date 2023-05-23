@@ -12,10 +12,20 @@ app.get('/profile', async (req, res) => {
         res.redirect('/');
         return;
     }
+    if (req.query.error) {
+        error = req.query.error;
+    } else {
+        error = null;
+    }
+    if (req.query.success) {
+        success = req.query.success;
+    } else {
+        success = null;
+    }
     // retrieve user info from database
     var user = await userCollection.find({ email: req.session.email }).project({ username: 1, email: 1, cookingSkill: 1, bakingSkill: 1, secretquestion: 1, secretanswer: 1, UserIngredients: 1, DietaryRestriction: 1, _id: 1 }).toArray();
     console.log(user);
-    res.render('profile', { user: user });
+    res.render('profile', { user: user, error: error, success: success });
 });
 
 app.post('/changePassword', async (req, res) => {
