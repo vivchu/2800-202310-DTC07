@@ -1,13 +1,24 @@
 <%- include("templates/header") %>
 
+<style>
+    .btn-custom-search {
+            width: 150px;
+    }
+</style>
 
 <div class="container">
+<div class="text-center">
+        <h4>Search by Name</h4>
+        <br>
+</div>
 <form action="/searchNameSubmit" method="POST">
     <div class="form-group">
         <label for="recipeName">Recipe Name:</label>
         <input name="recipeName" type="text" class="form-control" id="recipeName" placeholder="Enter the recipe name">
     </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <div style="display: flex; justify-content: center; align-items: center;">
+        <button type="submit" class="btn btn-custom-search mb-4 mb-0 mt-6 rounded-pill">Search</button>
+    </div>
 </form>
 </div>
 

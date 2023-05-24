@@ -1,11 +1,18 @@
 <%- include("templates/header") %>
 
-<div class="container">
-<% if (currentUser) { %>
-    <h4><%= currentUser[0].username %>'s Preset Cooking Skills</h4>
-    <br>
+<style>
+    .btn-custom-search {
+            width: 150px;
+    }
+</style>
 
-<% } %>
+<div class="container">
+    <div class="text-center">
+        <% if (currentUser) { %>
+            <h4><%= currentUser[0].username %>'s Preset Cooking Skills</h4>
+            <br>
+        <% } %>
+    </div>
 
 <form action="/searchSkillLevelSubmit" method="POST">
     <label for="cookingSkill">Cooking Skill:</label>
@@ -49,7 +56,9 @@
     <br>
 
 
-    <button type="submit" class="btn btn-primary">Search</button>
+    <div style="display: flex; justify-content: center; align-items: center;">
+        <button type="submit" class="btn btn-custom-search mb-4 mb-0 mt-6 rounded-pill">Search</button>
+    </div>
 </form>
 </div>
 

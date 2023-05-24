@@ -11,13 +11,18 @@
     .btn-custom-edit {
             width: 200px;
     }
+    .btn-custom-search {
+            width: 150px;
+    }
 </style>
 
 
 <!-- Ingredients Table -->
 
 <div class="container">
-    <h4>Search Ingredients</h4>
+    <div class="text-center">
+        <h4>Search by Ingredients</h4>
+    </div>
     
     <br>
     <table class="table">
@@ -117,7 +122,9 @@
 </div>
 <div class="text-center">
     <form action="/searchIngredientSubmit" method="POST">
-        <button type="submit" class="btn btn-lg rounded-pill">Search</button>
+        <div style="display: flex; justify-content: center; align-items: center;">
+            <button type="submit" class="btn btn-custom-search mb-4 mb-0 mt-6 rounded-pill">Search</button>
+        </div>
     </form>
 </div><br><br>
 <div class="text-center">
@@ -129,7 +136,9 @@
 </div>
 <div class="text-center">
     <form action="/generateIngredientSubmit" method="POST">
-        <button type="submit" class=" btn btn-lg rounded-pill">Generate</button>
+        <div style="display: flex; justify-content: center; align-items: center;">
+            <button type="submit" class="btn btn-custom-search mb-4 mb-0 mt-6 rounded-pill">Generate</button>
+        </div>
     </form>
 </div><br><br><br><br>
 

@@ -8,14 +8,19 @@
     .pop-up {
             margin-top: 20%;
         }
+    .btn-custom-search {
+            width: 150px;
+    }
 </style>
 
 <div class="container">
-    <% if (user) { %>
-        <h4><%= user[0].username %>'s Preset Dietary Restriction</h4>
-        <br>
-    
-    <% } %>
+    <div class="text-center">
+        <% if (user) { %>
+            <h4><%= user[0].username %>'s Preset Dietary Restriction</h4>
+            <br>
+        
+        <% } %>
+    </div>
     
     <form action="/searchDietaryRestrictionSubmit" method="POST">
         <label for="DietaryRestriction">Dietary Restriction:</label>
@@ -35,7 +40,9 @@
         <br>
     
     
-        <button type="submit" class="btn btn-primary">Search</button>
+        <div style="display: flex; justify-content: center; align-items: center;">
+            <button type="submit" class="btn btn-custom-search mb-4 mb-0 mt-6 rounded-pill">Search</button>
+        </div>
     </form>
     </div>
 
