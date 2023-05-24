@@ -35,9 +35,13 @@ app.post('/changePassword', async (req, res) => {
     }
     var newPasword = req.body.newPassword;
     var confirmPassword = req.body.confirmPassword;
+    newPasword = newPasword.trim();
+    confirmPassword = confirmPassword.trim();
+    console.log(newPasword);
+    console.log(confirmPassword);
     // Check if the new password is valid
     const schema = Joi.object({
-        newPassword: Joi.string().pattern(/^[^${}[\]"'`:,.<>]{3,20}$/).required(),
+        newPasword: Joi.string().pattern(/^[^${}[\]"'`:,.<>]{3,20}$/).required(),
         confirmPassword: Joi.string().pattern(/^[^${}[\]"'`:,.<>]{3,20}$/).required()
     });
 
@@ -64,6 +68,8 @@ app.post('/editProfile', async (req, res) => {
     var newEmail = req.body.email;
 
     if (newUsername) {
+        newUsername = newUsername.trim();
+        console.log(newUsername);
         // check if the newUsername is valid
         const schema = Joi.object({
             name: Joi.string().pattern(/^[^${}[\]"'`:,.<>]{3,20}$/).required()
@@ -77,6 +83,7 @@ app.post('/editProfile', async (req, res) => {
         req.session.username = newUsername;
     }
     if (newEmail) {
+        newEmail = newEmail.trim();
         // check if the newEmail is valid
         const schema = Joi.object({
             email: Joi.string().email().required()
@@ -85,16 +92,20 @@ app.post('/editProfile', async (req, res) => {
             res.redirect('/profile?error=Invalid email');
             return;
         }
-        // Check if the new email already exists in the database
-        const existingUser = await userCollection.findOne({ email: newEmail });
-        if (existingUser) {
-            // Email already belongs to another user
-            res.redirect('/profile?error=Email is already in use');
-            return;
+        // if newEmail is different from the current email, update the email
+        if (newEmail != req.session.email) {
+            // Check if the new email already exists in the database
+            const existingUser = await userCollection.findOne({ email: newEmail });
+            if (existingUser) {
+                // Email already belongs to another user
+                res.redirect('/profile?error=Email is already in use');
+                return;
+            }
+            await userCollection.updateOne({ email: req.session.email }, { $set: { email: newEmail } });
+            req.session.email = newEmail;
         }
 
-        await userCollection.updateOne({ email: req.session.email }, { $set: { email: newEmail } });
-        req.session.email = newEmail;
+        
     }
     res.redirect('/profile?success=Profile updated successfully');
 });
@@ -122,6 +133,10 @@ app.post('/editSecretQuestion', async (req, res) => {
     }
     var secretQuestion = req.body.secretQuestion
     var secretAnswer = req.body.secretAnswer
+    // if secretAnswer is not empty, trim it and hash it
+    if (secretAnswer) {
+        secretAnswer = secretAnswer.trim();
+    }
     var hashSecretAnswer = await bcrypt.hashSync(secretAnswer, 1);
     if (secretQuestion && secretAnswer) {
         // check if the secretAnswer is valid
