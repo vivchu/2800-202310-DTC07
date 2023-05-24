@@ -8,52 +8,58 @@
     .btn-custom-password {
             width: 250px;
     }
+    .btn-custom-edit {
+            width: 200px;
+    }
 </style>
 
 
 <!-- Ingredients Table -->
-<br><br><br><br><br><br><br>
-<h3>Search Ingredients</h3>
-<br>
-<table class="table">
-    <thead>
-        <tr>
-            <th scope="col">Ingredients</th>
-            <th scope="col">Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        <% if (user[0].SearchIngredients && user[0].SearchIngredients != user[0].UserIngredients) { %>
-            <% user[0].SearchIngredients.forEach(function(ingredient) { %>
-                <tr>
-                    <td><%= ingredient %></td>
-                    <td>
-                        <button type="button" class="btn btn-info btn-sm edit-ingredient-btn" value="<%= ingredient %>">Edit</button>
-                        <button type="button" class="btn btn-danger btn-sm remove-ingredient-btn" value="<%= ingredient %>">Remove</button>
-                    </td>
-                </tr>
-            <% }); %>
-        <% } else if (user[0].UserIngredients && user[0].UserIngredients == user[0].UserIngredients) { %>
-            <% user[0].UserIngredients.forEach(function(ingredient) { %>
-                <tr>
-                    <td><%= ingredient %></td>
-                    <td>
-                        <button type="button" class="btn btn-info btn-sm edit-ingredient-btn" value="<%= ingredient %>">Edit</button>
-                        <button type="button" class="btn btn-danger btn-sm remove-ingredient-btn" value="<%= ingredient %>">Remove</button>
-                    </td>
-                </tr>
-            <% }); %>
-        <% } else { %>
+
+<div class="container">
+    <h4>Search Ingredients</h4>
+    
+    <br>
+    <table class="table">
+        <thead>
             <tr>
-                <td colspan="2">No ingredients added.</td>
+                <th scope="col">Ingredients</th>
+                <th scope="col">Actions</th>
             </tr>
-        <% } %>
-    </tbody>
-</table><br>
+        </thead>
+        <tbody>
+            <% if (user[0].SearchIngredients && user[0].SearchIngredients != user[0].UserIngredients) { %>
+                <% user[0].SearchIngredients.forEach(function(ingredient) { %>
+                    <tr>
+                        <td><%= ingredient %></td>
+                        <td>
+                            <button type="button" class="btn btn-info btn-sm edit-ingredient-btn" value="<%= ingredient %>">Edit</button>
+                            <button type="button" class="btn btn-danger btn-sm remove-ingredient-btn" value="<%= ingredient %>">Remove</button>
+                        </td>
+                    </tr>
+                <% }); %>
+            <% } else if (user[0].UserIngredients && user[0].UserIngredients == user[0].UserIngredients) { %>
+                <% user[0].UserIngredients.forEach(function(ingredient) { %>
+                    <tr>
+                        <td><%= ingredient %></td>
+                        <td>
+                            <button type="button" class="btn btn-info btn-sm edit-ingredient-btn" value="<%= ingredient %>">Edit</button>
+                            <button type="button" class="btn btn-danger btn-sm remove-ingredient-btn" value="<%= ingredient %>">Remove</button>
+                        </td>
+                    </tr>
+                <% }); %>
+            <% } else { %>
+                <tr>
+                    <td colspan="2">No ingredients added.</td>
+                </tr>
+            <% } %>
+        </tbody>
+    </table><br>
+</div>
 
 <!-- Add Ingredient Button -->
-<div class="text-center">
-    <button type="button" class="btn btn-info btn btn-custom-password green" data-toggle="modal" data-target="#addIngredientModal">
+<div style="display: flex; justify-content: center; align-items: center;">
+    <button type="button" class="btn btn-custom-edit btn-block mb-4 mb-0 mt-6 rounded-pill" data-toggle="modal" data-target="#addIngredientModal">
         Add Ingredient
     </button>
 </div>
@@ -111,7 +117,7 @@
 </div>
 <div class="text-center">
     <form action="/searchIngredientSubmit" method="POST">
-        <button type="submit" class="btn btn-lg ">Search</button>
+        <button type="submit" class="btn btn-lg rounded-pill">Search</button>
     </form>
 </div><br><br>
 <div class="text-center">
@@ -123,7 +129,7 @@
 </div>
 <div class="text-center">
     <form action="/generateIngredientSubmit" method="POST">
-        <button type="submit" class=" btn btn-lg ">Generate</button>
+        <button type="submit" class=" btn btn-lg rounded-pill">Generate</button>
     </form>
 </div><br><br><br><br>
 
