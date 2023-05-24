@@ -53,7 +53,7 @@ const searchRecipesByName = async (keywords) => {
 
 
 app.post('/searchNameSubmit', async (req, res) => {
-    const keywords = req.body.recipeName;
+    const keywords = req.body.recipeName.trim()
     // check if the keywords are valid
     const schema = Joi.object({
         recipeName: Joi.string().pattern(/^[^${}/\]"'`:,.<>]{3,20}$/).required()
@@ -123,7 +123,9 @@ app.get('/searchSkillLevel', async (req, res) => {
 });
 
 app.post('/searchSkillLevelSubmit', async (req, res) => {
-    const { cookingSkill, bakingSkill, keywords } = req.body;
+    let { cookingSkill, bakingSkill, keywords } = req.body;
+    // trim the keywords
+    keywords = keywords.trim();
     // check if the keywords are valid
     const schema = Joi.object({
         cookingSkill: Joi.string().valid('beginner', 'intermediate', 'expert').required(),

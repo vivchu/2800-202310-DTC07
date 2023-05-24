@@ -7,6 +7,8 @@ $(document).ready(function() {
             alert("Please enter an ingredient.");
             return;
         }
+        // trim ingredient
+        ingredient = ingredient.trim();
         $.ajax({
             url: "/addSearchIngredient",
             type: "POST",
@@ -35,6 +37,8 @@ $(document).ready(function() {
             alert("Please enter a new ingredient name.");
             return;
         }
+        // trim newIngredientName
+        newIngredientName = newIngredientName.trim();
         $.ajax({
             url: "/editSearchIngredient",
             type: "POST",
