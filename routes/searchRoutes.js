@@ -18,10 +18,18 @@ const openai = new OpenAIApi(config);
 
 
 app.get('/search', (req, res) => {
+    if (!req.session.authenticated) {
+        res.redirect('/');
+        return;
+    }
     res.render('search');
 });
 
 app.get('/searchName', (req, res) => {
+    if (!req.session.authenticated) {
+        res.redirect('/');
+        return;
+    }
     res.render('searchName');
 });
 
@@ -103,6 +111,10 @@ const searchRecipesBySkillAndKeywords = async (cookingSkill, bakingSkill, keywor
 };
 
 app.get('/searchSkillLevel', async (req, res) => {
+    if (!req.session.authenticated) {
+        res.redirect('/');
+        return;
+    }
     if (req.session.authenticated) {
         var currentUser = await userCollection.find({ username: req.session.username }).toArray();
         console.log(currentUser)
@@ -133,7 +145,7 @@ app.get('/searchByIngredients', async (req, res) => {
         res.render('searchIngredients', { user: currentUser });
         return
     }
-    res.render('searchIngredientsNotLoggedIn');
+    res.redirect('/');
 });
 
 app.post('/addSearchIngredient', async (req, res) => {
