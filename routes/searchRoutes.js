@@ -438,6 +438,17 @@ app.post('/searchDietaryRestrictionSubmit', async (req, res) => {
     res.render('searchResults', { foundRecipes: sortedRecipes });
 })
 
+app.post('/removeAllSearchIngredients', async (req, res) => {
+    if (!req.session.authenticated) {
+        res.redirect('/');
+        return;
+    }
+    const email = req.session.email;
+    await userCollection.updateOne({ email: email }, { $set: { SearchIngredients: [] } });
+    res.redirect('/searchbyIngredients');
+});
+
+
 module.exports = app;
 module.exports.searchRecipesByName = searchRecipesByName;
 module.exports.searchRecipesBySkillAndKeywords = searchRecipesBySkillAndKeywords;

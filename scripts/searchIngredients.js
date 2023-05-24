@@ -83,4 +83,22 @@ $(document).ready(function() {
             });
         }
     });
+
+    // Remove all search ingredients
+    $("#removeAllSearchIngredients").click(function() {
+        if (confirm("Are you sure you want to remove all search ingredients?")) {
+            $.ajax({
+                url: "/removeAllSearchIngredients",
+                type: "POST",
+                success: function(response) {
+                    // Refresh the page
+                    location.reload();
+                },
+                error: function(error) {
+                    console.log(error);
+                    alert("An error occurred while removing all search ingredients. Please try again.");
+                }
+            });
+        }
+    });
 });
