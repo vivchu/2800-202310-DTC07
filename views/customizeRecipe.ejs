@@ -70,7 +70,7 @@
     width: 16px;
     height: 16px;
     border: 4px solid transparent;
-    border-top-color: #821484;
+    border-top-color: white;
     border-radius: 50%;
     animation: spin 1s linear infinite;
     visibility: hidden;
@@ -168,9 +168,13 @@
 
           buttons.forEach(function (button) {
             button.addEventListener("click", function () {
+              button.style.backgroundColor = "#468414";
+              button.style.color = "white";
+          
               
               var spinner = button.querySelector(".spinner");
               spinner.classList.add("show");
+              
             
             });
           });
