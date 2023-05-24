@@ -1,4 +1,67 @@
 <%- include("templates/header") %>
+<style>
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+  }
+
+.tooltip-btn {
+    position: relative;
+    margin-left: 5px;
+  }
+
+  .tooltip-btn i {
+    font-size: 16px;
+    color: #999;
+    cursor: pointer;
+    margin-left: 5px;
+  }
+
+  .tooltip-text {
+  position: absolute;
+  width: 180px;
+  background-color: #333;
+  color: #fff;
+  padding: 8px;
+  border-radius: 4px;
+  text-align: center;
+  visibility: hidden;
+  transition: opacity 0.3s;
+  bottom: 100%;
+  left:-50px;
+  transform: translateX(-50%);
+  margin-bottom: 8px;
+  opacity: 0.5;
+}
+
+
+  .show {
+    visibility: visible;
+    opacity: 1;
+  }
+
+.form-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.smaller-button {
+  font-size: 16px;
+  padding: 12px 24px;
+  width: 300px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  }
+
+</style>
   <div class="container">
     <div class="row">
       <div class="col-md-6 offset-md-3 text-center">
@@ -16,28 +79,60 @@
           <form method="post" action="/customizedByCookingTimeSubmit">
             <div class="form-group">
               <button type="text" id="recipeId" name="recipeId" value="<%=recipe._id %>"
-                class=" btn btn-block mt-10 mb-0 rounded-pill">Make this quicker!</button>
+                class=" btn btn-block mt-10 mb-0 rounded-pill smaller-button">Make this quicker!</button>
+                <span class="tooltip-btn">
+                  <i class="fas fa-question-circle"></i>
+                  <span class="tooltip-text">Click here to modify the recipe and make it quicker. Save time and enjoy your meal sooner. </span>
+                </span>
             </div>
           </form>
           <br>
           <br>
           <div>
             <form action="/customizedBySkillLevelSubmit" method="POST">
-              <button type="text" id="recipeId" name="recipeId" value="<%=recipe._id %>"
-                class=" btn btn-block mt-10 mb-0 rounded-pill">Make this easier!</button>
-            </form>
+              <div class="form-group">
+                <button type="text" id="recipeId" name="recipeId" value="<%=recipe._id %>"
+                  class=" btn btn-block mt-10 mb-0 rounded-pill smaller-button">Make this easier!</button>
+                  <span class="tooltip-btn">
+                    <i class="fas fa-question-circle"></i>
+                    <span class="tooltip-text">Click here to modify the recipe and make it easier. Simplify the steps or ingredients to streamline your cooking process.</span>
+                  </span>
+              </div>
           </div>
-          <br>
           <br>
           <br>
           <form method="post" action="/customizedByPrice">
             <div class="form-group">
               <button type="text" id="recipeId" name="recipeId" value="<%=recipe._id %>"
-                class=" btn btn-block mt-10 mb-0 rounded-pill">Make this cheaper!</button>
+                class=" btn btn-block mt-10 mb-0 rounded-pill smaller-button">Make this cheaper!</button>
+                <span class="tooltip-btn">
+                  <i class="fas fa-question-circle"></i>
+                  <span class="tooltip-text">Click here to modify the recipe and make it easier. Discover budget-friendly alternatives for this recipe.</span>
+                </span>
             </div>
-
-
           </form>
         </div>
+        <script>
+          document.addEventListener("DOMContentLoaded", function() {
+            var tooltipBtns = document.querySelectorAll(".tooltip-btn");
+
+            tooltipBtns.forEach(function(tooltipBtn) {
+            var tooltipText = tooltipBtn.querySelector(".tooltip-text");
+
+            tooltipBtn.addEventListener("click", function(event) {
+              event.stopPropagation();
+              tooltipText.classList.toggle("show");
+      });
+
+
+        
+            document.addEventListener("click", function(event) {
+  
+                tooltipText.classList.remove("show");
+              });
+    });
+  });
+        </script>
+        
 
         <%- include("templates/footer") %>
