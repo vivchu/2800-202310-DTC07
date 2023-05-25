@@ -67,8 +67,6 @@ app.post('/customizedByCookingTimeSubmit', async(req, res) => {
     return
 })
 
-
-
 app.post('/customizedBySkillLevelSubmit', async (req, res) => {
     if(req.session.authenticated){
     const recipeId = req.body.recipeId;
@@ -125,8 +123,6 @@ return
 
 })
 
-
-
 app.post('/customizedByPrice', async (req, res) => {
     if (req.session.authenticated) {
         const recipeId = req.body.recipeId;
@@ -176,7 +172,5 @@ app.post('/customizedByPrice', async (req, res) => {
     }
 
 })
-
-
 
 module.exports = app;

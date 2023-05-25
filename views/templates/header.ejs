@@ -9,85 +9,77 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 
- 
-
-    <!-- <script src="server.js"></script> -->
     <style>
-body{
-  font-family: Lato, sans-serif;
-}
-header{
-    display: block;
-  height: 15%;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  background-color: white;
-  z-index: 9999;
-}
-.logo {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-}
-
-#headerImage {
-  max-width: 400px;
-  max-height: auto;
-  margin: 0;
-  margin-bottom: 10px;
-  position: fixed;
-  top: 0;
-  left: 0;
-}
-#logoImage{
-  width: 60%;
-  height: auto;
-  margin-top: 40%;
-  margin-bottom: 20px;
-  
-}
-@media (max-width: 768px) {
-  .logo {
-    top: 5px;
-    left: 5px;
-  }
-}
-#profileIcon{
-  position: fixed;
-  top: 10px;
-  right: 20px;
-  font-size: 25px;
-  color:  #468414;
-}
-.btn{
-  background-color: white;
-   color: #468414;
-    border-color: #468414;
-
-}
-.btn:hover{
-  background-color: #468414;
-   color: white;
-    border-color: #468414;
-}
-.btn-success{
-  background-color: #468414;
-   color: white;
-    border-color: #468414;
-}
-.container{
-  margin-top: 140px
-}
-.fas:hover{
-  color:#E4EDDD
-}
-
-.recipeResults{
-  height: auto;
-}
-
+      body {
+        font-family: Lato, sans-serif;
+      }
+      header {
+        display: block;
+        height: 15%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background-color: white;
+        z-index: 9999;
+      }
+      .logo {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+      }
+      #headerImage {
+        max-width: 400px;
+        max-height: auto;
+        margin: 0;
+        margin-bottom: 10px;
+        position: fixed;
+        top: 0;
+        left: 0;
+      }
+      #logoImage {
+        width: 60%;
+        height: auto;
+        margin-top: 40%;
+        margin-bottom: 20px;
+      }
+      @media (max-width: 768px) {
+        .logo {
+          top: 5px;
+          left: 5px;
+        }
+      }
+      #profileIcon{
+        position: fixed;
+        top: 10px;
+        right: 20px;
+        font-size: 25px;
+        color:  #468414;
+      }
+      .btn{
+        background-color: white;
+        color: #468414;
+        border-color: #468414;
+      }
+      .btn:hover{
+        background-color: #468414;
+        color: white;
+        border-color: #468414;
+      }
+      .btn-success{
+        background-color: #468414;
+        color: white;
+        border-color: #468414;
+      }
+      .container{
+        margin-top: 140px
+      }
+      .fas:hover{
+        color:#E4EDDD
+      }
+      .recipeResults{
+        height: auto;
+      }
     </style>
 
 
@@ -95,12 +87,10 @@ header{
   <div class="container">
     <div class="row align-items-center">
       <div class="col-md-12">
-
-        <!-- <img src="/images/logo.png" alt="" width="80px"> -->
         <img id="headerImage" src="/images/header.png" alt="">
       </div>
       <div class="col-md-10 text-right">
-       <a  id ="profileIcon"href="/profile" class="text-black profile-icon"><i class="fas fa-user"></i></a>
+        <a  id ="profileIcon"href="/profile" class="text-black profile-icon"><i class="fas fa-user"></i></a>
       </div>
     </div>
   </div>

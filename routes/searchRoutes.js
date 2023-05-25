@@ -16,7 +16,6 @@ const config = new Configuration({
 
 const openai = new OpenAIApi(config);
 
-
 app.get('/search', (req, res) => {
     if (!req.session.authenticated) {
         res.redirect('/');
@@ -51,7 +50,6 @@ const searchRecipesByName = async (keywords) => {
     return sortedRecipes;
 };
 
-
 app.post('/searchNameSubmit', async (req, res) => {
     const keywords = req.body.recipeName.trim()
     // check if the keywords are valid
@@ -68,7 +66,6 @@ app.post('/searchNameSubmit', async (req, res) => {
     res.render('searchResults', { foundRecipes: foundRecipes });
 });
 
-
 const searchRecipesBySkillAndKeywords = async (cookingSkill, bakingSkill, keywords) => {
     let skillLevelFilter = [];
 
@@ -79,14 +76,6 @@ const searchRecipesBySkillAndKeywords = async (cookingSkill, bakingSkill, keywor
     } else if (cookingSkill === 'expert') {
         skillLevelFilter = ['Easy', 'Medium', 'Hard'];
     }
-
-    // if (bakingSkill === 'beginner') {
-    //     skillLevelFilter.bakingSkill = 'Easy';
-    // } else if (bakingSkill === 'intermediate') {
-    //     skillLevelFilter.bakingSkill = { $in: ['Easy', 'Medium'] };
-    // } else if (bakingSkill === 'expert') {
-    //     skillLevelFilter.bakingSkill = { $in: ['Easy', 'Medium', 'Hard'] };
-    // }
 
     const searchRegex = new RegExp(keywords, 'i');
     const foundRecipes = await recipeCollection.find({ Name: searchRegex }).toArray();
@@ -395,16 +384,6 @@ const searchDietaryRestriction = async (foundRecipes, DietaryRestriction) => {
         return true; // Include recipes that don't contain any of the keywords
     });
 
-    // const filteredRecipes = foundRecipes.filter(recipe => {
-    //     for (const keyword of exclusionKeywords) {
-    //         const regex = new RegExp(`\\b${keyword}\\b`, 'i');
-    //         if (regex.test(recipe.UpdatedRecipeIngredientParts)) {
-    //             return false; // Exclude recipes containing the keyword
-    //         }
-    //     }
-    //     return true; // Include recipes that don't contain any of the keywords
-    // });
-
     const sortedRecipes = filteredRecipes.sort((a, b) => {
         if (a.Image_Link === 'Unavailable' && b.Image_Link !== 'Unavailable') {
             return 1;
@@ -449,7 +428,6 @@ app.post('/removeAllSearchIngredients', async (req, res) => {
     await userCollection.updateOne({ email: email }, { $set: { SearchIngredients: [] } });
     res.redirect('/searchbyIngredients');
 });
-
 
 module.exports = app;
 module.exports.searchRecipesByName = searchRecipesByName;

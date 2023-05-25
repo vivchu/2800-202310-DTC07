@@ -8,12 +8,10 @@
   <style>
     .form-control {
       border-color: #468414;
-      font-family: Arial, sans-serif;
-      
+      font-family: Arial, sans-serif; 
     }
     body {
-     color: #468414;
-     ;
+      color: #468414;
     }
     .btn {
       background-color: #468414;
@@ -33,7 +31,6 @@
           $('#errorModal').modal('show');
           // Remove the error message from the URL
           window.history.pushState("", document.title, window.location.pathname);
-
       });
   </script>
 <% } %>
@@ -85,6 +82,5 @@
       </div>
       <button type="submit" class="btn btn-primary">Submit</button>
     </form>
-
   </div>
   <%- include("templates/footer") %>

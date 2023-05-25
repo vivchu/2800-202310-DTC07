@@ -28,7 +28,6 @@ $(document).ready(function() {
         });
     });
 
-
     // Edit Ingredient Form Submission
     $("#editIngredientForm").submit(function(event) {
         event.preventDefault();
