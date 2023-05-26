@@ -18,12 +18,4 @@ app.post('/customizeRecipe', async (req, res) => {
     res.render('customizeRecipe', { recipe: recipe });
 });
 
-app.post('/customizeRecipeIngredients', async (req, res) => {
-    const recipeId = req.body.recipeId;
-    console.log(recipeId);
-    const recipe = await recipeCollection.findOne({ _id: new ObjectId(recipeId) });
-    console.log(recipe);
-    res.render('home');
-});
-
 module.exports = app;
