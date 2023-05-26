@@ -90,7 +90,8 @@ Our project TasteBud, DTC-07, is developing a web app that suggests customised r
 5. Download Studio 3T https://studio3t.com/download/
 6. Download the Kaggle Dataset.  https://www.kaggle.com/datasets/irkaal/foodcom-recipes-and-reviews resource=download  
 7. Copy and Paste the code below to modify the Database to store the first 103,426 recipes 
-    ```const collection = db.getCollection("recipes");
+    ```
+    const collection = db.getCollection("recipes");
     // Get the IDs of the first 103,426 items
     const idsToKeep = collection.find({}, { _id: 1 }).limit(103426).map(doc => doc._id);
     // Delete all items except the ones in idsToKeep
