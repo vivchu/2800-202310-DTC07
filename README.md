@@ -82,13 +82,13 @@ Our project TasteBud, DTC-07, is developing a web app that suggests customised r
 
 ## Installation and Running the Project 
 
-1. Clone the project using the github repo link and open the project in your IDE
+1. Clone the project using the github repo link and open the project in your IDE.
 2. Make sure you have Node.js installed on your machine. https://nodejs.org/en/download
 3. If Node.js is installed, open a terminal or command prompt.
 4. Navigate to the directory where the cloned repo is located using the cd command. 
-5. Download Studio 3T https://studio3t.com/download/
+5. Download Studio 3T. https://studio3t.com/download/
 6. Download the Kaggle Dataset. https://www.kaggle.com/datasets/irkaal/foodcom-recipes-and-reviews
-7. Copy and Paste the code below to modify the database to store the first 103,426 recipes 
+7. Copy and Paste the code below to modify the database to store the first 103,426 recipes. 
     ```
     const collection = db.getCollection("recipes");
     // Get the IDs of the first 103,426 items
@@ -96,16 +96,17 @@ Our project TasteBud, DTC-07, is developing a web app that suggests customised r
     // Delete all items except the ones in idsToKeep
     const deleteResult = collection.deleteMany({ _id: { $nin: idsToKeep } });
     ```
-8. Visit /scripts and run python script addDifficulty.py 
+8. Visit /scripts and run python script addDifficulty.py. 
 9. In the project directory, there should be a package.json file that lists the project's dependencies. 
-10. Run ‘npm install’ to install the project dependencies listed in the package.json file
+10. Run ‘npm install’ to install the project dependencies listed in the package.json file.
 11. Make sure all the dependencies have been installed
 12. Create a .env file in the main directory.
-13. Reach out to TasteBud team for the connection information that should be in .env file
-14. Copy and paste all the information which includes MongoDB database connection information, node session and MongoDB session secrets and OpenAI API key
-15. Run ‘nodemon server.js’ in the terminal
+13. Reach out to TasteBud team for the connection information that should be in .env file.
+14. Copy and paste all the information which includes MongoDB database connection information, node session and MongoDB session secrets and OpenAI API key.
+15. Run ‘nodemon server.js’ in the terminal.
 16. Go to your localhost:3000 port. You should see the project running there.
-17. Visit /routes cleanDatabaseRecipeParts.js replace ENTER COLLECTION NAME HERE with the database collection 
+17. Visit /routes cleanDatabaseRecipeParts.js replace ENTER COLLECTION NAME HERE with the database collection called 'recipes'.
+18. Enter each URL noted in cleanDatabaseRecipeParts.js into the URL addres bar. This process adds columns to the database required by the application.
 
 
 
