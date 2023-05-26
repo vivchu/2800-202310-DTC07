@@ -83,19 +83,27 @@ Our project TasteBud, DTC-07, is developing a web app that suggests customised r
 
 ## Installation and Running the Project 
 
-Clone the project using the github repo link and open the project in your IDE
-Make sure you have Node.js installed on your machine.
-If Node.js is installed, open a terminal or command prompt.
-Navigate to the directory where the cloned repo is located using the cd command. 
-In terminal , enter Bash cd path/to/my-project
-In the project directory, there should be a package.json file that lists the project's dependencies. 
-Run ‘npm install’ to install the project dependencies listed in the package.json file
-Make sure all the dependencies have been installed
-Create a .env file in the main directory.
-Reach out to TasteBud team for the connection information that should be in .env file
-Copy and paste all the information which includes MongoDB database connection information, node session and MongoDB session secrets and OpenAI API key
-Run ‘nodemon server.js’ in the terminal
-Go to your localhost:3000. You should see the project running there.
+1. Clone the project using the github repo link and open the project in your IDE
+2. Make sure you have Node.js installed on your machine. https://nodejs.org/en/download
+3. If Node.js is installed, open a terminal or command prompt.
+4. Navigate to the directory where the cloned repo is located using the cd command. 
+5. Download Studio 3T https://studio3t.com/download/
+6. Download the Kaggle Dataset.  https://www.kaggle.com/datasets/irkaal/foodcom-recipes-and-reviews resource=download  
+7. Copy and Paste the code below to modify the Database to store the first 103,426 recipes 
+    ```const collection = db.getCollection("recipes");
+    // Get the IDs of the first 103,426 items
+    const idsToKeep = collection.find({}, { _id: 1 }).limit(103426).map(doc => doc._id);
+    // Delete all items except the ones in idsToKeep
+    const deleteResult = collection.deleteMany({ _id: { $nin: idsToKeep } });```
+8. In terminal , enter Bash cd path/to/my-project
+9. In the project directory, there should be a package.json file that lists the project's dependencies. 
+10. Run ‘npm install’ to install the project dependencies listed in the package.json file
+11. Make sure all the dependencies have been installed
+12. Create a .env file in the main directory.
+13. Reach out to TasteBud team for the connection information that should be in .env file
+14. Copy and paste all the information which includes MongoDB database connection information, node session and MongoDB session secrets and OpenAI API key
+15. Run ‘nodemon server.js’ in the terminal
+16. Go to your localhost:3000 port. You should see the project running there.
 
 
 ## How to Use the Product
