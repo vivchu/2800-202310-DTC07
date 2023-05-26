@@ -41,6 +41,10 @@
 <div class="container">
       <h3><%= user.username %>'s Favorite Recipes:</h3>
       <br>
+      <br>
+      <% if (favoritedRecipes.length === 0) { %>
+        <h5>You have no favorite recipes yet!</h5>
+      <% }%>
   <div class="row">
     <% favoritedRecipes.forEach((recipe, index) => { %>
       <div class="col-md-12 mb-3 recipe-card">
