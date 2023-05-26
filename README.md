@@ -16,6 +16,7 @@ Our project TasteBud, DTC-07, is developing a web app that suggests customised r
 
 ## File Contents of folder
 
+```
 │   .env
 │   .gitignore
 │   databaseConnection.js
@@ -46,13 +47,13 @@ Our project TasteBud, DTC-07, is developing a web app that suggests customised r
 │       searchRoutes.js
 │
 ├───scripts
+│       addDifficulty.py
 │       profile.js
 │       recipeDetails.js
 │       searchIngredients.js
 │
 └───views
     │   404.ejs
-    │   api.ejs
     │   createUser.ejs
     │   customizedRecipeDisplay.ejs
     │   customizeRecipe.ejs
@@ -68,7 +69,6 @@ Our project TasteBud, DTC-07, is developing a web app that suggests customised r
     │   search.ejs
     │   searchDietaryRestriction.ejs
     │   searchIngredients.ejs
-    │   searchIngredientsNotLoggedIn.ejs
     │   searchName.ejs
     │   searchResults.ejs
     │   searchSkill.ejs
@@ -78,8 +78,7 @@ Our project TasteBud, DTC-07, is developing a web app that suggests customised r
     └───templates
             footer.ejs
             header.ejs
-            users.ejs
-
+```
 
 ## Installation and Running the Project 
 
