@@ -2,7 +2,6 @@
 require('./utils.js');
 require('dotenv').config();
 
-
 // get all the route files
 const profileRoutes = require('./routes/profileRoutes.js');
 const searchRoutes = require('./routes/searchRoutes.js');
@@ -13,23 +12,15 @@ const apiRoutes = require('./routes/apiRoutes.js');
 const cleanDatabaseRecipeParts = require('./routes/cleanDatabaseRecipeParts.js');
 const recipeDetailsRoutes = require('./routes/recipeDetailsRoutes.js');
 
-
 const express = require('express');
-
 const sessions = require('express-session');
-
 const MongoStore = require('connect-mongo');
-
-
 const bcrypt = require('bcrypt');
-
 const Joi = require('joi');
-
 const app = express();
-
 const port = process.env.PORT || 3000;
-// const port = 3000;
 
+// mongodb connection
 const mongodb_user = process.env.MONGODB_USER;
 const mongodb_password = process.env.MONGODB_PASSWORD;
 const mongodb_session_secret = process.env.MONGODB_SESSION_SECRET;
@@ -40,7 +31,7 @@ const node_session_secret = process.env.NODE_SESSION_SECRET;
 
 const bodyParser = require('body-parser');
 
-const expireTime = 1 * 60 * 60 * 1000; //expires after 1 day (hours * minutes * seconds * millis)
+const expireTime = 1 * 60 * 60 * 1000; //expires after 1 hour (hours * minutes * seconds * millis)
 
 var { database } = include('databaseConnection');
 
@@ -60,7 +51,7 @@ var mongoStore = MongoStore.create({
 
 app.use(sessions({
     secret: node_session_secret,
-    store: mongoStore, //default is memory store
+    store: mongoStore,
     saveUninitialized: false,
     resave: true
 }
@@ -82,29 +73,17 @@ app.get('/', async (req, res) => {
     }
 });
 
-
+// separation of routes
 app.use('/', authenticationRoutes)
-
-
 app.use('/', profileRoutes);
-
-
 app.use('/', searchRoutes)
-
-
 app.use('/', favoritesRoutes)
-
-
 app.use('/', customizationRoutes)
-
 app.use('/', cleanDatabaseRecipeParts)
-
 app.use('/', apiRoutes)
-
 app.use('/', recipeDetailsRoutes)
 
-
-// recipe details page route (Reza)
+// recipe details page route
 const { ObjectId } = require('mongodb');
 
 app.get('/recipes/:id', async (req, res) => {
@@ -119,12 +98,11 @@ app.get('/recipes/:id', async (req, res) => {
     res.render('recipeDetails', { recipe: recipe });
 });
 
-
+// logout route
 app.get('/logout', (req, res) => {
     req.session.destroy();
     res.redirect('/');
 });
-
 
 // catch all 404 page not found errors
 app.get('*', (req, res) => {

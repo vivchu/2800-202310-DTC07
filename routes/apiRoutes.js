@@ -19,7 +19,7 @@ const config = new Configuration({
 const openai = new OpenAIApi(config);
 
 
-
+// make it quicker route
 app.post('/customizedByCookingTimeSubmit', async(req, res) => {
     const recipeId = req.body.recipeId;
     const clickedRecipe = await recipeCollection.findOne({ _id: new ObjectId(recipeId) });
@@ -67,8 +67,7 @@ app.post('/customizedByCookingTimeSubmit', async(req, res) => {
     return
 })
 
-
-
+// make it easier route
 app.post('/customizedBySkillLevelSubmit', async (req, res) => {
     if(req.session.authenticated){
     const recipeId = req.body.recipeId;
@@ -125,8 +124,7 @@ return
 
 })
 
-
-
+// make it cheaper route
 app.post('/customizedByPrice', async (req, res) => {
     if (req.session.authenticated) {
         const recipeId = req.body.recipeId;
@@ -176,7 +174,5 @@ app.post('/customizedByPrice', async (req, res) => {
     }
 
 })
-
-
 
 module.exports = app;

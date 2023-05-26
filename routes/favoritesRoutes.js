@@ -10,7 +10,7 @@ const expireTime = 1 * 60 * 60 * 1000;
 const userCollection = database.db(mongodb_database).collection('users');
 const recipeCollection = database.db(mongodb_database).collection('recipes');
 
-// add all app.get and app.post routes related to favorites here
+// Route to get the favorite recipes of a user
 app.get('/favorite', async (req, res) => {
     if (!req.session.authenticated || !req.session.username) {
         res.redirect('/');
@@ -36,11 +36,7 @@ app.get('/favorite', async (req, res) => {
     }
 });
 
-
-
-
-
-
+// Route to check if a recipe is favorited
 app.post('/favorites/check', async (req, res) => {
     const { recipeId } = req.body;
     const email = req.session.email; // Get the user email from the session
@@ -62,21 +58,23 @@ app.post('/favorites/check', async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 });
-app.post('/favorites/add', async (req, res) => {
-  const { recipeId } = req.body;
-  const email = req.session.email; // Assuming you have a session and userId available
 
-  try {
-    // Add the recipeId to the user's favorite recipes array
-    await userCollection.updateOne(
-      { email: email },
-        { $addToSet: { favoritedRecipes: recipeId } }
-    );
-    res.json({ success: true });
-  } catch (error) {
-    console.error('Error adding recipe to favorites:', error);
-    res.json({ success: false });
-  }
+// Route to add a recipe to favorites
+app.post('/favorites/add', async (req, res) => {
+    const { recipeId } = req.body;
+    const email = req.session.email; // Assuming you have a session and userId available
+
+    try {
+        // Add the recipeId to the user's favorite recipes array
+        await userCollection.updateOne(
+            { email: email },
+            { $addToSet: { favoritedRecipes: recipeId } }
+        );
+        res.json({ success: true });
+    } catch (error) {
+        console.error('Error adding recipe to favorites:', error);
+        res.json({ success: false });
+    }
 });
 
 // Route to remove a recipe from favorites

@@ -1,4 +1,44 @@
 <%- include("templates/header") %> 
+<style>
+.help-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin-bottom: 35px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.help-popup {
+  position: fixed;
+  bottom: 120px; /* Increased bottom position */
+  right: 40px;
+  width: 300px; /* Increased width */
+  padding: 16px;
+  background-color: rgb(241, 235, 228);
+  border-radius: 4px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+  display: none;
+}
+
+.help-popup p {
+  margin: 0;
+  line-height: 1.3; /* Adjusted line-height */
+  font-size: 14px; /* Adjusted font size */
+}
+
+.help-popup.show {
+  display: block;
+}
+</style>
 <div class="container">
   <div class="row">
     <div class="col-md-6 offset-md-3 text-center">
@@ -13,8 +53,37 @@
       <a href="/searchSkillLevel" class="btn  btn-block mb-4 rounded-pill" >Skill Level</a>
       <br>
       <a href="/searchByDietaryRestriction" class="btn  btn-block mb-4 mb-0 rounded-pill"  >Dietary Restrictions</a>
+      
     </div>
   </div>
 </div>
+<button class="help-btn"><i class="fas fa-question"></i></button>
+
+<div class="help-popup" id="helpPopup">
+  <p>This page offers a variety of methods to search for recipes based on different criteria. Choose one of the following options to get started:</p><br>
+  <ul>
+    <li><strong>Recipe Name:</strong> If you have specific recipe names in mind, select this option to search for recipes by their names.</li>
+    <li><strong>Ingredients on Hand:</strong> If you have certain ingredients available, choose this option to find recipes that include those ingredients or generate a customized recipe exclusively using your ingredients.</li>
+    <li><strong>Skill Level:</strong> To search for recipes suitable for your cooking skill level, click on this option.</li>
+    <li><strong>Dietary Restrictions:</strong> If you have dietary restrictions, select this option to discover recipes tailored to your specific needs.</li>
+  </ul>
+  <p>Explore the various search methods and find the perfect recipes to satisfy your culinary desires!</p>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    var helpBtn = document.querySelector(".help-btn");
+    var helpPopup = document.querySelector("#helpPopup");
+
+    helpBtn.addEventListener("click", function(event) {
+      event.stopPropagation();
+      helpPopup.classList.toggle("show");
+    });
+
+    document.addEventListener("click", function() {
+      helpPopup.classList.remove("show");
+    });
+  });
+</script>
 
 <%- include("templates/footer") %>

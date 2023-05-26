@@ -7,6 +7,8 @@ $(document).ready(function() {
             alert("Please enter an ingredient.");
             return;
         }
+        // trim ingredient
+        ingredient = ingredient.trim();
         $.ajax({
             url: "/addSearchIngredient",
             type: "POST",
@@ -35,6 +37,8 @@ $(document).ready(function() {
             alert("Please enter a new ingredient name.");
             return;
         }
+        // trim newIngredientName
+        newIngredientName = newIngredientName.trim();
         $.ajax({
             url: "/editSearchIngredient",
             type: "POST",
@@ -79,6 +83,24 @@ $(document).ready(function() {
                 error: function(error) {
                     console.log(error);
                     alert("An error occurred while removing the ingredient. Please try again.");
+                }
+            });
+        }
+    });
+
+    // Remove all search ingredients
+    $("#removeAllSearchIngredients").click(function() {
+        if (confirm("Are you sure you want to remove all search ingredients?")) {
+            $.ajax({
+                url: "/removeAllSearchIngredients",
+                type: "POST",
+                success: function(response) {
+                    // Refresh the page
+                    location.reload();
+                },
+                error: function(error) {
+                    console.log(error);
+                    alert("An error occurred while removing all search ingredients. Please try again.");
                 }
             });
         }

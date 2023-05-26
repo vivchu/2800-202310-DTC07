@@ -8,6 +8,7 @@ const expireTime = 1 * 60 * 60 * 1000;
 
 const userCollection = database.db(mongodb_database).collection('users');
 
+// login routes
 app.get('/login', (req, res) => {
     var errorMessage = req.query.error;
     console.log(errorMessage);
@@ -50,6 +51,7 @@ app.post("/loginSubmit", async (req, res) => {
     }
 });
 
+// signup routes
 app.get("/createUser", (req, res) => {
     var errorMessage = req.query.error;
     console.log(errorMessage);
@@ -57,7 +59,7 @@ app.get("/createUser", (req, res) => {
 });
 
 
-// this is for the forgot password and email page routes (Vivian)
+// this is for the forgot password and email page routes
 app.get('/forgotPassword', (req, res) => {
     var errorMessage = req.query.error;
     console.log(errorMessage);
@@ -126,6 +128,7 @@ app.post('/verifyanswerSubmit', async(req, res) => {
         }
 });
 
+// signup route
 app.post('/submitUser', async (req, res) => {
     if (!req.body.username) {
         res.redirect("/createUser?error=Missing username field, please try again");

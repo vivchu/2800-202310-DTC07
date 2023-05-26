@@ -30,7 +30,6 @@ const runPrompt = async (prompt) => {
     return response.data.choices[0].message.content;
 };
 
-
 const createPrompt = (recipeIngredients) => {
     const prompt = `${recipeIngredients} \n\n
                     what is the most common units of measure for the above ingredients? please make your answer be an array where each array element is the single most common unit of measure for each item, taken from the below list. only include the one most common unit of measure. Can you format the response as an array only? can you make the response the least number of tokens as possible?
@@ -64,7 +63,5 @@ app.post('/generateMeasureUnits', async (req, res) => {
     res.render('recipeDetails', { recipe: result[0], measureUnits: measureUnits });
 
 });
-
-
 
 module.exports = app;

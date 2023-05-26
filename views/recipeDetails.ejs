@@ -8,25 +8,21 @@
             <% } else { %>
                 <img src="<%= recipe.Image_Link %>" alt="<%= recipe.Name %>" class="img-fluid">
             <% } %>
-            
         </div>
         <div class="col-12 col-md-6">
             <h3>Recipe Info</h3>
             <ul>
-                
                 <li>Prep Time: <%= recipe.PrepTime.slice(2) %></li>
-               
                 <li>Cook Time: <%= recipe.CookTime.slice(2) %></li>
                 <li>Total Time: <%= recipe.TotalTime.slice(2) %></li>
                 <li>Number of Servings: <%= recipe.RecipeServings %></li>
                 <li>Rating: <%= recipe.AggregatedRating %> / 5</li>
             </ul>
-
         </div>
         <div class="col-12 col-md-6">
             <h3>Ingredients</h3>
             <ul>
-              <% let i = 0; %>
+                <% let i = 0; %>
                 <% recipe.UpdatedRecipeIngredientParts.forEach((recipeIngredientPart) => { %>
                     <li><%= recipe.UpdatedRecipeIngredientQuantities[i] %> <%= measureUnits[i] %> - <%= recipeIngredientPart %></li>
                     <% i++; %>
@@ -42,19 +38,13 @@
 
             <div class="row flex-row justify-content-around">
                 <div class="col-6 col-md-4 text-center">
-                    
                     <button  class="btn" id="favoritebtn" > <i class="fas fa-heart"></i></button>
-                    
                 </div>
                 <form action="/customizeRecipe" method="POST">
-                  <div class="form-group">
-                  <button type="submit" name="recipeId" class="btn" value="<%=recipe._id %>">Customize</button>
-                  </div>
-                </form>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
+                    <div class="form-group">
+                        <button type="submit" name="recipeId" class="btn" value="<%=recipe._id %>">Customize</button>
+                    </div>
+                </form><br><br><br><br>
                 </div>
             </div>
         </div>
@@ -62,9 +52,9 @@
 </div>
 
 <script>
-  const favoriteBtn = document.getElementById('favoritebtn');
-  const recipeId = "<%= recipe._id %>";
-  let isFavorite;
+    const favoriteBtn = document.getElementById('favoritebtn');
+    const recipeId = "<%= recipe._id %>";
+    let isFavorite;
 </script>
 
 <script src="/recipeDetails.js"></script>

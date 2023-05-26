@@ -9,9 +9,6 @@ const expireTime = 1 * 60 * 60 * 1000;
 const userCollection = database.db(mongodb_database).collection('users');
 const recipeCollection = database.db(mongodb_database).collection('ENTER COLLECTION NAME HERE');
 
-
-
-
 app.get('/cleanDatabaseIngredientParts', async (req, res) => {
     try {
         console.log('Cleaning database');

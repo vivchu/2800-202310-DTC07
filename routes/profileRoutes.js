@@ -7,6 +7,7 @@ const Joi = require('joi');
 
 const userCollection = database.db(mongodb_database).collection('users');
 
+// Profile page
 app.get('/profile', async (req, res) => {
     if (!req.session.authenticated) {
         res.redirect('/');
@@ -28,6 +29,7 @@ app.get('/profile', async (req, res) => {
     res.render('profile', { user: user, error: error, success: success });
 });
 
+// Change password route
 app.post('/changePassword', async (req, res) => {
     if (!req.session.authenticated) {
         res.redirect('/');
@@ -35,9 +37,13 @@ app.post('/changePassword', async (req, res) => {
     }
     var newPasword = req.body.newPassword;
     var confirmPassword = req.body.confirmPassword;
+    newPasword = newPasword.trim();
+    confirmPassword = confirmPassword.trim();
+    console.log(newPasword);
+    console.log(confirmPassword);
     // Check if the new password is valid
     const schema = Joi.object({
-        newPassword: Joi.string().pattern(/^[^${}[\]"'`:,.<>]{3,20}$/).required(),
+        newPasword: Joi.string().pattern(/^[^${}[\]"'`:,.<>]{3,20}$/).required(),
         confirmPassword: Joi.string().pattern(/^[^${}[\]"'`:,.<>]{3,20}$/).required()
     });
 
@@ -55,6 +61,7 @@ app.post('/changePassword', async (req, res) => {
     res.redirect('/profile?success=Password changed successfully');
 });
 
+// Edit profile route
 app.post('/editProfile', async (req, res) => {
     if (!req.session.authenticated) {
         res.redirect('/');
@@ -64,6 +71,8 @@ app.post('/editProfile', async (req, res) => {
     var newEmail = req.body.email;
 
     if (newUsername) {
+        newUsername = newUsername.trim();
+        console.log(newUsername);
         // check if the newUsername is valid
         const schema = Joi.object({
             name: Joi.string().pattern(/^[^${}[\]"'`:,.<>]{3,20}$/).required()
@@ -77,6 +86,7 @@ app.post('/editProfile', async (req, res) => {
         req.session.username = newUsername;
     }
     if (newEmail) {
+        newEmail = newEmail.trim();
         // check if the newEmail is valid
         const schema = Joi.object({
             email: Joi.string().email().required()
@@ -85,20 +95,25 @@ app.post('/editProfile', async (req, res) => {
             res.redirect('/profile?error=Invalid email');
             return;
         }
-        // Check if the new email already exists in the database
-        const existingUser = await userCollection.findOne({ email: newEmail });
-        if (existingUser) {
-            // Email already belongs to another user
-            res.redirect('/profile?error=Email is already in use');
-            return;
+        // if newEmail is different from the current email, update the email
+        if (newEmail != req.session.email) {
+            // Check if the new email already exists in the database
+            const existingUser = await userCollection.findOne({ email: newEmail });
+            if (existingUser) {
+                // Email already belongs to another user
+                res.redirect('/profile?error=Email is already in use');
+                return;
+            }
+            await userCollection.updateOne({ email: req.session.email }, { $set: { email: newEmail } });
+            req.session.email = newEmail;
         }
 
-        await userCollection.updateOne({ email: req.session.email }, { $set: { email: newEmail } });
-        req.session.email = newEmail;
+        
     }
     res.redirect('/profile?success=Profile updated successfully');
 });
 
+// Edit skill level route
 app.post('/editSkillLevel', async (req, res) => {
     if (!req.session.authenticated) {
         res.redirect('/');
@@ -115,6 +130,7 @@ app.post('/editSkillLevel', async (req, res) => {
     res.redirect('/profile?success=Skill level updated successfully');
 });
 
+// Edit secret question route
 app.post('/editSecretQuestion', async (req, res) => {
     if (!req.session.authenticated) {
         res.redirect('/');
@@ -122,6 +138,10 @@ app.post('/editSecretQuestion', async (req, res) => {
     }
     var secretQuestion = req.body.secretQuestion
     var secretAnswer = req.body.secretAnswer
+    // if secretAnswer is not empty, trim it and hash it
+    if (secretAnswer) {
+        secretAnswer = secretAnswer.trim();
+    }
     var hashSecretAnswer = await bcrypt.hashSync(secretAnswer, 1);
     if (secretQuestion && secretAnswer) {
         // check if the secretAnswer is valid
@@ -137,6 +157,7 @@ app.post('/editSecretQuestion', async (req, res) => {
     res.redirect('/profile?success=Secret question updated successfully');
 });
 
+// Add ingredient route
 app.post('/addIngredient', async (req, res) => { 
     if (!req.session.authenticated) {
         res.redirect('/');
@@ -157,6 +178,7 @@ app.post('/addIngredient', async (req, res) => {
     res.redirect('/profile?success=Ingredient added successfully');
 });
 
+// edit ingredient route
 app.post('/editIngredient', async (req, res) => {
     if (!req.session.authenticated) {
         res.redirect('/');
@@ -179,6 +201,7 @@ app.post('/editIngredient', async (req, res) => {
     res.redirect('/profile?success=Ingredient edited successfully');
 });
 
+// remove ingredient route
 app.post('/removeIngredient', async (req, res) => {
     if (!req.session.authenticated) {
         res.redirect('/');
@@ -191,6 +214,7 @@ app.post('/removeIngredient', async (req, res) => {
     res.redirect('/profile?success=Ingredient removed successfully');
 });
 
+// edit dietary restriction route
 app.post('/editDietaryRestriction', async (req, res) => {
     if (!req.session.authenticated) {
         res.redirect('/');
@@ -203,6 +227,7 @@ app.post('/editDietaryRestriction', async (req, res) => {
     res.redirect('/profile?success=Dietary restriction updated successfully');
 });
 
+// reset all fields on profile page to default route
 app.post('/resetToDefault', async (req, res) => {
     if (!req.session.authenticated) {
         res.redirect('/');

@@ -7,6 +7,8 @@ $(document).ready(function() {
             alert("Please enter an ingredient.");
             return;
         }
+        // trim ingredient
+        ingredient = ingredient.trim();
         $.ajax({
             url: "/addIngredient",
             type: "POST",
@@ -26,7 +28,6 @@ $(document).ready(function() {
         });
     });
 
-
     // Edit Ingredient Form Submission
     $("#editIngredientForm").submit(function(event) {
         event.preventDefault();
@@ -36,6 +37,8 @@ $(document).ready(function() {
             alert("Please enter a new ingredient name.");
             return;
         }
+        // trim newIngredientName
+        newIngredientName = newIngredientName.trim();
         $.ajax({
             url: "/editIngredient",
             type: "POST",
@@ -87,7 +90,6 @@ $(document).ready(function() {
 
     // Reset all fields to default
     $("#resetToDefault").click(function() {
-        var ingredient = $(this).val();
         if (confirm("Are you sure you want to reset all fields?")) {
             $.ajax({
                 url: "/resetToDefault",
