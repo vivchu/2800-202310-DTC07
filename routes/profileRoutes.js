@@ -7,6 +7,7 @@ const Joi = require('joi');
 
 const userCollection = database.db(mongodb_database).collection('users');
 
+// Profile page
 app.get('/profile', async (req, res) => {
     if (!req.session.authenticated) {
         res.redirect('/');
@@ -28,6 +29,7 @@ app.get('/profile', async (req, res) => {
     res.render('profile', { user: user, error: error, success: success });
 });
 
+// Change password route
 app.post('/changePassword', async (req, res) => {
     if (!req.session.authenticated) {
         res.redirect('/');
@@ -59,6 +61,7 @@ app.post('/changePassword', async (req, res) => {
     res.redirect('/profile?success=Password changed successfully');
 });
 
+// Edit profile route
 app.post('/editProfile', async (req, res) => {
     if (!req.session.authenticated) {
         res.redirect('/');
@@ -110,6 +113,7 @@ app.post('/editProfile', async (req, res) => {
     res.redirect('/profile?success=Profile updated successfully');
 });
 
+// Edit skill level route
 app.post('/editSkillLevel', async (req, res) => {
     if (!req.session.authenticated) {
         res.redirect('/');
@@ -126,6 +130,7 @@ app.post('/editSkillLevel', async (req, res) => {
     res.redirect('/profile?success=Skill level updated successfully');
 });
 
+// Edit secret question route
 app.post('/editSecretQuestion', async (req, res) => {
     if (!req.session.authenticated) {
         res.redirect('/');
@@ -152,6 +157,7 @@ app.post('/editSecretQuestion', async (req, res) => {
     res.redirect('/profile?success=Secret question updated successfully');
 });
 
+// Add ingredient route
 app.post('/addIngredient', async (req, res) => { 
     if (!req.session.authenticated) {
         res.redirect('/');
@@ -172,6 +178,7 @@ app.post('/addIngredient', async (req, res) => {
     res.redirect('/profile?success=Ingredient added successfully');
 });
 
+// edit ingredient route
 app.post('/editIngredient', async (req, res) => {
     if (!req.session.authenticated) {
         res.redirect('/');
@@ -194,6 +201,7 @@ app.post('/editIngredient', async (req, res) => {
     res.redirect('/profile?success=Ingredient edited successfully');
 });
 
+// remove ingredient route
 app.post('/removeIngredient', async (req, res) => {
     if (!req.session.authenticated) {
         res.redirect('/');
@@ -206,6 +214,7 @@ app.post('/removeIngredient', async (req, res) => {
     res.redirect('/profile?success=Ingredient removed successfully');
 });
 
+// edit dietary restriction route
 app.post('/editDietaryRestriction', async (req, res) => {
     if (!req.session.authenticated) {
         res.redirect('/');
@@ -218,6 +227,7 @@ app.post('/editDietaryRestriction', async (req, res) => {
     res.redirect('/profile?success=Dietary restriction updated successfully');
 });
 
+// reset all fields on profile page to default route
 app.post('/resetToDefault', async (req, res) => {
     if (!req.session.authenticated) {
         res.redirect('/');
