@@ -16,6 +16,7 @@ const config = new Configuration({
 
 const openai = new OpenAIApi(config);
 
+// the search page
 app.get('/search', (req, res) => {
     if (!req.session.authenticated) {
         res.redirect('/');
@@ -24,6 +25,7 @@ app.get('/search', (req, res) => {
     res.render('search');
 });
 
+// the search by name page
 app.get('/searchName', (req, res) => {
     if (!req.session.authenticated) {
         res.redirect('/');
@@ -50,6 +52,7 @@ const searchRecipesByName = async (keywords) => {
     return sortedRecipes;
 };
 
+// the search by name submit route
 app.post('/searchNameSubmit', async (req, res) => {
     const keywords = req.body.recipeName.trim()
     // check if the keywords are valid
@@ -66,6 +69,7 @@ app.post('/searchNameSubmit', async (req, res) => {
     res.render('searchResults', { foundRecipes: foundRecipes });
 });
 
+// function to search recipes by skill level and keywords
 const searchRecipesBySkillAndKeywords = async (cookingSkill, bakingSkill, keywords) => {
     let skillLevelFilter = [];
 
@@ -99,6 +103,7 @@ const searchRecipesBySkillAndKeywords = async (cookingSkill, bakingSkill, keywor
     return sortedRecipes;
 };
 
+// the search by skill level page
 app.get('/searchSkillLevel', async (req, res) => {
     if (!req.session.authenticated) {
         res.redirect('/');
@@ -111,6 +116,7 @@ app.get('/searchSkillLevel', async (req, res) => {
     res.render('searchSkill', { currentUser: currentUser });
 });
 
+// the search by skill level submit route
 app.post('/searchSkillLevelSubmit', async (req, res) => {
     let { cookingSkill, bakingSkill, keywords } = req.body;
     // trim the keywords
@@ -129,6 +135,7 @@ app.post('/searchSkillLevelSubmit', async (req, res) => {
     res.render('searchResults', { foundRecipes: foundRecipes }); 
 });
 
+// the search by ingredients page
 app.get('/searchByIngredients', async (req, res) => {
     if (req.session.authenticated) {
         var currentUser = await userCollection.find({ username: req.session.username }).toArray();
@@ -139,6 +146,7 @@ app.get('/searchByIngredients', async (req, res) => {
     res.redirect('/');
 });
 
+// add an ingredient to the user's search ingredients
 app.post('/addSearchIngredient', async (req, res) => {
     if (!req.session.authenticated) {
         res.redirect('/');
@@ -159,6 +167,7 @@ app.post('/addSearchIngredient', async (req, res) => {
     res.redirect('/profile?success=Ingredient added successfully');
 });
 
+// edit an ingredient in the user's search ingredients
 app.post('/editSearchIngredient', async (req, res) => {
     if (!req.session.authenticated) {
         res.redirect('/');
@@ -181,6 +190,7 @@ app.post('/editSearchIngredient', async (req, res) => {
     res.redirect('/profile?success=Ingredient edited successfully');
 });
 
+// remove an ingredient from the user's search ingredients
 app.post('/removeSearchIngredient', async (req, res) => {
     if (!req.session.authenticated) {
         res.redirect('/');
@@ -193,6 +203,7 @@ app.post('/removeSearchIngredient', async (req, res) => {
     res.redirect('/profile?success=Ingredient removed successfully');
 });
 
+// the search by ingredients submit route
 app.post('/searchIngredientSubmit', async (req, res) => {
     if (req.session.authenticated) {
         const searchedIngredients = await userCollection.find({ username: req.session.username }).project({ SearchIngredients: 1 }).toArray();
@@ -229,6 +240,7 @@ app.post('/searchIngredientSubmit', async (req, res) => {
     res.redirect('/');
 });
 
+// the generate recipe submit route
 app.post('/generateIngredientSubmit', async (req, res) => {
     if (req.session.authenticated) {
         const searchedIngredients = await userCollection.find({ username: req.session.username }).project({ SearchIngredients: 1 }).toArray();
@@ -290,6 +302,7 @@ app.post('/generateIngredientSubmit', async (req, res) => {
     res.redirect('/');
 });
 
+// save a recipe to the user's saved Customized recipes
 app.post('/addCustomizedRecipe', async (req, res) => {
     if (!req.session.authenticated) {
         res.redirect('/');
@@ -307,6 +320,7 @@ app.post('/addCustomizedRecipe', async (req, res) => {
     return;
 });
 
+// the saved customized recipe display page
 app.get('/savedCustomizedRecipes', async (req, res) => {
     if (!req.session.authenticated || !req.session.username) {
         res.redirect('/');
@@ -321,6 +335,7 @@ app.get('/savedCustomizedRecipes', async (req, res) => {
     return;
 });
 
+// view a saved customized recipe
 app.post('/viewCustomizedRecipe', async (req, res) => {
     if (!req.session.authenticated) {
         res.redirect('/');
@@ -335,6 +350,7 @@ app.post('/viewCustomizedRecipe', async (req, res) => {
     return;
 });
 
+// the search by dietary restriction page
 app.get('/searchByDietaryRestriction', async (req, res) => {
     if (!req.session.authenticated) {
         res.redirect('/');
@@ -346,6 +362,7 @@ app.get('/searchByDietaryRestriction', async (req, res) => {
     return
 });
 
+// function that searches for recipes based on dietary restriction keywords
 const searchDietaryRestriction = async (foundRecipes, DietaryRestriction) => {
     let exclusionKeywords = [];
     if (DietaryRestriction === "vegetarian") {
@@ -396,6 +413,7 @@ const searchDietaryRestriction = async (foundRecipes, DietaryRestriction) => {
     return sortedRecipes;
 };
 
+// the search by dietary restriction submit route
 app.post('/searchDietaryRestrictionSubmit', async (req, res) => {
     if (!req.session.authenticated) {
         res.redirect('/');
@@ -419,6 +437,7 @@ app.post('/searchDietaryRestrictionSubmit', async (req, res) => {
     res.render('searchResults', { foundRecipes: sortedRecipes });
 })
 
+// remove all search ingredients in the search by ingredients page
 app.post('/removeAllSearchIngredients', async (req, res) => {
     if (!req.session.authenticated) {
         res.redirect('/');
