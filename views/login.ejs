@@ -6,24 +6,22 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 <style>
-      .form-control {
-      border-color: #468414;
-      font-family: Arial, sans-serif;
-      
-    }
-    body {
-     color: #468414;
-     ;
-    }
-    .btn {
-      background-color: #468414;
-      color: white;
-      margin-top: 20px;
-    }
-    h2 {
-      color: #68cf14;
-      margin-bottom: 20px;
-    }
+  .form-control {
+    border-color: #468414;
+    font-family: Arial, sans-serif; 
+  }
+  body {
+    color: #468414;
+  }
+  .btn {
+    background-color: #468414;
+    color: white;
+    margin-top: 20px;
+  }
+  h2 {
+    color: #68cf14;
+    margin-bottom: 20px;
+  }
 </style>
 
 <% if (error) { %>
@@ -33,7 +31,6 @@
           $('#errorModal').modal('show');
           // Remove the error message from the URL
           window.history.pushState("", document.title, window.location.pathname);
-
       });
   </script>
 <% } %>
@@ -54,6 +51,7 @@
       </div>
   </div>
 </div>
+
 <div class="container">
   <h1>Log In</h1>
   <form action='/loginSubmit' method='post'>

@@ -89,7 +89,6 @@
 <div class="container">
   <div class="row">
     <div class="col-md-6 offset-md-3 text-center">
-
       <h3>Please choose the customization method:</h3>
       <br>
       <br>
@@ -140,37 +139,31 @@
           </div>
         </form>
       </div>
-      <script>
-        document.addEventListener("DOMContentLoaded", function () {
-          var tooltipBtns = document.querySelectorAll(".tooltip-btn");
-
-          tooltipBtns.forEach(function (tooltipBtn) {
-            var tooltipText = tooltipBtn.querySelector(".tooltip-text");
-
-            tooltipBtn.addEventListener("click", function (event) {
-              event.stopPropagation();
-              tooltipText.classList.toggle("show");
-            });
-
-            document.addEventListener("click", function (event) {
-              tooltipText.classList.remove("show");
-            });
-          });
-
-          var buttons = document.querySelectorAll(".smaller-button");
-
-          buttons.forEach(function (button) {
-            button.addEventListener("click", function () {
-              button.style.backgroundColor = "#468414";
-              button.style.color = "white";
-          
-              
-              var spinner = button.querySelector(".spinner");
-              spinner.classList.add("show");
-              
-            
-            });
-          });
-        });
-      </script>
+    </div>
+  </div>
+</div>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    var tooltipBtns = document.querySelectorAll(".tooltip-btn");
+    tooltipBtns.forEach(function (tooltipBtn) {
+      var tooltipText = tooltipBtn.querySelector(".tooltip-text");
+      tooltipBtn.addEventListener("click", function (event) {
+        event.stopPropagation();
+        tooltipText.classList.toggle("show");
+      });
+      document.addEventListener("click", function (event) {
+        tooltipText.classList.remove("show");
+      });
+    });
+    var buttons = document.querySelectorAll(".smaller-button");
+    buttons.forEach(function (button) {
+      button.addEventListener("click", function () {
+        button.style.backgroundColor = "#468414";
+        button.style.color = "white";
+        var spinner = button.querySelector(".spinner");
+        spinner.classList.add("show");
+      });
+    });
+  });
+</script>
 <%- include("templates/footer") %>

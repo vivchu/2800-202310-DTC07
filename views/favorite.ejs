@@ -43,26 +43,25 @@
       <br>
   <div class="row">
     <% favoritedRecipes.forEach((recipe, index) => { %>
-      <div class="col-md-12 mb-3 recipe-card">
-        <div class="card">
-          <h5 class="card-title"><%= recipe.Name %></h5>
-          <div class="card-img-container">
+    <div class="col-md-12 mb-3 recipe-card">
+      <div class="card">
+        <h5 class="card-title"><%= recipe.Name %></h5>
+        <div class="card-img-container">
           <img src="<%= recipe.Image_Link %>" alt="<%= recipe.Name %>" class="card-img">
-          </div>
-          <div class="card-body-recipeResults">
-
-      <p class="card-text"><%= recipe.UpdatedRecipeIngredientParts %></p>
-      <form action="/generateMeasureUnits" method="POST">
-        <div class="form-group">
-          <button type="text" class="btn btn-primary" id="recipeID" name="recipeID" value="<%= recipe._id %>">View Recipe</button>
         </div>
-      </form>
-    </div>
+        <div class="card-body-recipeResults">
+          <p class="card-text"><%= recipe.UpdatedRecipeIngredientParts %></p>
+          <form action="/generateMeasureUnits" method="POST">
+            <div class="form-group">
+              <button type="text" class="btn btn-primary" id="recipeID" name="recipeID" value="<%= recipe._id %>">View Recipe</button>
+            </div>
+          </form>
         </div>
       </div>
-      <% if ((index + 1) % 3 === 0) { %>
-        </div>
-        <div class="row">
+    </div>
+    <% if ((index + 1) % 3 === 0) { %>
+  </div>
+  <div class="row">
       <% } %>
     <% }); %>
   </div>

@@ -126,13 +126,13 @@ Easily update your personal account information to keep your profile up to date 
 ## Include Credits, References, and Licenses
 
 ### Credits and References
-1. Kaggle Dataset:  Food.com - Recipes and Reviews 
-- Link to Kaggle dataset   
+1. Kaggle Dataset - Food.com - Recipes and Reviews 
+- https://www.kaggle.com/datasets/irkaal/foodcom-recipes-and-reviews?resource=download   
 - We would like to include a brief description of the dataset we used, which contains recipes sourced from Food.com. This dataset is a valuable resource that encompasses a wide variety of culinary creations, ranging from appetizers to desserts. By leveraging this extensive recipe collection, our app, Tastebud, offers users a diverse range of options to explore and discover new dishes. The inclusion of the Food.com dataset enhances the relevance and richness of our recipe database, providing users with an extensive selection of recipes to search, customize, and enjoy.
-2. ChatGPT API:
+2. ChatGPT API
 - Link to ChatGPT API
 - We would like to acknowledge the invaluable contribution of the ChatGPT API provided by OpenAI in powering the intelligent conversational capabilities of our app, Tastebud. The ChatGPT API plays a crucial role in enabling users to interact seamlessly with our app, allowing them to search for recipes, receive personalized recommendations, and generate AI-created recipes based on their available ingredients. We are grateful to OpenAI for their cutting-edge technology and the transformative impact it has on enhancing the user experience of our app.
-3. ChatGPT by OpenAI: 
+3. ChatGPT by OpenAI 
 - Link to the ChatGPT website or GitHub repository.
 - We would like to recognize the utilization of the ChatGPT language model itself in the development of our app, Tastebud. The integration of the ChatGPT language model has significantly contributed to the diverse range of features and capabilities offered by our app. By leveraging the power of ChatGPT, Tastebud enables users to search for recipes, receive personalized recommendations, generate AI-created recipes, and engage in natural language interactions, thereby enhancing their overall culinary experience. We extend our appreciation to OpenAI for providing this exceptional language model that has greatly enriched our app's functionality.
 

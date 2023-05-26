@@ -16,12 +16,9 @@
 <div class="container">
     <div class="text-center">
         <% if (user) { %>
-            <h4><%= user[0].username %>'s Preset Dietary Restriction</h4>
-            <br>
-        
+            <h4><%= user[0].username %>'s Preset Dietary Restriction</h4><br>
         <% } %>
     </div>
-    
     <form action="/searchDietaryRestrictionSubmit" method="POST">
         <label for="DietaryRestriction">Dietary Restriction:</label>
         <select id="DietaryRestriction" name="DietaryRestriction" class="form-control">
@@ -31,18 +28,14 @@
             <option value="dairy-free" <% if (user[0].DietaryRestriction === 'dairy-free') { %> selected <% } %>>Dairy-Free</option>
             <option value="gluten-free" <% if (user[0].DietaryRestriction === 'gluten-free') { %> selected <% } %>>Gluten-Free</option>
         </select>
-    
         <br>
-        
         <label for="keywords">Recipe Name:</label>
         <br>
         <input name="keywords" type="text" class="form-control" id="keywords" placeholder="Enter the recipe name">
         <br>
-    
-    
         <div style="display: flex; justify-content: center; align-items: center;">
             <button type="submit" class="btn btn-custom-search mb-4 mb-0 mt-6 rounded-pill">Search</button>
         </div>
     </form>
-    </div>
+</div>
 <%- include("templates/footer") %>
