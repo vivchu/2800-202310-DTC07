@@ -135,10 +135,10 @@ Easily update your personal account information to keep your profile up to date 
 
 ### Credits and References
 1. Kaggle Dataset - Food.com - Recipes and Reviews 
-- https://www.kaggle.com/datasets/irkaal/foodcom-recipes-and-reviews?resource=download   
+- Link to Kaggle dataset: [https://www.kaggle.com/datasets/irkaal/foodcom-recipes-and-reviews]
 - We would like to include a brief description of the dataset we used, which contains recipes sourced from Food.com. This dataset is a valuable resource that encompasses a wide variety of culinary creations, ranging from appetizers to desserts. By leveraging this extensive recipe collection, our app, Tastebud, offers users a diverse range of options to explore and discover new dishes. The inclusion of the Food.com dataset enhances the relevance and richness of our recipe database, providing users with an extensive selection of recipes to search, customize, and enjoy.
 2. ChatGPT API
-- Link to ChatGPT API
+- Link to ChatGPT API[https://platform.openai.com/overview]
 - We would like to acknowledge the invaluable contribution of the ChatGPT API provided by OpenAI in powering the intelligent conversational capabilities of our app, Tastebud. The ChatGPT API plays a crucial role in enabling users to interact seamlessly with our app, allowing them to search for recipes, receive personalized recommendations, and generate AI-created recipes based on their available ingredients. We are grateful to OpenAI for their cutting-edge technology and the transformative impact it has on enhancing the user experience of our app.
 3. ChatGPT by OpenAI 
 - Link to the ChatGPT website or GitHub repository.
@@ -149,17 +149,17 @@ Easily update your personal account information to keep your profile up to date 
 
 This project utilizes the following third-party dependencies:
 
-bcrypt: License:  (v5.1.0)
-body-parser: License:  (v1.20.2)
-connect-mongo: License:  (v5.0.0)
-dotenv: License: (v16.0.3)
-ejs: License: (v3.1.9)
-express: License:  (v4.18.2)
-express-session: License:  (v1.17.3)
-joi: License: (v17.9.2)
-mongodb: License: (v5.5.0)
-mongoose: License:  (v7.1.0)
-openai: The OpenAI API may have its own specific terms of use, which can be found on the OpenAI website 
+bcrypt: License:[https://github.com/kelektiv/node.bcrypt.js/blob/master/LICENSE]  (v5.1.0)
+body-parser: License: [https://github.com/expressjs/body-parser/blob/master/LICENSE] (v1.20.2)
+connect-mongo: License:[https://github.com/jdesboeufs/connect-mongo/blob/master/LICENSE]  (v5.0.0)
+dotenv: License:[https://github.com/motdotla/dotenv/blob/main/LICENSE] (v16.0.3)
+ejs: License:[https://github.com/mde/ejs/blob/main/LICENSE] (v3.1.9)
+express: License:[https://github.com/expressjs/express/blob/master/LICENSE] (v4.18.2)
+express-session:[https://github.com/expressjs/session/blob/master/LICENSE] License:  (v1.17.3)
+joi: License:[https://github.com/hapijs/joi/blob/master/LICENSE.md] (v17.9.2)
+mongodb: License:[https://github.com/mongodb/node-mongodb-native/blob/main/LICENSE.md] (v5.5.0)
+mongoose: License:[https://github.com/Automattic/mongoose/blob/master/LICENSE.md]  (v7.1.0)
+openai: The OpenAI API may have its own specific terms of use, which can be found on the OpenAI website[https://openai.com/policies/terms-of-use] 
  
 # AI section
  
