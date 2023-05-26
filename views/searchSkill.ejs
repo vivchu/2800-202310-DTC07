@@ -1,56 +1,55 @@
 <%- include("templates/header") %>
 
+<style>
+    .btn-custom-search {
+            width: 150px;
+    }
+</style>
+
 <div class="container">
-<% if (currentUser) { %>
-    <h4><%= currentUser[0].username %>'s Preset Cooking Skills</h4>
-    <br>
-
-<% } %>
-
-<form action="/searchSkillLevelSubmit" method="POST">
-    <label for="cookingSkill">Cooking Skill:</label>
-    <select id="cookingSkill" name="cookingSkill" class="form-control">
+    <div class="text-center">
         <% if (currentUser) { %>
-        <option value="beginner" <% if (currentUser[0].cookingSkill==='beginner' || !currentUser[0].cookingSkill) { %> selected <% } %>
-                >Beginner</option>
-        <option value="intermediate" <% if (currentUser[0].cookingSkill==='intermediate' ) { %> selected <% } %>>Intermediate</option>
-        <option value="expert" <% if (currentUser[0].cookingSkill==='expert' ) { %> selected <% } %>>Expert</option>
-        <% } else { %>
-        <option value="beginner" selected>Beginner</option>
-        <option value="intermediate">Intermediate</option>
-        <option value="expert">Expert</option>
+            <h4><%= currentUser[0].username %>'s Preset Cooking Skills</h4>
+            <br>
         <% } %>
-    </select>
-
-    <br>
-
-    <label for="bakingSkill">Baking Skill:</label>
-    <select id="bakingSkill" name="bakingSkill" class="form-control">
-        <% if (currentUser) { %>
-        <option value="beginner" <% if (currentUser[0].bakingSkill==='beginner' || !currentUser[0].bakingSkill) { %> selected <% } %>>Beginner
-        </option>
-        <option value="intermediate" <% if (currentUser[0].bakingSkill==='intermediate' ) { %> selected <% } %>>Intermediate</option>
-        <option value="expert" <% if (currentUser[0].bakingSkill==='expert' ) { %> selected <% } %>>Expert</option>
-        <% } else { %>
-        <option value="beginner" selected>Beginner</option>
-        <option value="intermediate">Intermediate</option>
-        <option value="expert">Expert</option>
-        <% } %>
-    </select>
-
-    <br>
-    
-    <label for="keywords">Recipe Name:</label>
-    <br>
-    <input name="keywords" type="text" class="form-control" id="keywords" placeholder="Enter the recipe name">
- 
-    
-    
-    <br>
-
-
-    <button type="submit" class="btn btn-primary">Search</button>
-</form>
+    </div>
+    <form action="/searchSkillLevelSubmit" method="POST">
+        <label for="cookingSkill">Cooking Skill:</label>
+        <select id="cookingSkill" name="cookingSkill" class="form-control">
+            <% if (currentUser) { %>
+            <option value="beginner" <% if (currentUser[0].cookingSkill==='beginner' || !currentUser[0].cookingSkill) { %> selected <% } %>
+                    >Beginner</option>
+            <option value="intermediate" <% if (currentUser[0].cookingSkill==='intermediate' ) { %> selected <% } %>>Intermediate</option>
+            <option value="expert" <% if (currentUser[0].cookingSkill==='expert' ) { %> selected <% } %>>Expert</option>
+            <% } else { %>
+            <option value="beginner" selected>Beginner</option>
+            <option value="intermediate">Intermediate</option>
+            <option value="expert">Expert</option>
+            <% } %>
+        </select>
+        <br>
+        <label for="bakingSkill">Baking Skill:</label>
+        <select id="bakingSkill" name="bakingSkill" class="form-control">
+            <% if (currentUser) { %>
+            <option value="beginner" <% if (currentUser[0].bakingSkill==='beginner' || !currentUser[0].bakingSkill) { %> selected <% } %>>Beginner
+            </option>
+            <option value="intermediate" <% if (currentUser[0].bakingSkill==='intermediate' ) { %> selected <% } %>>Intermediate</option>
+            <option value="expert" <% if (currentUser[0].bakingSkill==='expert' ) { %> selected <% } %>>Expert</option>
+            <% } else { %>
+            <option value="beginner" selected>Beginner</option>
+            <option value="intermediate">Intermediate</option>
+            <option value="expert">Expert</option>
+            <% } %>
+        </select>
+        <br>
+        <label for="keywords">Recipe Name:</label>
+        <br>
+        <input name="keywords" type="text" class="form-control" id="keywords" placeholder="Enter the recipe name">
+        <br>
+        <div style="display: flex; justify-content: center; align-items: center;">
+            <button type="submit" class="btn btn-custom-search mb-4 mb-0 mt-6 rounded-pill">Search</button>
+        </div>
+    </form>
 </div>
 
-    <%- include("templates/footer") %>
+<%- include("templates/footer") %>

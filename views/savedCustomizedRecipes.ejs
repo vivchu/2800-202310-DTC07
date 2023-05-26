@@ -1,33 +1,69 @@
 <%- include("templates/header") %> 
+<style>
+.card-img-container {
+  width: 40%;
+  float: right;
+}
+
+.card-img {
+  width: 100%;
+  height: auto;
+}
+
+.card-body-recipeResults {
+  width: 60%;
+  float: right;
+}
+
+.card {
+  height: auto;
+  display: block;
+  background-color:#eaf6df
+}
+
+.card-title {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: bold;
+  width: 100%;
+}
+
+.card-spec {
+  width: 100%;
+}
+.recipe-card {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+}
+</style>
 
 <div class="container">
-        <h3>
-            <%= user.username %>'s Saved Customized Recipes:
-        </h3>
-        <br>
+    <h3><%= user.username %>'s Saved Customized Recipes:</h3><br>
     <div class="row">
         <% customizedRecipes.forEach((recipe, index)=> { %>
-            <div class="col-md-4 mb-3">
-                <div class="card">
-                    <img src="/images/logo.png" alt="<%= recipe[0] %>" class="card-img-top">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            <%= recipe[0] %>
-                        </h5>
-                        <form action="/viewCustomizedRecipe" method="post">
-                            <input type="hidden" name="title" value="<%= JSON.stringify(recipe[0]) %>">
-                            <input type="hidden" name="ingredients" value="<%= JSON.stringify(recipe[1]) %>">
-                            <input type="hidden" name="instructions" value="<%= JSON.stringify(recipe[2]) %>">
-                            <button type="submit" class="btn btn-primary">View Recipe</button>
-                        </form>
-                    </div>
+        <div class="col-md-12 mb-3 recipe-card">
+            <div class="card">
+                <h5 class="card-title">Customized <%= recipe[0] %></h5>
+                <div class="card-img-container">
+                    <img src="/images/logo.png" alt="<%= recipe[0] %>" class="card-img">
+                </div>
+                <div class="card-body-recipeResults">
+                    <p class="card-text"><%= recipe[1] %></p>
+                    <form action="/viewCustomizedRecipe" method="POST">
+                        <input type="hidden" name="title" value="<%= JSON.stringify(recipe[0]) %>">
+                        <input type="hidden" name="ingredients" value="<%= JSON.stringify(recipe[1]) %>">
+                        <input type="hidden" name="instructions" value="<%= JSON.stringify(recipe[2]) %>">
+                        <button type="submit" class="btn btn-primary">View Recipe</button>
+                    </form>
                 </div>
             </div>
+        </div>
             <% if ((index + 1) % 3 === 0) { %>
-                </div>
-                <div class="row">
-            <% } %>
-        <% }); %>
+    </div>
+    <div class="row">
+          <% } %>
+      <% }); %>
     </div>
 </div><br><br>
 

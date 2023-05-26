@@ -1,13 +1,17 @@
 <%- include("templates/header") %> 
+
+<!-- add jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- add bootstrap js -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  
   <style>
     .form-control {
       border-color: #468414;
-      font-family: Arial, sans-serif;
-      
+      font-family: Arial, sans-serif; 
     }
     body {
-     color: #468414;
-     ;
+      color: #468414;
     }
     .btn {
       background-color: #468414;
@@ -20,36 +24,63 @@
     }
   </style>
 
-  <div class="container">
-    <h2>Sign Up</h2>
-    <form action='/submitUser' method='post'>
-      <div class="form-group">
-        <label for="username">Name:</label>
-        <input name='username' type='text' class="form-control" id="username" placeholder='Enter name'>
+<% if (error) { %>
+  <script>
+      // Display error message as a Bootstrap modal when the page loads
+      $(document).ready(function() {
+          $('#errorModal').modal('show');
+          // Remove the error message from the URL
+          window.history.pushState("", document.title, window.location.pathname);
+      });
+  </script>
+<% } %>
+
+<!-- Error Modal -->
+<div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="errorModalLabel">Error</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          <div class="modal-body">
+              <%= error %> <!-- Display the error message here -->
+          </div>
       </div>
-      <div class="form-group">
-        <label for="email">Email:</label>
-        <input name='email' type='text' class="form-control" id="email" placeholder='Enter email'>
-      </div>
-      <div class="form-group">
-        <label for="password">Password:</label>
-        <input name='password' type='password' class="form-control" id="password" placeholder='Enter password'>
-      </div>
-        <div class="form-group">
-          <label for="secretQuestion">Select a secret question:</label>
-          <select name='secretQuestion' class="form-control" id="secretQuestion">
-            <option value="" selected>Select a secret question</option>
-            <option value="What is your mother' s maiden name?">What is your mother's maiden name?</option>
-            <option value='What was the name of your first pet?'>What was the name of your first pet?</option>
-            <option value='What is your favorite color?'>What is your favorite color?</option>
-          </select>
-        </div>
-      <div class="form-group">
-        <label for="secretAnswer">Answer to secret question:</label>
-        <input name='secretAnswer' type='text' class="form-control" id="secretAnswer" placeholder='Enter answer'>
-      </div>
-      <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
-    <%= errorMessage %>
   </div>
-  <%- include("templates/footer") %>
+</div>
+
+<div class="container">
+  <h2>Sign Up</h2>
+  <form action='/submitUser' method='post'>
+    <div class="form-group">
+      <label for="username">Name:</label><span style="color: red">*</span>
+      <input name='username' type='text' class="form-control" id="username" placeholder='Enter name' required>
+    </div>
+    <div class="form-group">
+      <label for="email">Email:</label><span style="color: red">*</span>
+      <input name='email' type='text' class="form-control" id="email" placeholder='Enter email' required>
+    </div>
+    <div class="form-group">
+      <label for="password">Password:</label><span style="color: red">*</span>
+      <input name='password' type='password' class="form-control" id="password" placeholder='Enter password' required>
+    </div>
+    <div class="form-group">
+      <label for="secretQuestion">Select a secret question:</label><span style="color: red">*</span>
+      <select name='secretQuestion' class="form-control" id="secretQuestion" required>
+        <option value="" selected>Select a secret question</option>
+        <option value="What is your mother' s maiden name?">What is your mother's maiden name?</option>
+        <option value='What was the name of your first pet?'>What was the name of your first pet?</option>
+        <option value='What is your favorite color?'>What is your favorite color?</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="secretAnswer">Answer to secret question:</label><span style="color: red">*</span>
+      <input name='secretAnswer' type='text' class="form-control" id="secretAnswer" placeholder='Enter answer' required>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+</div>
+<%- include("templates/footer") %>

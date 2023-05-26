@@ -4,33 +4,87 @@
 <!-- add bootstrap js -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
+<% if (error) { %>
+    <script>
+        // Display error message as a Bootstrap modal when the page loads
+        $(document).ready(function() {
+            $('#errorModal').modal('show');
+            // Remove the error message from the URL
+            window.history.pushState("", document.title, window.location.pathname);
+        });
+    </script>
+<% } %>
+
+<% if (success) { %>
+    <script>
+        // Display success message as a Bootstrap modal when the page loads
+        $(document).ready(function() {
+            $('#successModal').modal('show');
+            // Remove the success message from the URL
+            window.history.pushState("", document.title, window.location.pathname);
+        });
+    </script>
+<% } %>
+
+<!-- Error Modal -->
+<div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="errorModalLabel">Error</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <%= error %> <!-- Display the error message here -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Success Modal -->
+<div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="successModalLabel">Success</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <%= success %> <!-- Display the success message here -->
+            </div>
+        </div>
+    </div>
+</div>
 
 <br><br><br>
 <div class="container">
-    <!-- space for profile picture -->
     <div class="container">
         <div class=" row d-flex justify-content-center">
             <img src="/images/profile.png" alt="profile picture" width="200px">
         </div>
     </div><br>
+
     <!-- Edit Profile Table -->
-    
-        <table class="table">
-            <tbody>
-                <tr>
-                    <th scope="row">Name</th>
-                    <td>
-                        <%= user[0].username %>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row">Email</th>
-                    <td>
-                        <%= user[0].email %>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+    <table class="table">
+        <tbody>
+            <tr>
+                <th scope="row">Name</th>
+                <td>
+                    <%= user[0].username %>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">Email</th>
+                <td>
+                    <%= user[0].email %>
+                </td>
+            </tr>
+        </tbody>
+    </table>
     
     <style>
         .btn-custom {
@@ -46,27 +100,33 @@
             width: 300px;
         }
         .pop-up {
-            margin-top: 20%;
+            margin-top: 150px;
+        }
+        body {
+            color: #468414;
+            ;
         }
     </style>
+
     <!-- Edit profile button -->
-    <div class="text-center">
-        <button type="button" class="btn btn-info btn-lg rounded-pill btn-custom-edit btn-custom-password green" data-toggle="modal" data-target="#editProfileModal">
+    <div style="display: flex; justify-content: center; align-items: center;">
+        <button type="button" class="btn btn-custom-edit btn-block mb-4 mb-0 mt-6 rounded-pill" data-toggle="modal" data-target="#editProfileModal">
             Edit Profile
         </button>
     </div><br><br>
+
     <!-- Edit profile Modal -->
     <div class="modal fade" id="editProfileModal" tabindex="-1" role="dialog" aria-labelledby="editProfileModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
-            <div class="modal-content">
+            <div class="modal-content pop-up">
                 <div class="modal-header">
                     <h5 class="modal-title" id="editProfileModalLabel">Edit Profile</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body pop-up">
+                <div class="modal-body">
                     <form method="POST" action="/editProfile">
                         <div class="form-group">
                             <label for="name">Name</label>
@@ -82,6 +142,7 @@
             </div>
         </div>
     </div>
+
     <!-- Skill level table -->
     <table class="table">
         <thead>
@@ -113,26 +174,27 @@
             </tr>
         </tbody>
     </table><br>
+
     <!-- Change Cooking and Baking Skill Level Button -->
-    <div class="text-center">
-        <button type="button" class="btn btn-info btn-lg rounded-pill btn-custom-password green" data-toggle="modal"
+    <div style="display: flex; justify-content: center; align-items: center;">
+        <button type="button" class="btn btn-custom-edit btn-block mb-4 mb-0 mt-6 rounded-pill" data-toggle="modal"
             data-target="#changeSkillLevelModal">
             Edit Skill Level
         </button>
-    </div><br><br><br><br><br><br>
-    
+    </div><br><br>
+
     <!-- Change Cooking and Baking Skill Level Modal -->
     <div class="modal fade" id="changeSkillLevelModal" tabindex="-1" role="dialog"
         aria-labelledby="changeSkillLevelModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
-            <div class="modal-content">
+            <div class="modal-content pop-up">
                 <div class="modal-header">
                     <h5 class="modal-title" id="changeSkillLevelModalLabel">Edit Skill Level</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body pop-up">
+                <div class="modal-body">
                     <form method="POST" action="/editSkillLevel">
                         <div class="form-group">
                             <label for="cookingSkillLevel">Cooking Skill Level:</label>
@@ -185,23 +247,23 @@
     </table><br>
 
     <!-- Add Ingredient Button -->
-    <div class="text-center">
-        <button type="button" class="btn btn-info btn-lg rounded-pill btn-custom-password green" data-toggle="modal" data-target="#addIngredientModal">
+    <div style="display: flex; justify-content: center; align-items: center;">
+        <button type="button" class="btn btn-custom-edit btn-block mb-4 mb-0 mt-6 rounded-pill" data-toggle="modal" data-target="#addIngredientModal">
             Add Ingredient
         </button>
-    </div><br><br><br><br><br><br>
+    </div><br><br>
 
     <!-- Add Ingredient Modal -->
-    <div class="modal fade" id="addIngredientModal" tabindex="-1" role="dialog" aria-labelledby="addIngredientModalLabel" aria-hidden="true">
+    <div class="modal fade " id="addIngredientModal" tabindex="-1" role="dialog" aria-labelledby="addIngredientModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
-            <div class="modal-content">
+            <div class="modal-content pop-up">
                 <div class="modal-header">
                     <h5 class="modal-title" id="addIngredientModalLabel">Add Ingredient</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body pop-up">
+                <div class="modal-body">
                     <form id="addIngredientForm">
                         <div class="form-group">
                             <label for="ingredientName">Ingredient Name:</label>
@@ -217,14 +279,14 @@
     <!-- Edit Ingredient Modal -->
     <div class="modal fade" id="editIngredientModal" tabindex="-1" role="dialog" aria-labelledby="editIngredientModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
-            <div class="modal-content">
+            <div class="modal-content pop-up">
                 <div class="modal-header">
                     <h5 class="modal-title" id="editIngredientModalLabel">Edit Ingredient</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body pop-up">
+                <div class="modal-body">
                     <form id="editIngredientForm">
                         <input type="hidden" id="oldIngredient" name="oldIngredient">
                         <div class="form-group">
@@ -238,9 +300,64 @@
         </div>
     </div>
 
+    <table class="table">
+        <tbody>
+            <tr>
+                <th scope="row">Dietary Restriction</th>
+                <td>
+                    <%= user[0].DietaryRestriction %>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Change Dietary Restriction Button -->
+    <div style="display: flex; justify-content: center; align-items: center;">
+        <button type="button" class="btn btn-custom-edit btn-block mb-4 mb-0 mt-6 rounded-pill" data-toggle="modal"
+            data-target="#changeDietaryRestrictionModal">
+            Edit Dietary Restriction
+        </button>
+    </div><br>
+
+    <!-- Dietary Restriction Modal -->
+    <div class="modal fade" id="changeDietaryRestrictionModal" tabindex="-1" role="dialog"
+        aria-labelledby="changeDietaryRestrictionModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content pop-up">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="changeDietaryRestrictionModalLabel">Edit Dietary Restriction</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="/editDietaryRestriction">
+                        <div class="form-group">
+                            <label for="DietaryRestriction">Dietary Restriction:</label>
+                            <select class="form-control" id="DietaryRestriction" name="DietaryRestriction">
+                                <option value="none" <% if (user[0].DietaryRestriction === 'none' || !user[0].DietaryRestriction) { %> selected <% } %>>None</option>
+                                <option value="vegetarian" <% if (user[0].DietaryRestriction === 'vegetarian') { %> selected <% } %>>Vegetarian</option>
+                                <option value="vegan" <% if (user[0].DietaryRestriction === 'vegan') { %> selected <% } %>>Vegan</option>
+                                <option value="dairy-free" <% if (user[0].DietaryRestriction === 'dairy-free') { %> selected <% } %>>Dairy-Free</option>
+                                <option value="gluten-free" <% if (user[0].DietaryRestriction === 'gluten-free') { %> selected <% } %>>Gluten-Free</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="text-center btn btn-info btn-lg rounded-pill btn-custom-edit green">Save Changes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <form action="/resetToDefault" method="post">
+        <div style="display: flex; justify-content: center; align-items: center;">
+            <button id="resetToDefault" type="submit" class="btn btn-custom-question mb-4 mb-0 mt-6 rounded-pill">Reset all Fields to Default</button>
+        </div>
+    </form><br><br><br><br>
+
     <!-- edit security question -->
-    <div class="text-center">
-        <button type="button" class="btn btn-info btn-lg rounded-pill btn-custom-question green" data-toggle="modal"
+    <div style="display: flex; justify-content: center; align-items: center;">
+        <button type="button" class="btn btn-custom-question mb-4 mb-0 mt-6 rounded-pill" data-toggle="modal"
             data-target="#changeSecurityQuestionModal">
             Update Security Question
         </button>
@@ -250,14 +367,14 @@
     <div class="modal fade" id="changeSecurityQuestionModal" tabindex="-1" role="dialog"
         aria-labelledby="changeSecurityQuestionModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
-            <div class="modal-content">
+            <div class="modal-content pop-up">
                 <div class="modal-header">
                     <h5 class="modal-title" id="changeSecurityQuestionModalLabel">Update Security Question</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body pop-up">
+                <div class="modal-body">
                     <form method="POST" action="/editSecretQuestion">
                         <div class="form-group">
                             <label for="secretQuestion">Select a security question:</label>
@@ -278,10 +395,9 @@
         </div>
     </div>
     
-
     <!-- Change Password Button -->
-    <div class="text-center">
-        <button type="button" class="btn btn-info btn-lg rounded-pill btn-custom-password green" data-toggle="modal" data-target="#changePasswordModal">
+    <div style="display: flex; justify-content: center; align-items: center;">
+        <button type="button" class="btn btn-custom-edit mb-4 mb-0 mt-6 rounded-pill" data-toggle="modal" data-target="#changePasswordModal">
             Reset Password
         </button>
     </div><br>
@@ -289,14 +405,14 @@
     <div class="modal fade" id="changePasswordModal" tabindex="-1" role="dialog" aria-labelledby="changePasswordModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
-            <div class="modal-content">
+            <div class="modal-content pop-up">
                 <div class="modal-header">
                     <h5 class="modal-title" id="changePasswordModalLabel">Reset Password</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body pop-up">
+                <div class="modal-body">
                     <form method="POST" action="/changePassword">
                         <div class="form-group">
                             <label for="newPassword">New Password</label>
@@ -313,110 +429,14 @@
             </div>
         </div>
     </div>
-    <form action="/logout" method="get">
-        <div class="text-center">
-            <button type="submit" class="btn btn-info btn-lg rounded-pill btn-custom green">Logout</button>
-        </div>
-    </form>
+
+    <!-- Logout button -->
+    <div style="display: flex; justify-content: center; align-items: center;">
+        <button id="logout" type="submit" class="btn btn-custom mb-4 mb-0 mt-6 rounded-pill">Logout</button>
+    </div>
+
 </div><br><br><br>
 
-<!-- Add Ingredient Script -->
-<script>
-    $(document).ready(function() {
-        // Add Ingredient Form Submission
-        $("#addIngredientForm").submit(function(event) {
-            event.preventDefault();
-            var ingredient = $("#ingredientName").val();
-            if (ingredient.trim() === "") {
-                alert("Please enter an ingredient.");
-                return;
-            }
-            $.ajax({
-                url: "/addIngredient",
-                type: "POST",
-                data: { ingredient: ingredient },
-                success: function(response) {
-                    // Clear the input field
-                    $("#ingredientName").val("");
-                    // Close the modal
-                    $("#addIngredientModal").modal("hide");
-                    // Refresh the page or update the ingredient list dynamically
-                    location.reload();
-                },
-                error: function(error) {
-                    console.log(error);
-                    alert("An error occurred while adding the ingredient. Please try again.");
-                }
-            });
-        });
-    });
-</script>
-<!-- Edit Ingredient Script -->
-<script>
-    $(document).ready(function() {
-        // Edit Ingredient Form Submission
-        $("#editIngredientForm").submit(function(event) {
-            event.preventDefault();
-            var oldIngredient = $("#oldIngredient").val();
-            var newIngredientName = $("#newIngredientName").val();
-            if (newIngredientName.trim() === "") {
-                alert("Please enter a new ingredient name.");
-                return;
-            }
-            $.ajax({
-                url: "/editIngredient",
-                type: "POST",
-                data: {
-                    oldIngredient: oldIngredient,
-                    newIngredientName: newIngredientName
-                },
-                success: function(response) {
-                    // Close the modal
-                    $("#editIngredientModal").modal("hide");
-                    // Refresh the page or update the ingredient list dynamically
-                    location.reload();
-                },
-                error: function(error) {
-                    console.log(error);
-                    alert("An error occurred while editing the ingredient. Please try again.");
-                }
-            });
-        });
-
-        // Edit Ingredient Modal Open
-        $(".edit-ingredient-btn").click(function() {
-            var oldIngredient = $(this).val();
-            $("#oldIngredient").val(oldIngredient);
-            $("#newIngredientName").val(oldIngredient);
-            $("#editIngredientModal").modal("show");
-        });
-    });
-</script>
-<!-- Remove Ingredient Script -->
-<script>
-    $(document).ready(function() {
-        // Remove Ingredient
-        $(".remove-ingredient-btn").click(function() {
-            // get the value of the remove-ingredient-btn
-            var ingredient = $(this).val();
-            if (confirm("Are you sure you want to remove the ingredient: " + ingredient + "?")) {
-                $.ajax({
-                    url: "/removeIngredient",
-                    type: "POST",
-                    data: { ingredient: ingredient },
-                    success: function(response) {
-                        // Refresh the page or update the ingredient list dynamically
-                        location.reload();
-                    },
-                    error: function(error) {
-                        console.log(error);
-                        alert("An error occurred while removing the ingredient. Please try again.");
-                    }
-                });
-            }
-        });
-    });
-</script>
-
+<script src="/profile.js"></script>
 
 <%- include("templates/footer") %>

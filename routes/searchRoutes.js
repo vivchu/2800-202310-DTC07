@@ -16,12 +16,21 @@ const config = new Configuration({
 
 const openai = new OpenAIApi(config);
 
-
+// the search page
 app.get('/search', (req, res) => {
+    if (!req.session.authenticated) {
+        res.redirect('/');
+        return;
+    }
     res.render('search');
 });
 
-app.get('/searchName', (req, res) => {    
+// the search by name page
+app.get('/searchName', (req, res) => {
+    if (!req.session.authenticated) {
+        res.redirect('/');
+        return;
+    }
     res.render('searchName');
 });
 
@@ -43,16 +52,24 @@ const searchRecipesByName = async (keywords) => {
     return sortedRecipes;
 };
 
-
+// the search by name submit route
 app.post('/searchNameSubmit', async (req, res) => {
-    const keywords = req.body.recipeName;
+    const keywords = req.body.recipeName.trim()
+    // check if the keywords are valid
+    const schema = Joi.object({
+        recipeName: Joi.string().pattern(/^[^${}/\]"'`:,.<>]{3,20}$/).required()
+    });
+    if (schema.validate({ recipeName: keywords }).error) {
+        res.redirect('/searchName?error=Invalid keywords');
+        return;
+    }
     console.log(keywords)
     const foundRecipes = await searchRecipesByName(keywords);
     console.log(foundRecipes);
     res.render('searchResults', { foundRecipes: foundRecipes });
 });
 
-
+// function to search recipes by skill level and keywords
 const searchRecipesBySkillAndKeywords = async (cookingSkill, bakingSkill, keywords) => {
     let skillLevelFilter = [];
 
@@ -63,14 +80,6 @@ const searchRecipesBySkillAndKeywords = async (cookingSkill, bakingSkill, keywor
     } else if (cookingSkill === 'expert') {
         skillLevelFilter = ['Easy', 'Medium', 'Hard'];
     }
-
-    // if (bakingSkill === 'beginner') {
-    //     skillLevelFilter.bakingSkill = 'Easy';
-    // } else if (bakingSkill === 'intermediate') {
-    //     skillLevelFilter.bakingSkill = { $in: ['Easy', 'Medium'] };
-    // } else if (bakingSkill === 'expert') {
-    //     skillLevelFilter.bakingSkill = { $in: ['Easy', 'Medium', 'Hard'] };
-    // }
 
     const searchRegex = new RegExp(keywords, 'i');
     const foundRecipes = await recipeCollection.find({ Name: searchRegex }).toArray();
@@ -94,7 +103,12 @@ const searchRecipesBySkillAndKeywords = async (cookingSkill, bakingSkill, keywor
     return sortedRecipes;
 };
 
+// the search by skill level page
 app.get('/searchSkillLevel', async (req, res) => {
+    if (!req.session.authenticated) {
+        res.redirect('/');
+        return;
+    }
     if (req.session.authenticated) {
         var currentUser = await userCollection.find({ username: req.session.username }).toArray();
         console.log(currentUser)
@@ -102,12 +116,26 @@ app.get('/searchSkillLevel', async (req, res) => {
     res.render('searchSkill', { currentUser: currentUser });
 });
 
+// the search by skill level submit route
 app.post('/searchSkillLevelSubmit', async (req, res) => {
-    const { cookingSkill, bakingSkill, keywords } = req.body;
+    let { cookingSkill, bakingSkill, keywords } = req.body;
+    // trim the keywords
+    keywords = keywords.trim();
+    // check if the keywords are valid
+    const schema = Joi.object({
+        cookingSkill: Joi.string().valid('beginner', 'intermediate', 'expert').required(),
+        bakingSkill: Joi.string().valid('beginner', 'intermediate', 'expert').required(),
+        keywords: Joi.string().pattern(/^[^${}[\]"'`:,.<>]{3,20}$/).required()
+    });
+    if (schema.validate({ cookingSkill: cookingSkill, bakingSkill: bakingSkill, keywords: keywords }).error) {
+        res.redirect('/searchSkillLevel?error=Invalid keywords');
+        return;
+    }
     const foundRecipes = await searchRecipesBySkillAndKeywords(cookingSkill, bakingSkill, keywords);
     res.render('searchResults', { foundRecipes: foundRecipes }); 
 });
 
+// the search by ingredients page
 app.get('/searchByIngredients', async (req, res) => {
     if (req.session.authenticated) {
         var currentUser = await userCollection.find({ username: req.session.username }).toArray();
@@ -115,9 +143,10 @@ app.get('/searchByIngredients', async (req, res) => {
         res.render('searchIngredients', { user: currentUser });
         return
     }
-    res.render('searchIngredientsNotLoggedIn');
+    res.redirect('/');
 });
 
+// add an ingredient to the user's search ingredients
 app.post('/addSearchIngredient', async (req, res) => {
     if (!req.session.authenticated) {
         res.redirect('/');
@@ -125,11 +154,20 @@ app.post('/addSearchIngredient', async (req, res) => {
     }
     var ingredient = req.body.ingredient
     if (ingredient) {
+        // check if the ingredient is valid
+        const schema = Joi.object({
+            ingredient: Joi.string().pattern(/^[^${}[\]"'`:,.<>]{3,20}$/).required()
+        });
+        if (schema.validate({ ingredient: ingredient }).error) {
+            res.redirect('/searchByIngredients?error=Invalid ingredient');
+            return;
+        }
         await userCollection.updateOne({ email: req.session.email }, { $push: { SearchIngredients: ingredient } });
     }
     res.redirect('/profile?success=Ingredient added successfully');
 });
 
+// edit an ingredient in the user's search ingredients
 app.post('/editSearchIngredient', async (req, res) => {
     if (!req.session.authenticated) {
         res.redirect('/');
@@ -138,12 +176,21 @@ app.post('/editSearchIngredient', async (req, res) => {
     var oldIngredient = req.body.oldIngredient
     var newIngredientName = req.body.newIngredientName
     if (oldIngredient && newIngredientName) {
+        // check if the newIngredientName is valid
+        const schema = Joi.object({
+            newIngredientName: Joi.string().pattern(/^[^${}[\]"'`:,.<>]{3,20}$/).required()
+        });
+        if (schema.validate({ newIngredientName: newIngredientName }).error) {
+            res.redirect('/searchByIngredients?error=Invalid ingredient');
+            return;
+        }
         await userCollection.updateOne({ email: req.session.email }, { $pull: { SearchIngredients: oldIngredient } });
         await userCollection.updateOne({ email: req.session.email }, { $push: { SearchIngredients: newIngredientName } });
     }
     res.redirect('/profile?success=Ingredient edited successfully');
 });
 
+// remove an ingredient from the user's search ingredients
 app.post('/removeSearchIngredient', async (req, res) => {
     if (!req.session.authenticated) {
         res.redirect('/');
@@ -156,6 +203,7 @@ app.post('/removeSearchIngredient', async (req, res) => {
     res.redirect('/profile?success=Ingredient removed successfully');
 });
 
+// the search by ingredients submit route
 app.post('/searchIngredientSubmit', async (req, res) => {
     if (req.session.authenticated) {
         const searchedIngredients = await userCollection.find({ username: req.session.username }).project({ SearchIngredients: 1 }).toArray();
@@ -163,15 +211,13 @@ app.post('/searchIngredientSubmit', async (req, res) => {
 
         const UserIngredients = await userCollection.find({ username: req.session.username }).project({ UserIngredients: 1 }).toArray();
 
-        const foundRecipes = await recipeCollection
-    .find({
-        UpdatedRecipeIngredientParts: {
-            $all: searchedIngredients[0].SearchIngredients.map((ingredient) => ({
-                $elemMatch: { $eq: ingredient }
-            }))
-        }
-    })
-    .toArray();
+        const foundRecipes = await recipeCollection.find({
+                                                        UpdatedRecipeIngredientParts: {
+                                                            $all: searchedIngredients[0].SearchIngredients.map((ingredient) => ({
+                                                                $elemMatch: { $eq: ingredient }
+                                                            }))
+                                                        }
+                                                    }).toArray();
 
         const sortedRecipes = foundRecipes.sort((a, b) => {
                 if (a.Image_Link === 'Unavailable' && b.Image_Link !== 'Unavailable') {
@@ -194,6 +240,7 @@ app.post('/searchIngredientSubmit', async (req, res) => {
     res.redirect('/');
 });
 
+// the generate recipe submit route
 app.post('/generateIngredientSubmit', async (req, res) => {
     if (req.session.authenticated) {
         const searchedIngredients = await userCollection.find({ username: req.session.username }).project({ SearchIngredients: 1 }).toArray();
@@ -255,6 +302,7 @@ app.post('/generateIngredientSubmit', async (req, res) => {
     res.redirect('/');
 });
 
+// save a recipe to the user's saved Customized recipes
 app.post('/addCustomizedRecipe', async (req, res) => {
     if (!req.session.authenticated) {
         res.redirect('/');
@@ -272,6 +320,7 @@ app.post('/addCustomizedRecipe', async (req, res) => {
     return;
 });
 
+// the saved customized recipe display page
 app.get('/savedCustomizedRecipes', async (req, res) => {
     if (!req.session.authenticated || !req.session.username) {
         res.redirect('/');
@@ -286,6 +335,7 @@ app.get('/savedCustomizedRecipes', async (req, res) => {
     return;
 });
 
+// view a saved customized recipe
 app.post('/viewCustomizedRecipe', async (req, res) => {
     if (!req.session.authenticated) {
         res.redirect('/');
@@ -300,6 +350,103 @@ app.post('/viewCustomizedRecipe', async (req, res) => {
     return;
 });
 
+// the search by dietary restriction page
+app.get('/searchByDietaryRestriction', async (req, res) => {
+    if (!req.session.authenticated) {
+        res.redirect('/');
+        return;
+    }
+    var currentUser = await userCollection.find({ username: req.session.username }).toArray();
+    console.log(currentUser)
+    res.render('searchDietaryRestriction', { user: currentUser });
+    return
+});
+
+// function that searches for recipes based on dietary restriction keywords
+const searchDietaryRestriction = async (foundRecipes, DietaryRestriction) => {
+    let exclusionKeywords = [];
+    if (DietaryRestriction === "vegetarian") {
+        exclusionKeywords = [
+            'meat', 'chicken', 'pork', 'bacon', 'sausage', 'beef', 'steak', 'ham', 'lamb', 'duck', 'turkey', 'spam', 'salmon', 'halibut', 'fish', 'shrimp',
+            'crab', 'lobster', 'clam', 'mussel', 'oyster', 'anchovy', 'sardine', 'tuna', 'trout', 'cod', 'tilapia', 'catfish', 'bass', 'pepperoni', 'prosciutto',
+            'salami', 'chorizo'];
+    } else if (DietaryRestriction === "vegan") {
+        exclusionKeywords = [
+            'meat', 'chicken', 'pork', 'bacon', 'sausage', 'beef', 'steak', 'ham', 'lamb', 'duck', 'turkey', 'spam', 'salmon', 'halibut', 'fish', 'shrimp',
+            'crab', 'lobster', 'clam', 'mussel', 'oyster', 'anchovy', 'sardine', 'tuna', 'trout', 'cod', 'tilapia', 'catfish', 'bass', 'pepperoni', 'prosciutto',
+            'salami', 'chorizo', 'egg', 'milk', 'cheese', 'butter', 'yogurt', 'cream', 'honey', 'mayonnaise', 'gelatin', 'lard', 'whey', 'casein', 'albumin',
+            'isenglass', 'carmine', 'cochineal', 'shellac', 'vitamin d3', 'whey', 'casein', 'albumin', 'isenglass', 'carmine', 'cochineal', 'shellac', 'vitamin d3'];
+    } else if (DietaryRestriction === "dairy-free") {
+        exclusionKeywords = [
+            'milk', 'cheese', 'butter', 'yogurt', 'cream', 'honey', 'mayonnaise', 'gelatin', 'lard', 'whey', 'casein', 'albumin',
+            'feta', 'ghee', 'goat cheese', 'ice cream', 'margarine', 'parmesan', 'ricotta', 'brie', 'cheddar', 'mozzarella', 'provolone', 'swiss', 
+            'isenglass', 'carmine', 'cochineal', 'shellac', 'vitamin d3', 'whey', 'casein', 'albumin', 'isenglass', 'carmine', 'cochineal', 'shellac', 'vitamin d3'];
+    } else if (DietaryRestriction === "gluten-free") {
+        exclusionKeywords = [
+            'wheat', 'barley', , 'flour', 'rye', 'triticale', 'malt', 'brewer\'s yeast', 'oats', 'spelt', 'kamut', 'semolina', 'durum', 'farina', 'farro', 'einkorn', 'emmer',
+            'wheat germ', 'wheat bran', 'bulgur', 'couscous', 'pasta', 'bread', 'cracker', 'cake', 'cookie', 'pie', 'pastry', 'dough', 'biscuit', 'muffin', 'roll',
+            'bagel', 'pretzel', 'croissant', 'crouton', 'stuffing', 'noodle', 'cereal', 'beer', 'ale', 'lager', 'stout', 'porter', 'malt', 'malt vinegar', 'soy sauce',
+            'teriyaki sauce', 'hoisin sauce', 'oyster sauce', 'barley malt', 'malt extract', 'malt flavoring', 'malt vinegar', 'malt syrup', 'maltodextrin', 'maltol']
+    }
+
+    const filteredRecipes = foundRecipes.filter(recipe => {
+        for (const keyword of exclusionKeywords) {
+            const regex = new RegExp(keyword, 'i');
+            for (const property in recipe) {
+                if (regex.test(recipe[property])) {
+                    return false; // Exclude recipes containing the keyword
+                }
+            }
+        }
+        return true; // Include recipes that don't contain any of the keywords
+    });
+
+    const sortedRecipes = filteredRecipes.sort((a, b) => {
+        if (a.Image_Link === 'Unavailable' && b.Image_Link !== 'Unavailable') {
+            return 1;
+        } else if (a.Image_Link !== 'Unavailable' && b.Image_Link === 'Unavailable') {
+            return -1;
+        } else {
+            return b.AggregatedRating - a.AggregatedRating;
+        }
+    }).slice(0, 200);
+    return sortedRecipes;
+};
+
+// the search by dietary restriction submit route
+app.post('/searchDietaryRestrictionSubmit', async (req, res) => {
+    if (!req.session.authenticated) {
+        res.redirect('/');
+        return;
+    }
+    const DietaryRestriction = req.body.DietaryRestriction;
+    console.log(DietaryRestriction);
+    const keywords = req.body.keywords;
+    // check if keywords is valid
+    const schema = Joi.object({
+        keywords: Joi.string().pattern(/^[^${}[\]"'`:,.<>]{3,20}$/).required()
+    });
+    if (schema.validate({ keywords: keywords }).error) {
+        res.redirect('/searchName?error=Invalid keywords');
+        return;
+    }
+    const searchRegex = new RegExp(keywords, 'i');
+    const foundRecipes = await recipeCollection.find({ Name: searchRegex }).toArray();
+
+    const sortedRecipes = await searchDietaryRestriction(foundRecipes, DietaryRestriction);
+    res.render('searchResults', { foundRecipes: sortedRecipes });
+})
+
+// remove all search ingredients in the search by ingredients page
+app.post('/removeAllSearchIngredients', async (req, res) => {
+    if (!req.session.authenticated) {
+        res.redirect('/');
+        return;
+    }
+    const email = req.session.email;
+    await userCollection.updateOne({ email: email }, { $set: { SearchIngredients: [] } });
+    res.redirect('/searchbyIngredients');
+});
 
 module.exports = app;
 module.exports.searchRecipesByName = searchRecipesByName;

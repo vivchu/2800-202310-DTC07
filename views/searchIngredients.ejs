@@ -8,55 +8,72 @@
     .btn-custom-password {
             width: 250px;
     }
+    .btn-custom-edit {
+            width: 200px;
+    }
+    .btn-custom-search {
+            width: 150px;
+    }
 </style>
 
 
 <!-- Ingredients Table -->
-<br><br><br><br><br><br><br>
-<h3>Search Ingredients</h3>
-<br>
-<table class="table">
-    <thead>
-        <tr>
-            <th scope="col">Ingredients</th>
-            <th scope="col">Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        <% if (user[0].SearchIngredients && user[0].SearchIngredients != user[0].UserIngredients) { %>
-            <% user[0].SearchIngredients.forEach(function(ingredient) { %>
-                <tr>
-                    <td><%= ingredient %></td>
-                    <td>
-                        <button type="button" class="btn btn-info btn-sm edit-ingredient-btn" value="<%= ingredient %>">Edit</button>
-                        <button type="button" class="btn btn-danger btn-sm remove-ingredient-btn" value="<%= ingredient %>">Remove</button>
-                    </td>
-                </tr>
-            <% }); %>
-        <% } else if (user[0].UserIngredients && user[0].UserIngredients == user[0].UserIngredients) { %>
-            <% user[0].UserIngredients.forEach(function(ingredient) { %>
-                <tr>
-                    <td><%= ingredient %></td>
-                    <td>
-                        <button type="button" class="btn btn-info btn-sm edit-ingredient-btn" value="<%= ingredient %>">Edit</button>
-                        <button type="button" class="btn btn-danger btn-sm remove-ingredient-btn" value="<%= ingredient %>">Remove</button>
-                    </td>
-                </tr>
-            <% }); %>
-        <% } else { %>
+
+<div class="container">
+    <div class="text-center">
+        <h4>Search by Ingredients</h4>
+    </div>
+    
+    <br>
+    <table class="table">
+        <thead>
             <tr>
-                <td colspan="2">No ingredients added.</td>
+                <th scope="col">Ingredients</th>
+                <th scope="col">Actions</th>
             </tr>
-        <% } %>
-    </tbody>
-</table><br>
+        </thead>
+        <tbody>
+            <% if (user[0].SearchIngredients && user[0].SearchIngredients != user[0].UserIngredients) { %>
+                <% user[0].SearchIngredients.forEach(function(ingredient) { %>
+                    <tr>
+                        <td><%= ingredient %></td>
+                        <td>
+                            <button type="button" class="btn btn-info btn-sm edit-ingredient-btn" value="<%= ingredient %>">Edit</button>
+                            <button type="button" class="btn btn-danger btn-sm remove-ingredient-btn" value="<%= ingredient %>">Remove</button>
+                        </td>
+                    </tr>
+                <% }); %>
+            <% } else if (user[0].UserIngredients && user[0].UserIngredients == user[0].UserIngredients) { %>
+                <% user[0].UserIngredients.forEach(function(ingredient) { %>
+                    <tr>
+                        <td><%= ingredient %></td>
+                        <td>
+                            <button type="button" class="btn btn-info btn-sm edit-ingredient-btn" value="<%= ingredient %>">Edit</button>
+                            <button type="button" class="btn btn-danger btn-sm remove-ingredient-btn" value="<%= ingredient %>">Remove</button>
+                        </td>
+                    </tr>
+                <% }); %>
+            <% } else { %>
+                <tr>
+                    <td colspan="2">No ingredients added.</td>
+                </tr>
+            <% } %>
+        </tbody>
+    </table><br>
+</div>
 
 <!-- Add Ingredient Button -->
-<div class="text-center">
-    <button type="button" class="btn btn-info btn btn-custom-password green" data-toggle="modal" data-target="#addIngredientModal">
+<div style="display: flex; justify-content: center; align-items: center;">
+    <button type="button" class="btn btn-custom-edit btn-block mb-4 mb-0 mt-6 rounded-pill" data-toggle="modal" data-target="#addIngredientModal">
         Add Ingredient
     </button>
 </div>
+
+<form action="/removeAllSearchIngredients" method="post">
+    <div style="display: flex; justify-content: center; align-items: center;">
+        <button id="removeAllSearchIngredients" type="submit" class="btn btn-custom-password mb-4 mb-0 mt-6 rounded-pill">Remove all Search Ingredients</button>
+    </div>
+</form>
 
 <!-- Add Ingredient Modal -->
 <div class="modal fade container" id="addIngredientModal" tabindex="-1" role="dialog" aria-labelledby="addIngredientModalLabel" aria-hidden="true">
@@ -111,118 +128,26 @@
 </div>
 <div class="text-center">
     <form action="/searchIngredientSubmit" method="POST">
-        <button type="submit" class="btn btn-lg ">Search</button>
+        <div style="display: flex; justify-content: center; align-items: center;">
+            <button type="submit" class="btn btn-custom-search mb-4 mb-0 mt-6 rounded-pill">Search</button>
+        </div>
     </form>
 </div><br><br>
 <div class="text-center">
     <h5>OR</h5>
 </div><br>
-<!-- ask chat gbt to generat some recipes for us -->
+<!-- ask chat gbt to generate a recipe for us -->
 <div class="text-center">
     <h5>Generate a customized recipe containing only your ingredients:</h5><br>
 </div>
 <div class="text-center">
     <form action="/generateIngredientSubmit" method="POST">
-        <button type="submit" class=" btn btn-lg ">Generate</button>
+        <div style="display: flex; justify-content: center; align-items: center;">
+            <button type="submit" class="btn btn-custom-search mb-4 mb-0 mt-6 rounded-pill">Generate</button>
+        </div>
     </form>
 </div><br><br><br><br>
 
-<!-- Add Ingredient Script -->
-<script>
-    $(document).ready(function() {
-        // Add Ingredient Form Submission
-        $("#addIngredientForm").submit(function(event) {
-            event.preventDefault();
-            var ingredient = $("#ingredientName").val();
-            if (ingredient.trim() === "") {
-                alert("Please enter an ingredient.");
-                return;
-            }
-            $.ajax({
-                url: "/addSearchIngredient",
-                type: "POST",
-                data: { ingredient: ingredient },
-                success: function(response) {
-                    // Clear the input field
-                    $("#ingredientName").val("");
-                    // Close the modal
-                    $("#addIngredientModal").modal("hide");
-                    // Refresh the page or update the ingredient list dynamically
-                    location.reload();
-                },
-                error: function(error) {
-                    console.log(error);
-                    alert("An error occurred while adding the ingredient. Please try again.");
-                }
-            });
-        });
-    });
-</script>
-<!-- Edit Ingredient Script -->
-<script>
-    $(document).ready(function() {
-        // Edit Ingredient Form Submission
-        $("#editIngredientForm").submit(function(event) {
-            event.preventDefault();
-            var oldIngredient = $("#oldIngredient").val();
-            var newIngredientName = $("#newIngredientName").val();
-            if (newIngredientName.trim() === "") {
-                alert("Please enter a new ingredient name.");
-                return;
-            }
-            $.ajax({
-                url: "/editSearchIngredient",
-                type: "POST",
-                data: {
-                    oldIngredient: oldIngredient,
-                    newIngredientName: newIngredientName
-                },
-                success: function(response) {
-                    // Close the modal
-                    $("#editIngredientModal").modal("hide");
-                    // Refresh the page or update the ingredient list dynamically
-                    location.reload();
-                },
-                error: function(error) {
-                    console.log(error);
-                    alert("An error occurred while editing the ingredient. Please try again.");
-                }
-            });
-        });
-
-        // Edit Ingredient Modal Open
-        $(".edit-ingredient-btn").click(function() {
-            var oldIngredient = $(this).val();
-            $("#oldIngredient").val(oldIngredient);
-            $("#newIngredientName").val(oldIngredient);
-            $("#editIngredientModal").modal("show");
-        });
-    });
-</script>
-<!-- Remove Ingredient Script -->
-<script>
-    $(document).ready(function() {
-        // Remove Ingredient
-        $(".remove-ingredient-btn").click(function() {
-            // get the value of the remove-ingredient-btn
-            var ingredient = $(this).val();
-            if (confirm("Are you sure you want to remove the ingredient: " + ingredient + "?")) {
-                $.ajax({
-                    url: "/removeSearchIngredient",
-                    type: "POST",
-                    data: { ingredient: ingredient },
-                    success: function(response) {
-                        // Refresh the page or update the ingredient list dynamically
-                        location.reload();
-                    },
-                    error: function(error) {
-                        console.log(error);
-                        alert("An error occurred while removing the ingredient. Please try again.");
-                    }
-                });
-            }
-        });
-    });
-</script>
+<script src="/searchIngredients.js"></script>
 
 <%- include("templates/footer") %>

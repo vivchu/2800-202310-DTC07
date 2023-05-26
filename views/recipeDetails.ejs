@@ -8,25 +8,21 @@
             <% } else { %>
                 <img src="<%= recipe.Image_Link %>" alt="<%= recipe.Name %>" class="img-fluid">
             <% } %>
-            
         </div>
         <div class="col-12 col-md-6">
             <h3>Recipe Info</h3>
             <ul>
-                
                 <li>Prep Time: <%= recipe.PrepTime.slice(2) %></li>
-               
                 <li>Cook Time: <%= recipe.CookTime.slice(2) %></li>
                 <li>Total Time: <%= recipe.TotalTime.slice(2) %></li>
                 <li>Number of Servings: <%= recipe.RecipeServings %></li>
                 <li>Rating: <%= recipe.AggregatedRating %> / 5</li>
             </ul>
-
         </div>
         <div class="col-12 col-md-6">
             <h3>Ingredients</h3>
             <ul>
-              <% let i = 0; %>
+                <% let i = 0; %>
                 <% recipe.UpdatedRecipeIngredientParts.forEach((recipeIngredientPart) => { %>
                     <li><%= recipe.UpdatedRecipeIngredientQuantities[i] %> <%= measureUnits[i] %> - <%= recipeIngredientPart %></li>
                     <% i++; %>
@@ -42,139 +38,25 @@
 
             <div class="row flex-row justify-content-around">
                 <div class="col-6 col-md-4 text-center">
-                    
                     <button  class="btn" id="favoritebtn" > <i class="fas fa-heart"></i></button>
-                    
                 </div>
                 <form action="/customizeRecipe" method="POST">
-                  <div class="form-group">
-                  <button type="submit" name="recipeId" class="btn" value="<%=recipe._id %>">Customize</button>
-                  </div>
-                </form>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
+                    <div class="form-group">
+                        <button type="submit" name="recipeId" class="btn" value="<%=recipe._id %>">Customize</button>
+                    </div>
+                </form><br><br><br><br>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 <script>
-const favoriteBtn = document.getElementById('favoritebtn');
-const recipeId = "<%= recipe._id %>";
-let isFavorite;
-
-fetch('/favorites/check', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  body: JSON.stringify({ recipeId }),
-})
-  .then((response) => response.json())
-  .then((data) => {
-    // Handle the response from the server
-    if (data.favorited) {
-      favoriteBtn.classList.add('btn-success'); // Change button color to success
-      isFavorite = true;
-      console.log(isFavorite)
-      console.log("Recipe is favorited");
-    }
-    else {
-      isFavorite = false;
-      console.log(isFavorite)
-      console.log("Recipe is not favorited");
-    }
-  })
-  .catch((error) => {
-    console.error('Error checking if recipe is favorited:', error);
-  });
-
-
-favoriteBtn.addEventListener('click', () => {
-    
-  if (isFavorite) {
-    // Recipe is already a favorite, so remove it
-    removeFromFavorites(recipeId);
-    //reload page
-    location.reload();
-  } else {
-    // Recipe is not a favorite, so add it
-    addToFavorites(recipeId);
-    location.reload();
-  }
-});
-
-function addToFavorites(recipeId) {
-  // Send an AJAX request to add the recipe to favorites
-  fetch('/favorites/add', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ recipeId }),
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      // Handle the response from the server
-      if (data.success) {
-        favoriteBtn.classList.add('btn-success'); // Change button color to success
-        isFavorite = true;
-      }
-    })
-    .catch((error) => {
-      console.error('Error:', error);
-    });
-}
-
-function removeFromFavorites(recipeId) {
-  // Send an AJAX request to remove the recipe from favorites
-  console.log("remove from favorites");
-  fetch('/favorites/remove', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ recipeId }),
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      // Handle the response from the server
-      if (data.success) {
-        favoriteBtn.classList.remove('btn-success'); // Change button color to success
-        isFavorite = false;
-      }
-    })
-    .catch((error) => {
-      console.error('Error:', error);
-    });
-}
-  // const customizeBtn = document.getElementById('customizeBtn');
-  // customizeBtn.addEventListener('click', () => {
-  //   // Save the ID of the current recipe in the session
-  //   console.log(recipeId)
-  //   saveCurrentRecipeId(recipeId);
-  // });
-
-  // function saveCurrentRecipeId(recipeId) {
-  //   console.log('Recipe ID:', recipeId);
-  //   fetch('/saveCurrentRecipeId', {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify({ recipeId }),
-  //   })
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       // Handle the response from the server
-  //     })
-  //     .catch((error) => {
-  //       console.error('Error:', error);
-  //     });
-  // }
-
-
+    const favoriteBtn = document.getElementById('favoritebtn');
+    const recipeId = "<%= recipe._id %>";
+    let isFavorite;
 </script>
+
+<script src="/recipeDetails.js"></script>
+
 <%- include("templates/footer") %>
