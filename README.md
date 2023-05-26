@@ -99,7 +99,7 @@ Go to your localhost:3000. You should see the project running there.
 
 
 ## How to Use the Product
-###TasteBud offers the following features:
+### TasteBud offers the following features:
 
 Features
 1. Intelligent Recipe Search
@@ -125,7 +125,7 @@ Easily update your personal account information to keep your profile up to date 
 
 ## Include Credits, References, and Licenses
 
-###Credits and References
+### Credits and References
 Kaggle Dataset:  Food.com - Recipes and Reviews 
 Link to Kaggle dataset   
 We would like to include a brief description of the dataset we used, which contains recipes sourced from Food.com. This dataset is a valuable resource that encompasses a wide variety of culinary creations, ranging from appetizers to desserts. By leveraging this extensive recipe collection, our app, Tastebud, offers users a diverse range of options to explore and discover new dishes. The inclusion of the Food.com dataset enhances the relevance and richness of our recipe database, providing users with an extensive selection of recipes to search, customize, and enjoy.
