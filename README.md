@@ -95,7 +95,8 @@ Our project TasteBud, DTC-07, is developing a web app that suggests customised r
     // Get the IDs of the first 103,426 items
     const idsToKeep = collection.find({}, { _id: 1 }).limit(103426).map(doc => doc._id);
     // Delete all items except the ones in idsToKeep
-    const deleteResult = collection.deleteMany({ _id: { $nin: idsToKeep } });```
+    const deleteResult = collection.deleteMany({ _id: { $nin: idsToKeep } });
+    ```
 8. In terminal , enter Bash cd path/to/my-project
 9. In the project directory, there should be a package.json file that lists the project's dependencies. 
 10. Run ‘npm install’ to install the project dependencies listed in the package.json file
